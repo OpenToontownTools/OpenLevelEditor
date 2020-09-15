@@ -1,0 +1,3 @@
+baselineStyle
+color: Vec4(1, 1, 1, 1)
+endBaselineStyle
