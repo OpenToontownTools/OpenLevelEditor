@@ -1329,7 +1329,7 @@ class LevelEditor(NodePath, DirectObject):
             modelPathStr += path
 
         modelPath = getModelPath().findFile(modelPathStr)
-        animFileList = glob.glob(f"/e/TestingLevelEditor/{modelPath}/{tokens[0]}_a_{tokens[1]}_*.bam")
+        animFileList = glob.glob(f"{modelPath}/{tokens[0]}_a_{tokens[1]}_*.bam")
 
         # [gjeon] define anim list menu for selection
         animNameList = []
