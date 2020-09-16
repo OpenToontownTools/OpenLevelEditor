@@ -376,7 +376,10 @@ class LevelEditor(NodePath, DirectObject):
         # And only the appropriate handles are showing
         base.direct.widget.disableHandles(['x-ring', 'x-disc',
                                            'y-ring', 'y-disc',
-                                           'z-post'])
+                                           'z-disc', 'z-post'])
+                                                 
+        base.direct.grid.setXyzSnap(0)
+        base.direct.grid.setHprSnap(0)
         # Initialize camera
         base.camLens.setNear(1.0)
         base.camLens.setFar(3000)
