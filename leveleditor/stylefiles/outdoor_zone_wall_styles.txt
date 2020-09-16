@@ -12,8 +12,6 @@ wall_texture: wall_sm_wood_ur
 wall_color: Vec4(0.874016, 0.610097, 0.610097, 1.0)
 window_texture: window_sm_shuttered_ur
 window_color: Vec4(0.874016, 0.548402, 0.329041, 1.0)
-cornice_texture: None
-cornice_color: Vec4(1.0, 1.0, 1.0, 1.0)
 endWallStyle
 
 wallStyle
@@ -48,8 +46,6 @@ wall_texture: wall_bricks_dr
 wall_color: Vec4(0.629921, 0.471823, 0.237147, 1.0)
 window_texture: window_sm_shuttered_ur
 window_color: Vec4(1.0, 0.627451, 0.376471, 1.0)
-cornice_texture: None
-cornice_color: Vec4(1.0, 1.0, 1.0, 1.0)
 endWallStyle
 
 wallStyle
@@ -66,8 +62,6 @@ wall_texture: wall_lg_brick_ur
 wall_color: Vec4(0.166003, 0.440945, 0.276671, 1.0)
 window_texture: window_md_curtains_ur
 window_color: Vec4(0.17258, 0.637795, 0.450208, 1.0)
-cornice_texture: None
-cornice_color: Vec4(1.0, 1.0, 1.0, 1.0)
 endWallStyle
 
 wallStyle
@@ -75,7 +69,5 @@ wall_texture: wall_md_board_ur
 wall_color: Vec4(0.929134, 0.153034, 0.153034, 1.0)
 window_texture: window_porthole_ur
 window_color: Vec4(0.0, 0.532747, 0.317894, 1.0)
-cornice_texture: None
-cornice_color: Vec4(1.0, 1.0, 1.0, 1.0)
 endWallStyle
  
