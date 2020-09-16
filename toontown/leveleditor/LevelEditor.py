@@ -7,6 +7,7 @@ from direct.gui import DirectGui
 from direct.showbase.TkGlobal import *
 from direct.directtools.DirectUtil import *
 from direct.directtools.DirectGeometry import *
+from direct.interval.IntervalGlobal import *
 from direct.tkwidgets.SceneGraphExplorer import *
 from direct.directnotify import DirectNotifyGlobal
 from tkinter.messagebox import showinfo
@@ -1437,14 +1438,14 @@ class LevelEditor(NodePath, DirectObject):
         # And add hooks to insert copies of dnaNode
         # self.addReplicationHooks(dnaNode)
         
-        # Move selected objects
-        for selectedNode in base.direct.selected:
-            self.notify.debug("Selected Node: %s" %selectedNode)
-            # Move it
-            #selectedNode.setPos(render, base.direct.cameraControl.coaMarker.getPos(render))
-            print(self.newObjPos)
-            selectedNode.setPos(render, self.newObjPos)
-            self.notify.debug("Node Position: %s" %selectedNode.getPos())
+        ## Move selected objects
+        #for selectedNode in base.direct.selected:
+        #    self.notify.debug("Selected Node: %s" %selectedNode)
+        #    # Move it
+        #    selectedNode.setPos(render, base.direct.cameraControl.coaMarker.getPos(render))
+        #    print(self.newObjPos)
+        #    #selectedNode.setPos(render, self.newObjPos)
+        #    self.notify.debug("Node Position: %s" %selectedNode.getPos())
 
     def addReplicationHooks(self, dnaNode):
         # Now add hook to allow placement of a new dna Node of this type
@@ -1621,8 +1622,8 @@ class LevelEditor(NodePath, DirectObject):
         else:
             # Place the new node path at the current grid origin
             # Changed this to the COA
-            #dnaNode.setPos(base.direct.grid.getPos())
-            dnaNode.setPos(base.direct.cameraControl.coaMarker.getPos(render))
+            dnaNode.setPos(base.direct.grid.getPos())
+            #dnaNode.setPos(base.direct.cameraControl.coaMarker.getPos(render))
                                 
         # Initialize angle to match last object
         dnaNode.setHpr(Vec3(self.getLastAngle(), 0, 0))
@@ -2799,7 +2800,7 @@ class LevelEditor(NodePath, DirectObject):
         else:
             return 1
 
-    def autoPositionGrid(self, fLerp = 1):
+    def autoPositionGrid(self, fLerp = 0):
         taskMgr.remove('autoPositionGrid')
         # Move grid to prepare for placement of next object
         selectedNode = base.direct.selected.last
@@ -2825,9 +2826,20 @@ class LevelEditor(NodePath, DirectObject):
                     deltaPos.setX(15.0)
                 elif objectCode[-2:-1] == 'C':
                     deltaPos.setX(20.0)
-
-            
-            base.direct.grid.setPosHpr(selectedNode, deltaPos, deltaHpr)
+            if fLerp:
+                # Position grid for placing next object
+                # Eventually we need to setHpr too
+                t = base.direct.grid.lerpPosHpr(
+                    0.25, deltaPos, deltaHpr,
+                    other = selectedNode,
+                    blendType = 'easeInOut',
+                    task = 'autoPositionGrid')
+                t.deltaPos = deltaPos
+                t.deltaHpr = deltaHpr
+                t.selectedNode = selectedNode
+                t.setUponDeath(self.autoPositionCleanup)
+            else:
+                base.direct.grid.setPosHpr(selectedNode, deltaPos, deltaHpr)
 
         if self.mouseMayaCamera:
             return
