@@ -7,6 +7,7 @@ from .ScrollMenu import *
 
 from .LevelEditorGlobals import *
 from functools import reduce
+from locale import atof
 
 class LevelStyleManager:
     """Class which reads in style files and manages class variables"""
@@ -88,7 +89,7 @@ class LevelStyleManager:
                 # Note, endBaselineStyle line is *not* stripped off
                 return style, styleData
             else:
-                pair = list(map(l.strip, l.split(':')))
+                pair = [h.strip() for h in l.split(':')]
                 if pair[0] in style.__dict__:
                     pair_0 = pair[0]
                     # Convert some numerical values
@@ -224,17 +225,17 @@ class LevelStyleManager:
                 # Note, endWallStyle line is *not* stripped off
                 return style, styleData
             else:
-                pair = list(map(l.strip, l.split(':')))
+                pair = [h.strip() for h in l.split(':')]
                 if pair[0] in style.__dict__:
                     # Convert colors and count strings to numerical values
-                    if ((string.find(pair[0],'_color') >= 0) or
-                        (string.find(pair[0],'_count') >= 0)):
+                    if ((pair[0].find('_color') >= 0) or
+                        (pair[0].find('_count') >= 0)):
+                    
                         style[pair[0]] = eval(pair[1])
                     else:
                         style[pair[0]] = pair[1]
                 else:
-                    print('getStyleDictionaryFromStyleData: Invalid Key')
-                    print(pair[0])
+                    print(f'getStyleDictionaryFromStyleData: Invalid Key {pair[0]}')
             styleData = styleData[1:]
         # No end of style found, return style data as is
         return style, None
@@ -359,7 +360,7 @@ class LevelStyleManager:
                 # Put in code for number of walls into building styles
                 
                 heightType = style.name.split(':')[1].strip()
-                heightList = list(map(atof, string.split(heightType, '_')))
+                heightList = [atof(l) for l in heightType.split('_')]
                 numWalls = len(heightList)
                 # This one stores styles sorted by type
                 typeAttributes[heightType].add(style)
@@ -413,8 +414,8 @@ class LevelStyleManager:
                 # Start with empty style list
                 bldgStyle = DNAFlatBuildingStyle(styleList = [])
                 # Extract height information found at end of line
-                heightCode = string.strip(string.split(l, ':')[1])
-                heightList = list(map(string.atof, string.split(heightCode, '_')))
+                heightCode = l.split(':')[1].strip()
+                heightList = [atof(l) for l in heightCode.split('_')]
                 # Construct name for building style.  Tack on height code
                 # to be used later to split styles by heightCode
                 bldgStyle.name = (
@@ -650,7 +651,7 @@ class LevelStyleManager:
             dict[colorType] = DEFAULT_COLORS[:]
         # Add color information to appropriate sub-list
         for line in colorData:
-            pair = list(map(line.strip, line.split(b':')))
+            pair = [h.strip() for h in line.split(':')]
             key = pair[0]
             if key in dict:
                 dict[key].append(eval(pair[1]))
@@ -901,7 +902,7 @@ class LevelStyleManager:
         f.close()
         styleData = []
         for line in rawData:
-            l = line.strip()
+            l = line.strip().decode('utf-8')
             if l:
                 styleData.append(l)
         return styleData

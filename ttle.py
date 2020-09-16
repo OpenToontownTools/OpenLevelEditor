@@ -7,6 +7,7 @@ from panda3d.core import loadPrcFile
 class ToontownLevelEditor(ShowBase):
     def __init__(self):
         # Check for -e or -d launch options
+        ShowBase.__init__(self)
         parser = argparse.ArgumentParser(description = "Modes")
         parser.add_argument("--experimental", action='store_true', help = "Enables experimental features")
         parser.add_argument("--debug", action='store_true', help = "Enables debugging features")
@@ -20,6 +21,7 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", "want-experimental true")
         if args.debug:
             loadPrcFileData("", "want-debug true")
+        self.hoods = args.hoods
         
         # Import the main dlls so we don't have to repeatedly import them everywhere
         builtins.__dict__.update(__import__('panda3d.core', fromlist = ['*']).__dict__)
@@ -31,5 +33,7 @@ class ToontownLevelEditor(ShowBase):
         
         # Now we actually start the editor
         from toontown.leveleditor import LevelEditor
+        self.le = LevelEditor.LevelEditor()
+
 
 ToontownLevelEditor().run()

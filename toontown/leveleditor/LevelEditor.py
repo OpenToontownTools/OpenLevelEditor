@@ -1,6 +1,5 @@
 
 from pandac.PandaModules import *
-from direct.directbase.DirectStart import *
 from direct.showbase.DirectObject import DirectObject
 from .PieMenu import *
 import direct.gui.DirectGuiGlobals as DGG
@@ -58,23 +57,11 @@ useSnowTree = base.config.GetBool("use-snow-tree", 0)
 # you want to load. For example:
 #    ppython LevelEditor.py DD TT BR
 #
-if sys.argv[1:]:
-    try:
-        opts, pargs = getopt.getopt(sys.argv[1:], '')
-        hoods = pargs
-    except Exception as e:
-        print(e)
-# If you do not run from the command line, we just load all of them
-# or you can hack this up for your own purposes.
-else:
-    hoodString = base.config.GetString('level-editor-hoods',
-                                       'TT DD BR DG DL MM CC CL CM CS GS GZ OZ PA')
-    hoods = hoodString.split()
 
 # Init neighborhood arrays
 NEIGHBORHOODS = []
 NEIGHBORHOOD_CODES = {}
-for hoodId in hoods:
+for hoodId in base.hoods:
     if hoodId in HOOD_IDS:
         hoodName = HOOD_IDS[hoodId]
         NEIGHBORHOOD_CODES[hoodName] = hoodId
@@ -5997,7 +5984,4 @@ class LEAvatar(LocalAvatar.LocalAvatar):
 
     def getAutoRun(self):
         return 0
-
-base.le = LevelEditor()
-run()
 
