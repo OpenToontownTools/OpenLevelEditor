@@ -5190,10 +5190,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         def toggleWidgetHandles(s = self):
             if s.fPlaneSnap.get():
                 base.direct.widget.disableHandles(['x-ring', 'x-disc',
-                                              'y-ring', 'y-disc',
-                                              'z-post'])
+                                                   'y-ring', 'y-disc',
+                                                   'z-disc', 'z-post'])
             else:
                 base.direct.widget.enableHandles('all')
+                
         self.fPlaneSnap = IntVar()
         self.fPlaneSnap.set(0)
         self.planeSnapButton = Checkbutton(buttonFrame,
