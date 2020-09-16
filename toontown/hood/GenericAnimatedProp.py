@@ -81,8 +81,9 @@ class GenericAnimatedProp(AnimatedProp.AnimatedProp):
         anim = node.getTag('DNAAnim')
         self.trashcan = Actor.Actor(node, copy = 0)
         self.trashcan.reparentTo(node)
-        self.trashcan.loadAnims({'anim' : "%s/%s"%(self.path,anim)})
+        self.trashcan.loadAnims({'anim' : f"{self.path}/{anim}"})
         self.trashcan.pose('anim', 0)
+        self.trashcan.setBlend(frameBlend = 1)
         self.node = self.trashcan
 
 

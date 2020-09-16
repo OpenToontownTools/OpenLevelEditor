@@ -111,3 +111,4 @@ ENV/
 .idea/
 buildCreativeTools.nsi
 notice.txt
+*.dna

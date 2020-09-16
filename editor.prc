@@ -18,6 +18,7 @@ multisamples 4
 # We want some more debugging info, but not too much
 notify-level info
 default-directnotify-level info
+notify-level-dna spam
 
 # Model Path
 model-path    $MAIN_DIR
