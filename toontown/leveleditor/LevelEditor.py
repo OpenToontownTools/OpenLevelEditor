@@ -2672,6 +2672,8 @@ class LevelEditor(NodePath, DirectObject):
     def keyboardXformSelected(self, arrowDirection, mode):
         if mode == 'rotate':
             self.keyboardRotateSelected(arrowDirection)
+        elif mode == 'zlate':
+            self.keyboardZTranslateSelected(arrowDirection)
         else:
             self.keyboardTranslateSelected(arrowDirection)
 
