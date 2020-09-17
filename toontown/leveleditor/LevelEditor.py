@@ -82,7 +82,7 @@ try:
     if dnaLoaded:
         pass
 except NameError:
-    print("Loading LevelEditor for hoods: ", hoods)
+    print("Loading LevelEditor for hoods: ", base.hoods)
     # DNAStorage instance for storing level DNA info
 
     # We need to use the __builtin__.foo syntax, not the
@@ -97,123 +97,44 @@ except NameError:
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_estate.dna', CSDefault, 1)
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
     # Load all the neighborhood specific storage files
-    if 'TT' in hoods:
+    if 'TT' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT_sz.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_5/dna/storage_TT_town.dna', CSDefault, 1)
-    if 'DD' in hoods:
+    if 'DD' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_sz.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_town.dna', CSDefault, 1)
-    if 'MM' in hoods:
+    if 'MM' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_sz.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_town.dna', CSDefault, 1)
-    if 'BR' in hoods:
+    if 'BR' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_sz.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_town.dna', CSDefault, 1)
-    if 'DG' in hoods:
+    if 'DG' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_sz.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_town.dna', CSDefault, 1)
-    if 'DL' in hoods:
+    if 'DL' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_sz.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_town.dna', CSDefault, 1)
-    if 'CS' in hoods:
+    if 'CS' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_9/dna/storage_CS.dna', CSDefault, 1)
-    if 'GS' in hoods:
+    if 'GS' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS_sz.dna', CSDefault, 1)
-    if 'OZ' in hoods:
+    if 'OZ' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_sz.dna', CSDefault, 1)
-    if 'GZ' in hoods:
+    if 'GZ' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ_sz.dna', CSDefault, 1)
-    if 'CC' in hoods:
-        loadDNAFile(DNASTORE, 'phase_12/dna/storage_CC_sz.dna', CSDefault, 1)
-
- #  # Load the generic storage files
- #  loadStorageFile('dna/storage.dna')
- #  loadStorageFile('phase_4/dna/storage.dna')
- #  loadStorageFile('phase_5/dna/storage_town.dna')
- #  # Load all the neighborhood specific storage files
- #  loadStorageFile('phase_4/dna/storage_TT.dna')
- #  loadStorageFile('phase_4/dna/storage_TT_sz.dna')
- #  loadStorageFile('phase_5/dna/storage_TT_town.dna')
- #  # DD
- #  loadStorageFile('phase_6/dna/storage_DD.dna')
- #  loadStorageFile('phase_6/dna/storage_DD_sz.dna')
- #  loadStorageFile('phase_6/dna/storage_DD_town.dna')
- #  # MM
- #  loadStorageFile('phase_6/dna/storage_MM.dna')
- #  loadStorageFile('phase_6/dna/storage_MM_sz.dna')
- #  loadStorageFile('phase_6/dna/storage_MM_town.dna')
- #  # BR
- #  loadStorageFile('phase_8/dna/storage_BR.dna')
- #  loadStorageFile('phase_8/dna/storage_BR_sz.dna')
- #  loadStorageFile('phase_8/dna/storage_BR_town.dna')
- #  # DG
- #  loadStorageFile('phase_8/dna/storage_DG.dna')
- #  loadStorageFile('phase_8/dna/storage_DG_sz.dna')
- #  loadStorageFile('phase_8/dna/storage_DG_town.dna')
- #  # DL
- #  loadStorageFile('phase_8/dna/storage_DL.dna')
- #  loadStorageFile('phase_8/dna/storage_DL_sz.dna')
- #  loadStorageFile('phase_8/dna/storage_DL_town.dna')
- #  # CS
- #  loadStorageFile('phase_9/dna/storage_CS.dna')
- #  # GS
- #  loadStorageFile('phase_4/dna/storage_GS.dna')
- #  loadStorageFile('phase_4/dna/storage_GS_sz.dna')
- #  # OZ
- #  loadStorageFile('phase_6/dna/storage_OZ.dna')
- #  loadStorageFile('phase_6/dna/storage_OZ_sz.dna')
- #  # GZ
- #  loadStorageFile('phase_6/dna/storage_GZ.dna')
- #  loadStorageFile('phase_6/dna/storage_GZ_sz.dna')
- #  # CC
- #  loadStorageFile('phase_12/dna/storage_CC_sz.dna')
-    if 'TT' in hoods:
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_5/dna/storage_TT_town.dna', CSDefault, 1)
-    if 'DD' in hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_town.dna', CSDefault, 1)
-    if 'MM' in hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_town.dna', CSDefault, 1)
-    if 'BR' in hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_town.dna', CSDefault, 1)
-    if 'DG' in hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_town.dna', CSDefault, 1)
-    if 'DL' in hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_town.dna', CSDefault, 1)
-    if 'CS' in hoods:
-        loadDNAFile(DNASTORE, 'phase_9/dna/storage_CS.dna', CSDefault, 1)
-    if 'GS' in hoods:
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS_sz.dna', CSDefault, 1)
-    if 'OZ' in hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_sz.dna', CSDefault, 1)
-    if 'GZ' in hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ_sz.dna', CSDefault, 1)
-    if 'CC' in hoods:
+    if 'CC' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_12/dna/storage_CC_sz.dna', CSDefault, 1)        
-    if 'PA' in hoods:
+    if 'PA' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_13/dna/storage_party_sz.dna', CSDefault, 1)
     builtins.dnaLoaded = 1
 
@@ -236,7 +157,7 @@ class LevelEditor(NodePath, DirectObject):
     # selectedDNARoot: DNA Node of currently selected object
     # selectedNPRoot: Corresponding Node Path
     # DNATarget: Subcomponent being modified by Pie Menu
-    def __init__(self, hoods = hoods):
+    def __init__(self):
         # Make the level editor a node path so that you can show/hide
         # The level editor separately from loading/saving the top level node
         # Initialize superclass
