@@ -129,6 +129,7 @@ except NameError:
     if 'OZ' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_sz.dna', CSDefault, 1)
+        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_town.dna', CSDefault, 1)
     if 'GZ' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ_sz.dna', CSDefault, 1)
