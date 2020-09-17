@@ -304,6 +304,7 @@ class LevelEditor(NodePath, DirectObject):
         # Initialize camera
         base.camLens.setNear(1.0)
         base.camLens.setFar(3000)
+        base.camLens.setMinFov(65)
         base.direct.camera.setPos(0, -10, 10)
         # Initialize drive mode
         self.configureDriveModeCollisionData()
@@ -648,8 +649,6 @@ class LevelEditor(NodePath, DirectObject):
         base.camera.setHpr(0, 0, 0)
         #base.camera.setPos(0, 0, 0)
         base.camera.setPos(0, -11.8125, 3.9375)
-
-        base.camLens.setMinFov(65)
 
         #self.initializeSmartCameraCollisions()
         #self._smartCamEnabled = False
