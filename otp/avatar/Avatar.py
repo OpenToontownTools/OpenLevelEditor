@@ -7,6 +7,7 @@ from libotp import CFSpeech, CFThought, CFTimeout, CFPageButton, CFNoQuitButton,
 from direct.actor.Actor import Actor
 from direct.distributed import ClockDelta
 from otp.avatar.ShadowCaster import ShadowCaster
+from otp.otpbase import OTPGlobals, OTPRender
 import random
 
 def reconsiderAllUnderstandable():
