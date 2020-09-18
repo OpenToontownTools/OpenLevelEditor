@@ -5165,20 +5165,21 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         buttonFrame4 = Frame(hull)
         self.driveMode = IntVar()
         self.driveMode.set(1)
-        self.directModeButton = Radiobutton(
-            buttonFrame4,
-            text = 'DIRECT Fly',
-            value = 1,
-            variable = self.driveMode,
-            command = self.levelEditor.useDirectFly)
-        self.directModeButton.pack(side = LEFT, fill = X, expand = 1)
-        self.driveModeButton = Radiobutton(
-            buttonFrame4,
-            text = 'Drive',
-            value = 0,
-            variable = self.driveMode,
-            command = self.levelEditor.useDriveMode)
-        self.driveModeButton.pack(side = LEFT, fill = X, expand = 1)
+        if ConfigVariableBool("want-experimental", False):
+            self.directModeButton = Radiobutton(
+                buttonFrame4,
+                text = 'DIRECT Fly',
+                value = 1,
+                variable = self.driveMode,
+                command = self.levelEditor.useDirectFly)
+            self.directModeButton.pack(side = LEFT, fill = X, expand = 1)
+            self.driveModeButton = Radiobutton(
+                buttonFrame4,
+                text = 'Drive',
+                value = 0,
+                variable = self.driveMode,
+                command = self.levelEditor.useDriveMode)
+            self.driveModeButton.pack(side = LEFT, fill = X, expand = 1)
 
         self.fColl = IntVar()
         self.fColl.set(1)
