@@ -12,6 +12,7 @@ class ToontownLevelEditor(ShowBase):
         parser = argparse.ArgumentParser(description="Modes")
         parser.add_argument("--experimental", action='store_true', help="Enables experimental features")
         parser.add_argument("--debug", action='store_true', help="Enables debugging features")
+        parser.add_argument("--clash", action='store_true', help="Enables Corporate Clash features")
         parser.add_argument("--hoods", nargs="*", help="Only loads the storage files of the specified hoods",
                             default=['TT', 'DD', 'BR', 'DG',
                                      'DL', 'MM', 'CC', 'CL',
@@ -22,6 +23,8 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", "want-experimental true")
         if args.debug:
             loadPrcFileData("", "want-debug true")
+        if args.clash:
+            loadPrcFileData("", "want-clash-specific-options true")
         self.hoods = args.hoods
 
         # Import the main dlls so we don't have to repeatedly import them everywhere
