@@ -8,7 +8,7 @@
 * Build yourself a copy of [Disyer's libtoontown](https://github.com/darktohka/libtoontown), and drop the .pyd files in the root directory.
 * Recent Panda3D build (1.10.7 or later) running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
 
-~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon, however you can grab my build of panda3d and compatible builds of lib toontown with it [HERE](https://drive.google.com/file/d/1EbfuG4AaPpeaDKWWeZIxUckFTvYfRQbL/view?usp=sharing. you MUST use that panda build if you use the pyd files in that zip.*
+~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon, however you can grab my build of panda3d and compatible builds of lib toontown with it [HERE](https://drive.google.com/file/d/1EbfuG4AaPpeaDKWWeZIxUckFTvYfRQbL/view?usp=sharing). you MUST use that panda build if you use the pyd files in that zip.*
 
 
 ## Credits
