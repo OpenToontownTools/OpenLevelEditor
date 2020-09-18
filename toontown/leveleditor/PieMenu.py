@@ -1,8 +1,8 @@
-
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 from direct.directtools.DirectGeometry import *
 from direct.task import Task
+
 
 class PieMenu(NodePath, DirectObject):
     def __init__(self, visibleMenu, menuItems,
@@ -23,7 +23,7 @@ class PieMenu(NodePath, DirectObject):
         if self.numItems == 0:
             self.degreesPerItem = 360.0
         else:
-            self.degreesPerItem = 360.0/self.numItems
+            self.degreesPerItem = 360.0 / self.numItems
         self.itemOffset = self.degreesPerItem / 2.0
         self.sfx = self.visibleMenu.getSx()
         self.sfz = self.visibleMenu.getSz()
@@ -69,19 +69,19 @@ class PieMenu(NodePath, DirectObject):
         self.currItem = -1
         taskMgr.add(self.pieMenuTask, 'pieMenuTask')
 
-    def pieMenuTask(self,state):
+    def pieMenuTask(self, state):
         # Don't do anything if nothing in the menu
         if self.numItems == 0:
             self.currItem = -1
             return Task.cont
-        
+
         mouseX = base.direct.dr.mouseX
         mouseY = base.direct.dr.mouseY
         deltaX = mouseX - self.originX
         deltaY = mouseY - self.originY
 
         # Update the line
-        #self.lines.setVertex(1, (deltaX/self.sfx), 0.0, (deltaY/self.sfz))
+        # self.lines.setVertex(1, (deltaX/self.sfx), 0.0, (deltaY/self.sfz))
 
         # How far from starting point has user moved the cursor?
         if ((abs(deltaX) < 0.1) and (abs(deltaY) < 0.1)):
@@ -133,7 +133,7 @@ class TextPieMenu(PieMenu):
         # Create top level node for new menu
         newMenu = hidden.attachNewNode('TextMenu')
         # Compute angle per item
-        angle = deg2Rad(360.0/numItems)
+        angle = deg2Rad(360.0 / numItems)
         prop = base.win.getProperties()
         if prop.hasSize():
             width = prop.getXSize()
@@ -141,10 +141,10 @@ class TextPieMenu(PieMenu):
         else:
             width = 640
             height = 480
-        aspectRatio = width/float(height)
+        aspectRatio = width / float(height)
         # Add items
         from direct.gui.DirectGuiGlobals import getDefaultFont
-        for i in range (numItems):
+        for i in range(numItems):
             # Create text node for each item
             if (textList[i] != None):
                 tn = TextNode('TextItem')
@@ -163,16 +163,14 @@ class TextPieMenu(PieMenu):
                 node.setScale(sf)
                 node.setPos(radius * math.cos(i * angle) - center[0], 0.0,
                             ((radius * aspectRatio * math.sin(i * angle)) -
-                            center[1]))
+                             center[1]))
         # Create and return a pie menu
         PieMenu.__init__(self, newMenu, textList, action = action,
                          fUpdateOnlyOnChange = fUpdateOnlyOnChange)
         self.accept('mouse3', self.spawnPieMenuTask)
         self.accept('mouse3-up', self.removePieMenuTask)
+
     def destroy(self):
         self.ignore('mouse3')
         self.ignore('mouse3-up')
         self.removeNode()
-
-
-
