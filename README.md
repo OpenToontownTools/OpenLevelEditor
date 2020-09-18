@@ -8,7 +8,7 @@
 * Build yourself a copy of [Disyer's libtoontown](https://github.com/darktohka/libtoontown), and drop the .pyd files in the root directory.
 * Recent Panda3D build running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
 
-~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon, however you can grab my build of panda3d and compatible builds of lib toontown with it HERE. you MUST use that panda build if you use the pyd files in that zip.*
+~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon, however you can grab my build of panda3d and compatible builds of lib toontown with it [HERE](https://drive.google.com/file/d/1EbfuG4AaPpeaDKWWeZIxUckFTvYfRQbL/view?usp=sharing. you MUST use that panda build if you use the pyd files in that zip.*
 
 
 ## Credits
@@ -17,6 +17,11 @@
 
 ## Help
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
+    
+## Upcoming Features
+* Optional Auto PDNA compilation support for [libpandadna](https://github.com/loblao/libpandadna) and Corporate Clash's DNA reader.
+* Auto Saving
+* and much more!
 
 ## Known Incompatibilities
 * Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
