@@ -3508,6 +3508,7 @@ class LevelEditor(NodePath, DirectObject):
             if marker==nodePath:
                 return point
         return None
+        
     def screenshot(self):
         base.screenshot("screenshots/screenshot")
             
@@ -3515,6 +3516,7 @@ class LevelEditor(NodePath, DirectObject):
         lens = OrthographicLens()
         lens.setFilmSize(1024, 1024)
         base.cam.node().setLens(lens)
+        
     def resetPathMarkers(self):
         for edge, edgeLine in list(self.edgeDict.items()):
             if not edgeLine.isEmpty():
