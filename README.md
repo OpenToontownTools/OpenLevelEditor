@@ -6,7 +6,7 @@
 
 ## Requirements
 ### ***IMPORTANT***
-* **You need a Panda3D build with [THIS](https://github.com/drewc5131/panda3d/commit/2b735df2d0b8f9880311a9a08a28c7ec684e9583) fix (You can just edit the .py file in ur SDK) This reverts a change that completely breaks the TTLE and RTM. This is IMPORTANT!**
+* **You need a Panda3D build with [THIS](https://github.com/drewc5131/panda3d/commit/2b735df2d0b8f9880311a9a08a28c7ec684e9583) fix (You can just edit the .py file in your SDK) This reverts a change that completely breaks the TTLE and RTM. This is IMPORTANT!**
 * Build yourself a copy of [Disyer's libtoontown](https://github.com/darktohka/libtoontown), and drop the .pyd files in the root directory.
 * Recent Panda3D build (1.10.7 or later) running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
 * Basic knowledge on how streets are setup
