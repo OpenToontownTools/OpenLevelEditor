@@ -4816,6 +4816,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addKernFloater = Floater.Floater(
             gridFrame,
             text='Kern',
+            numDigits=4,
             #maxVelocity=1.0,
             command=self.setSignBaselineKern)
         self.addKernFloater.grid(row=4, column=0, rowspan=2, columnspan=3,
@@ -4823,6 +4824,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addWiggleFloater = Floater.Floater(
             gridFrame,
             text='Wiggle',
+            numDigits=4,
             #maxVelocity=10.0,
             command=self.setSignBaselineWiggle)
         self.addWiggleFloater.grid(row=6, column=0, rowspan=2, columnspan=3,
@@ -4830,6 +4832,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addStumbleFloater = Floater.Floater(
             gridFrame,
             text='Stumble',
+            numDigits=4,
             #maxVelocity=1.0,
             command=self.setSignBaselineStumble)
         self.addStumbleFloater.grid(row=8, column=0, rowspan=2, columnspan=3,
@@ -4837,6 +4840,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addStompFloater = Floater.Floater(
             gridFrame,
             text='Stomp',
+            numDigits=4,
             #maxVelocity=1.0,
             command=self.setSignBaselineStomp)
         self.addStompFloater.grid(row=10, column=0, rowspan=2, columnspan=3,
@@ -4844,6 +4848,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addCurveFloater = Floater.Floater(
             gridFrame,
             text='Curve',
+            numDigits=4,
             #maxVelocity = 1.0,
             command=self.setSignBaselineCurve)
         self.addCurveFloater.grid(row=12, column=0, rowspan=2, columnspan=3,
@@ -4851,6 +4856,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addXFloater = Floater.Floater(
             gridFrame,
             text='X',
+            numDigits=4,
             #maxVelocity=1.0,
             command=self.setDNATargetX)
         self.addXFloater.grid(row=4, column=3, rowspan=2, columnspan=3,
@@ -4858,6 +4864,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addZFloater = Floater.Floater(
             gridFrame,
             text='Z',
+            numDigits=4,
             #maxVelocity=1.0,
             command=self.setDNATargetZ)
         self.addZFloater.grid(row=6, column=3, rowspan=2, columnspan=3,
@@ -4865,6 +4872,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addScaleXFloater = Floater.Floater(
             gridFrame,
             text='Scale X',
+            numDigits=4,
             #maxVelocity=1.0,
             command=self.setDNATargetScaleX)
         self.addScaleXFloater.grid(row=8, column=3, rowspan=2, columnspan=3,
@@ -4872,6 +4880,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addScaleZFloater = Floater.Floater(
             gridFrame,
             text='Scale Z',
+            numDigits=4,
             #maxVelocity=1.0,
             command=self.setDNATargetScaleZ)
         self.addScaleZFloater.grid(row=10, column=3, rowspan=2, columnspan=3,
@@ -4879,6 +4888,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.addRollFloater = Floater.Floater(
             gridFrame,
             text='Roll',
+            numDigits=4,
             #maxVelocity=10.0,
             command=self.setDNATargetRoll)
         self.addRollFloater.grid(row=12, column=3, rowspan=2, columnspan=3,
