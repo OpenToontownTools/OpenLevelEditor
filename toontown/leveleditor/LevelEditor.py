@@ -483,7 +483,7 @@ class LevelEditor(NodePath, DirectObject):
             self.panel.sceneGraphExplorer.update()
 
         self.outputFile = None
-        self.panel["title"] = 'Level Editor: No file loaded'
+        self.panel["title"] = 'Open Level Editor: No file loaded'
 
     def deleteToplevel(self):
         # Destory old toplevel node path and DNA
@@ -2999,7 +2999,7 @@ class LevelEditor(NodePath, DirectObject):
 
         # Set the title bar to have the filename to make it easier
         # to remember what file you are working on
-        self.panel["title"] = 'Level Editor: ' + os.path.basename(filename)
+        self.panel["title"] = 'Open Level Editor: ' + os.path.basename(filename)
         self.panel.sceneGraphExplorer.update()
 
     def outputDNADefaultFile(self):
@@ -4400,7 +4400,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         INITOPT = Pmw.INITOPT
         optiondefs = (
-            ('title',       'Toontown Level Editor',       None),
+            ('title',       'Open Level Editor',       None),
             )
         self.defineoptions(kw, optiondefs)
 
@@ -4416,7 +4416,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         balloon = self.balloon = Pmw.Balloon(hull)
         # Start with balloon help disabled
         self.balloon.configure(state = 'none')
-
+        
+        Pmw.aboutversion('1.0.0')
+        Pmw.aboutcopyright('Maintained by drewcification#5131')
+        Pmw.aboutcontact(
+          'For more information, check out the repo: http://github.com/OpenToontownTools/ToontownLevelEditor')
+        self.about = Pmw.AboutDialog(hull,
+                                     applicationname="OpenLevelEditor")
+                                     
+        self.about.withdraw()
         menuFrame = Frame(hull, relief = GROOVE, bd = 2)
         menuFrame.pack(fill = X)
 
@@ -4506,6 +4514,9 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             label = 'Balloon Help',
                             variable = self.toggleBalloonVar,
                             command = self.toggleBalloon)
+        menuBar.addmenuitem('Help', 'command',
+                                 'About the Open Level Editor',
+                                 label='About...', command=self.showAbout)
 
         self.editMenu = Pmw.ComboBox(
             menuFrame, labelpos = W,
@@ -5730,6 +5741,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.balloon.configure(state = 'balloon')
         else:
             self.balloon.configure(state = 'none')
+            
+    def showAbout(self):
+        self.about.show()
+        self.about.focus_set()
 
 class VisGroupsEditor(Pmw.MegaToplevel):
     def __init__(self, levelEditor, visGroups = ['None'],
