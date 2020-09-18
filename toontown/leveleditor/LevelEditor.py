@@ -48,7 +48,7 @@ from .LevelStyleManager import *
 base.startDirect(fWantDirect = 1, fWantTk = 1)
 
 visualizeZones = base.config.GetBool("visualize-zones", 0)
-dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "$TTMODELS/src/dna"))
+dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "leveleditor"))
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
 fUseCVS = base.config.GetBool("level-editor-use-cvs", 1)
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
@@ -284,7 +284,8 @@ class LevelEditor(NodePath, DirectObject):
             ('page_up', self.pageUp),
             ('page_down', self.pageDown),
             ('shift-o', self.toggleOrth),
-            ('f12', self.screenshot)
+            ('f12', self.screenshot),
+            ('control-s', self.outputDNADefaultFile)
             ]
 
         self.overrideEvents = [
@@ -3004,7 +3005,8 @@ class LevelEditor(NodePath, DirectObject):
     def outputDNADefaultFile(self):
         outputFile = self.outputFile
         if outputFile == None:
-            outputFile = self.neighborhood + '_working.dna'
+            self.saveToSpecifiedDNAFile()
+            return
         file = os.path.join(dnaDirectory.toOsSpecific(), outputFile)
         self.outputDNA(file)
 
