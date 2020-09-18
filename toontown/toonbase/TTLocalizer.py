@@ -2,12 +2,14 @@ from panda3d.core import *
 from direct.showbase import DConfig
 import string
 import types
+
 try:
     language = DConfig.GetString('language', 'english')
     checkLanguage = DConfig.GetBool('check-language', 0)
 except:
     language = simbase.config.GetString('language', 'english')
     checkLanguage = simbase.config.GetBool('check-language', 0)
+
 
 def getLanguage():
     return language
@@ -21,6 +23,7 @@ else:
     _languageModule = 'toontown.toonbase.TTLocalizer_' + language
 print('from ' + _languageModule + ' import *')
 from toontown.toonbase.TTLocalizerEnglish import *
+
 if checkLanguage:
     l = {}
     g = {}

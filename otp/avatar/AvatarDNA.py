@@ -3,7 +3,7 @@ AvatarDNA module: contains the methods and definitions for describing
 multipart actors with a simple class
 """
 
-#import whrandom
+# import whrandom
 from pandac.PandaModules import *
 from direct.directnotify.DirectNotifyGlobal import *
 import random
@@ -11,6 +11,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 
 notify = directNotify.newCategory("AvatarDNA")
+
 
 class AvatarDNA:
     """
@@ -25,8 +26,9 @@ class AvatarDNA:
         dna.makeFromNetString(networkPacket)
 
     """
+
     # special methods
-    
+
     def __str__(self):
         """
         Avatar DNA print method
@@ -41,10 +43,10 @@ class AvatarDNA:
         string = self.makeNetString()
         dg = PyDatagram(string)
         dg.dumpHex(ostream)
-    
+
     def makeFromNetString(self, string):
         notify.error("called makeFromNetString on avatarDNA parent class")
-    
+
     # dna methods
 
     def getType(self):

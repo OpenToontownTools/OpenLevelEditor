@@ -1,11 +1,10 @@
-
 from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
 
-class AnimatedProp(DirectObject.DirectObject):
 
+class AnimatedProp(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory("AnimatedProp")
-    
+
     def __init__(self, node):
         self.node = node
 
@@ -22,5 +21,3 @@ class AnimatedProp(DirectObject.DirectObject):
     def exit(self):
         # Note: this must be safe and efficient to be called multiple times
         self.notify.debug("exit")
-    
-    

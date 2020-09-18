@@ -11,17 +11,22 @@ zoneUtilNotify = DirectNotifyGlobal.directNotify.newCategory("ZoneUtil")
 
 tutorialDict = None
 
+
 def isGoofySpeedwayZone(zoneId):
     return (zoneId == 8000)
+
 
 def isCogHQZone(zoneId):
     return ((zoneId >= 10000) and (zoneId < 15000))
 
+
 def isMintInteriorZone(zoneId):
     return zoneId in (CashbotMintIntA, CashbotMintIntB, CashbotMintIntC)
 
+
 def isDynamicZone(zoneId):
     return ((zoneId >= DynamicZonesBegin) and (zoneId < DynamicZonesEnd))
+
 
 def getStreetName(branchId):
     global tutorialDict
@@ -29,6 +34,7 @@ def getStreetName(branchId):
         return StreetNames[20000][-1]
     else:
         return StreetNames[branchId][-1]
+
 
 def getLoaderName(zoneId):
     # examples:
@@ -50,25 +56,26 @@ def getLoaderName(zoneId):
         else:
             loaderName = "townLoader"
     else:
-        suffix = zoneId%1000
+        suffix = zoneId % 1000
 
         # We always assume toon interiors, never suit interiors, with
         # getLoaderName().  And toon interiors are loaded with the safe
         # zone or toon they correspond to.
         if suffix >= 500:
             suffix -= 500
-        
+
         if isCogHQZone(zoneId):
-            loaderName="cogHQLoader"
+            loaderName = "cogHQLoader"
         elif suffix < 100:
-            loaderName="safeZoneLoader"
+            loaderName = "safeZoneLoader"
         else:
-            loaderName="townLoader"
-            
-    assert(zoneUtilNotify.debug("getLoaderName(zoneId="
-            +str(zoneId)+") returning "+loaderName))
-    assert(loaderName)
+            loaderName = "townLoader"
+
+    assert (zoneUtilNotify.debug("getLoaderName(zoneId="
+                                 + str(zoneId) + ") returning " + loaderName))
+    assert (loaderName)
     return loaderName
+
 
 def getBranchLoaderName(zoneId):
     """Convert to a branch zone ID before getting loader name."""
@@ -84,36 +91,41 @@ def getBranchLoaderName(zoneId):
     # 40135 => townLoader
     return getLoaderName(getBranchZone(zoneId))
 
+
 def getSuitWhereName(zoneId):
-    where=getWhereName(zoneId, 0)
-    assert(zoneUtilNotify.debug("getWhereName(zoneId="
-            +str(zoneId)+") returning "+where))
-    assert(where)
+    where = getWhereName(zoneId, 0)
+    assert (zoneUtilNotify.debug("getWhereName(zoneId="
+                                 + str(zoneId) + ") returning " + where))
+    assert (where)
     return where
 
+
 def getToonWhereName(zoneId):
-    where=getWhereName(zoneId, 1)
-    assert(zoneUtilNotify.debug("getWhereName(zoneId="
-            +str(zoneId)+") returning "+where))
-    assert(where)
+    where = getWhereName(zoneId, 1)
+    assert (zoneUtilNotify.debug("getWhereName(zoneId="
+                                 + str(zoneId) + ") returning " + where))
+    assert (where)
     return where
+
 
 def isPlayground(zoneId):
     whereName = getWhereName(zoneId, False)
     if whereName == "cogHQExterior":
-        return True        
+        return True
     else:
-        return (zoneId%1000 == 0 and zoneId < DynamicZonesBegin)
+        return (zoneId % 1000 == 0 and zoneId < DynamicZonesBegin)
+
 
 def isPetshop(zoneId):
     if (zoneId == 2522 or
-        zoneId == 1510 or
-        zoneId == 3511 or
-        zoneId == 4508 or
-        zoneId == 5505 or
-        zoneId == 9508):
+            zoneId == 1510 or
+            zoneId == 3511 or
+            zoneId == 4508 or
+            zoneId == 5505 or
+            zoneId == 9508):
         return True
     return False
+
 
 def getWhereName(zoneId, isToon):
     global tutorialDict
@@ -140,9 +152,9 @@ def getWhereName(zoneId, isToon):
                 where = "cogHQLobby"
             elif suffix == 200:
                 where = "factoryExterior"
-            elif getHoodId(zoneId) == LawbotHQ and suffix in (300,400,500,600):
+            elif getHoodId(zoneId) == LawbotHQ and suffix in (300, 400, 500, 600):
                 where = "stageInterior"
-            elif getHoodId(zoneId) == BossbotHQ and suffix in (500,600,700):
+            elif getHoodId(zoneId) == BossbotHQ and suffix in (500, 600, 700):
                 where = "countryClubInterior"
             elif suffix >= 500:
                 if getHoodId(zoneId) == SellbotHQ:
@@ -154,15 +166,16 @@ def getWhereName(zoneId, isToon):
             else:
                 zoneUtilNotify.error("unknown cogHQ where: " + str(zoneId))
         elif suffix == 0:
-            where="playground"
+            where = "playground"
         elif suffix >= 500:
             if isToon:
-                where="toonInterior"
+                where = "toonInterior"
             else:
-                where="suitInterior"
+                where = "suitInterior"
         else:
-            where="street"
+            where = "street"
     return where
+
 
 def getBranchZone(zoneId):
     # examples:
@@ -185,10 +198,11 @@ def getBranchZone(zoneId):
         if not isCogHQZone(zoneId):
             if (zoneId % 1000) >= 500:
                 # ...this is an interior zone id.
-                branchId -= 500        
-    assert(zoneUtilNotify.debug("getBranchZone(zoneId="
-            +str(zoneId)+") returning "+str(branchId)))
+                branchId -= 500
+    assert (zoneUtilNotify.debug("getBranchZone(zoneId="
+                                 + str(zoneId) + ") returning " + str(branchId)))
     return branchId
+
 
 def getCanonicalBranchZone(zoneId):
     # examples:
@@ -203,6 +217,7 @@ def getCanonicalBranchZone(zoneId):
     # 40135 => 2100
     return getBranchZone(getCanonicalZoneId(zoneId))
 
+
 def isWelcomeValley(zoneId):
     """
     Returns true if the indicated zoneId represents one of the special
@@ -216,7 +231,8 @@ def isWelcomeValley(zoneId):
 
     """
     return zoneId == WelcomeValleyToken or (
-        zoneId >= WelcomeValleyBegin and zoneId < WelcomeValleyEnd)
+            zoneId >= WelcomeValleyBegin and zoneId < WelcomeValleyEnd)
+
 
 def getCanonicalZoneId(zoneId):
     """
@@ -236,12 +252,13 @@ def getCanonicalZoneId(zoneId):
         # need GS case?
         zoneId = ToontownCentral
     elif zoneId >= WelcomeValleyBegin and zoneId < WelcomeValleyEnd:
-        zoneId = (zoneId%2000)
+        zoneId = (zoneId % 2000)
         if zoneId < 1000:
             zoneId = zoneId + ToontownCentral
         else:
             zoneId = zoneId - 1000 + GoofySpeedway
     return zoneId
+
 
 def getTrueZoneId(zoneId, currentZoneId):
     """
@@ -259,18 +276,19 @@ def getTrueZoneId(zoneId, currentZoneId):
     # 40135 => 40135
     """
     if (zoneId >= WelcomeValleyBegin and \
-       zoneId < WelcomeValleyEnd) or zoneId == WelcomeValleyToken:
+        zoneId < WelcomeValleyEnd) or zoneId == WelcomeValleyToken:
         zoneId = getCanonicalZoneId(zoneId)
 
     if currentZoneId >= WelcomeValleyBegin and \
-       currentZoneId < WelcomeValleyEnd:
+            currentZoneId < WelcomeValleyEnd:
         hoodId = getHoodId(zoneId)
         offset = currentZoneId - (currentZoneId % 2000)
         if hoodId == ToontownCentral:
             return (zoneId - ToontownCentral) + offset
-        elif hoodId == GoofySpeedway: 
+        elif hoodId == GoofySpeedway:
             return (zoneId - GoofySpeedway) + offset + 1000
     return zoneId
+
 
 def getHoodId(zoneId):
     """includes HQ zones"""
@@ -291,9 +309,10 @@ def getHoodId(zoneId):
         hoodId = Tutorial
     else:
         hoodId = zoneId - (zoneId % 1000)
-    assert(zoneUtilNotify.debug("getHoodId(zoneId="
-            +str(zoneId)+") returning "+str(hoodId)))
+    assert (zoneUtilNotify.debug("getHoodId(zoneId="
+                                 + str(zoneId) + ") returning " + str(hoodId)))
     return hoodId
+
 
 def getSafeZoneId(zoneId):
     """returns hoodId of nearest playground; maps HQ zones to their
@@ -315,6 +334,7 @@ def getSafeZoneId(zoneId):
         hoodId = HQToSafezone[hoodId]
     return hoodId
 
+
 def getCanonicalHoodId(zoneId):
     # examples:
     # zoneId ==> returns
@@ -328,9 +348,11 @@ def getCanonicalHoodId(zoneId):
     # 40135 => 2000
     return getHoodId(getCanonicalZoneId(zoneId))
 
+
 def getCanonicalSafeZoneId(zoneId):
     # Just like getCanonicalHoodId except HQs get translated as well.
     return getSafeZoneId(getCanonicalZoneId(zoneId))
+
 
 def isInterior(zoneId):
     global tutorialDict
@@ -342,32 +364,35 @@ def isInterior(zoneId):
             r = 0
     else:
         # if the override is not in effect, do the math.
-        r = (zoneId%1000)>=500
-    assert(zoneUtilNotify.debug("isInterior(zoneId="
-            +str(zoneId)+") returning "+str(r)))
+        r = (zoneId % 1000) >= 500
+    assert (zoneUtilNotify.debug("isInterior(zoneId="
+                                 + str(zoneId) + ") returning " + str(r)))
     return r
 
+
 def overrideOn(branch, exteriorList, interiorList):
-    #print "OVERRIDE ON: "
-    #print exteriorList
-    #print interiorList
+    # print "OVERRIDE ON: "
+    # print exteriorList
+    # print interiorList
     # This lets us override the math of ZoneUtil during the tutorial.
     global tutorialDict
     if tutorialDict:
         zoneUtilNotify.warning("setTutorialDict: tutorialDict is already set!")
 
-    tutorialDict = {"branch" : branch,
-                    "exteriors" : exteriorList,
-                    "interiors" : interiorList,
+    tutorialDict = {"branch"   : branch,
+                    "exteriors": exteriorList,
+                    "interiors": interiorList,
                     }
 
+
 def overrideOff():
-    #print "OVERRIDE OFF:"
+    # print "OVERRIDE OFF:"
     global tutorialDict
     # This is used to turn off the override when the tutorial is over.
     tutorialDict = None
 
-def getWakeInfo(hoodId=None, zoneId=None):
+
+def getWakeInfo(hoodId = None, zoneId = None):
     """returns showWake, wakeWaterHeight"""
     wakeWaterHeight = 0
     showWake = 0

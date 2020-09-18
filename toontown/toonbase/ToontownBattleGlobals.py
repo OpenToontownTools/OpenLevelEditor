@@ -28,21 +28,21 @@ BaseHp = 15
 Tracks = TTLocalizer.BattleGlobalTracks
 NPCTracks = TTLocalizer.BattleGlobalNPCTracks
 
-TrackColors = ((211/255.0, 148/255.0, 255/255.0),
-               (249/255.0, 255/255.0, 93/255.0),
-               (79/255.0, 190/255.0, 76/255.0),
-               (93/255.0, 108/255.0, 239/255.0),
-               (255/255.0, 145/255.0, 66/255.0),
-               (255/255.0, 65/255.0, 199/255.0),
-               (67/255.0, 243/255.0, 255/255.0),
+TrackColors = ((211 / 255.0, 148 / 255.0, 255 / 255.0),
+               (249 / 255.0, 255 / 255.0, 93 / 255.0),
+               (79 / 255.0, 190 / 255.0, 76 / 255.0),
+               (93 / 255.0, 108 / 255.0, 239 / 255.0),
+               (255 / 255.0, 145 / 255.0, 66 / 255.0),
+               (255 / 255.0, 65 / 255.0, 199 / 255.0),
+               (67 / 255.0, 243 / 255.0, 255 / 255.0),
                )
 
 # TODO: put want-all-props back in with quest system
-#try:
+# try:
 #    wantAllProps = base.config.GetBool('want-all-props', 0)
-#except:
+# except:
 #    wantAllProps = simbase.config.GetBool('want-all-props', 0)
-#if (wantAllProps == 1):
+# if (wantAllProps == 1):
 #    for i in range(len(TrackZones)):
 #        TrackZones[i] = ToontownCentral
 
@@ -74,24 +74,23 @@ NUM_GAG_TRACKS = 7
 
 # which props buffs which track
 PropTypeToTrackBonus = {
-    AnimPropTypes.Hydrant: SQUIRT_TRACK,
+    AnimPropTypes.Hydrant : SQUIRT_TRACK,
     AnimPropTypes.Mailbox : THROW_TRACK,
-    AnimPropTypes.Trashcan : HEAL_TRACK,
+    AnimPropTypes.Trashcan: HEAL_TRACK,
     }
 
-
 # avatar skill levels (totalled)
-#Levels = [0, 10, 50, 140, 300, 550]
-#Levels = [0, 10, 50, 250, 750, 2000]
-Levels = [[0, 20, 200, 800, 2000, 6000, 10000], # heal
-          [0, 20, 100, 800, 2000, 6000, 10000], # trap
-          [0, 20, 100, 800, 2000, 6000, 10000], # lure
-          [0, 40, 200, 1000, 2500, 7500, 10000], # sound
-          [0, 10, 50, 400, 2000, 6000, 10000], # throw
-          [0, 10, 50, 400, 2000, 6000, 10000], # squirt
-          [0, 20, 100, 500, 2000, 6000, 10000], # drop
+# Levels = [0, 10, 50, 140, 300, 550]
+# Levels = [0, 10, 50, 250, 750, 2000]
+Levels = [[0, 20, 200, 800, 2000, 6000, 10000],  # heal
+          [0, 20, 100, 800, 2000, 6000, 10000],  # trap
+          [0, 20, 100, 800, 2000, 6000, 10000],  # lure
+          [0, 40, 200, 1000, 2500, 7500, 10000],  # sound
+          [0, 10, 50, 400, 2000, 6000, 10000],  # throw
+          [0, 10, 50, 400, 2000, 6000, 10000],  # squirt
+          [0, 20, 100, 500, 2000, 6000, 10000],  # drop
           ]
-#MaxSkill = 5000
+# MaxSkill = 5000
 regMaxSkill = 10000
 UberSkill = 500
 MaxSkill = UberSkill + regMaxSkill
@@ -108,74 +107,74 @@ StartingLevel = 0
 
 CarryLimits = (
     # Heal
-    ( ( 10,  0,  0,  0, 0, 0, 0),  # lvl 1
-      ( 10,  5,  0,  0, 0, 0, 0),  # lvl 2
-      ( 15, 10,  5,  0, 0, 0, 0),  # lvl 3
-      ( 20, 15, 10,  5, 0, 0, 0),  # lvl 4
-      ( 25, 20, 15, 10, 3, 0, 0),  # lvl 5
-      ( 30, 25, 20, 15, 7, 3, 0),  # lvl 6
-      ( 30, 25, 20, 15, 7, 3, 1) ), # lvl 7
+    ((10, 0, 0, 0, 0, 0, 0),  # lvl 1
+     (10, 5, 0, 0, 0, 0, 0),  # lvl 2
+     (15, 10, 5, 0, 0, 0, 0),  # lvl 3
+     (20, 15, 10, 5, 0, 0, 0),  # lvl 4
+     (25, 20, 15, 10, 3, 0, 0),  # lvl 5
+     (30, 25, 20, 15, 7, 3, 0),  # lvl 6
+     (30, 25, 20, 15, 7, 3, 1)),  # lvl 7
     # Trap
-    ( (  5,  0,  0,  0, 0, 0, 0),   # lvl 1
-      (  7,  3,  0,  0, 0, 0, 0),   # lvl 2
-      ( 10,  7,  3,  0, 0, 0, 0),   # lvl 3
-      ( 15, 10,  7,  3, 0, 0, 0),   # lvl 4
-      ( 15, 15, 10,  5, 3, 0, 0),   # lvl 5
-      ( 20, 15, 15, 10, 5, 2, 0),   # lvl 6
-      ( 20, 15, 15, 10, 5, 2, 1) ),  # lvl 7
+    ((5, 0, 0, 0, 0, 0, 0),  # lvl 1
+     (7, 3, 0, 0, 0, 0, 0),  # lvl 2
+     (10, 7, 3, 0, 0, 0, 0),  # lvl 3
+     (15, 10, 7, 3, 0, 0, 0),  # lvl 4
+     (15, 15, 10, 5, 3, 0, 0),  # lvl 5
+     (20, 15, 15, 10, 5, 2, 0),  # lvl 6
+     (20, 15, 15, 10, 5, 2, 1)),  # lvl 7
     # Lure
-    ( ( 10,  0,  0,  0, 0, 0, 0),  # lvl 1
-      ( 10,  5,  0,  0, 0, 0, 0),  # lvl 2
-      ( 15, 10,  5,  0, 0, 0, 0),  # lvl 3
-      ( 20, 15, 10,  5, 0, 0, 0),  # lvl 4
-      ( 25, 20, 15, 10, 3, 0, 0),  # lvl 5
-      ( 30, 25, 20, 15, 7, 3, 0),  # lvl 6
-      ( 30, 25, 20, 15, 7, 3, 1) ), # lvl 7
+    ((10, 0, 0, 0, 0, 0, 0),  # lvl 1
+     (10, 5, 0, 0, 0, 0, 0),  # lvl 2
+     (15, 10, 5, 0, 0, 0, 0),  # lvl 3
+     (20, 15, 10, 5, 0, 0, 0),  # lvl 4
+     (25, 20, 15, 10, 3, 0, 0),  # lvl 5
+     (30, 25, 20, 15, 7, 3, 0),  # lvl 6
+     (30, 25, 20, 15, 7, 3, 1)),  # lvl 7
     # Sound
-    ( ( 10,  0,  0,  0, 0, 0, 0),  # lvl 1
-      ( 10,  5,  0,  0, 0, 0, 0),  # lvl 2
-      ( 15, 10,  5,  0, 0, 0, 0),  # lvl 3
-      ( 20, 15, 10,  5, 0, 0, 0),  # lvl 4
-      ( 25, 20, 15, 10, 3, 0, 0),  # lvl 5
-      ( 30, 25, 20, 15, 7, 3, 0),  # lvl 6
-      ( 30, 25, 20, 15, 7, 3, 1) ), # lvl 7
+    ((10, 0, 0, 0, 0, 0, 0),  # lvl 1
+     (10, 5, 0, 0, 0, 0, 0),  # lvl 2
+     (15, 10, 5, 0, 0, 0, 0),  # lvl 3
+     (20, 15, 10, 5, 0, 0, 0),  # lvl 4
+     (25, 20, 15, 10, 3, 0, 0),  # lvl 5
+     (30, 25, 20, 15, 7, 3, 0),  # lvl 6
+     (30, 25, 20, 15, 7, 3, 1)),  # lvl 7
     # Throw
-    ( ( 10,  0,  0,  0, 0, 0, 0),  # lvl 1
-      ( 10,  5,  0,  0, 0, 0, 0),  # lvl 2
-      ( 15, 10,  5,  0, 0, 0, 0),  # lvl 3
-      ( 20, 15, 10,  5, 0, 0, 0),  # lvl 4
-      ( 25, 20, 15, 10, 3, 0, 0),  # lvl 5
-      ( 30, 25, 20, 15, 7, 3, 0),  # lvl 6
-      ( 30, 25, 20, 15, 7, 3, 1) ), # lvl 7
+    ((10, 0, 0, 0, 0, 0, 0),  # lvl 1
+     (10, 5, 0, 0, 0, 0, 0),  # lvl 2
+     (15, 10, 5, 0, 0, 0, 0),  # lvl 3
+     (20, 15, 10, 5, 0, 0, 0),  # lvl 4
+     (25, 20, 15, 10, 3, 0, 0),  # lvl 5
+     (30, 25, 20, 15, 7, 3, 0),  # lvl 6
+     (30, 25, 20, 15, 7, 3, 1)),  # lvl 7
     # Squirt
-    ( ( 10,  0,  0,  0, 0, 0, 0 ),  # lvl 1
-      ( 10,  5,  0,  0, 0, 0, 0 ),  # lvl 2
-      ( 15, 10,  5,  0, 0, 0, 0 ),  # lvl 3
-      ( 20, 15, 10,  5, 0, 0, 0 ),  # lvl 4
-      ( 25, 20, 15, 10, 3, 0, 0 ),  # lvl 5
-      ( 30, 25, 20, 15, 7, 3, 0 ),  # lvl 6
-      ( 30, 25, 20, 15, 7, 3, 1 ) ), # lvl 7
+    ((10, 0, 0, 0, 0, 0, 0),  # lvl 1
+     (10, 5, 0, 0, 0, 0, 0),  # lvl 2
+     (15, 10, 5, 0, 0, 0, 0),  # lvl 3
+     (20, 15, 10, 5, 0, 0, 0),  # lvl 4
+     (25, 20, 15, 10, 3, 0, 0),  # lvl 5
+     (30, 25, 20, 15, 7, 3, 0),  # lvl 6
+     (30, 25, 20, 15, 7, 3, 1)),  # lvl 7
     # Drop
-    ( ( 10,  0,  0,  0, 0, 0, 0),  # lvl 1
-      ( 10,  5,  0,  0, 0, 0, 0),  # lvl 2
-      ( 15, 10,  5,  0, 0, 0, 0),  # lvl 3
-      ( 20, 15, 10,  5, 0, 0, 0),  # lvl 4
-      ( 25, 20, 15, 10, 3, 0, 0),  # lvl 5
-      ( 30, 25, 20, 15, 7, 3, 0),  # lvl 6
-      ( 30, 25, 20, 15, 7, 3, 1) ), # lvl 7
+    ((10, 0, 0, 0, 0, 0, 0),  # lvl 1
+     (10, 5, 0, 0, 0, 0, 0),  # lvl 2
+     (15, 10, 5, 0, 0, 0, 0),  # lvl 3
+     (20, 15, 10, 5, 0, 0, 0),  # lvl 4
+     (25, 20, 15, 10, 3, 0, 0),  # lvl 5
+     (30, 25, 20, 15, 7, 3, 0),  # lvl 6
+     (30, 25, 20, 15, 7, 3, 1)),  # lvl 7
     )
 
 # avatar prop maxes
-MaxProps = ( (15, 40), (30, 60), (75, 80) )
+MaxProps = ((15, 40), (30, 60), (75, 80))
 
 # death-list flag masks for BattleExperience
-DLF_SKELECOG   = 0x01
-DLF_FOREMAN    = 0x02
-DLF_VP         = 0x04
-DLF_CFO        = 0x08
+DLF_SKELECOG = 0x01
+DLF_FOREMAN = 0x02
+DLF_VP = 0x04
+DLF_CFO = 0x08
 DLF_SUPERVISOR = 0x10
-DLF_VIRTUAL    = 0x20
-DLF_REVIVES    = 0x40
+DLF_VIRTUAL = 0x20
+DLF_REVIVES = 0x40
 
 # Pie names.  These map to props in BattleProps, but it must be
 # defined here beccause BattleProps cannot be included on the AI.
@@ -186,37 +185,39 @@ pieNames = ['tart',
             'creampie',
             'birthday-cake',
             'wedding-cake',
-            'lawbook', #used in battle three of lawbot boss
+            'lawbook',  # used in battle three of lawbot boss
             ]
 
 # avatar prop icon filenames
-AvProps = ( ('feather', 'bullhorn', 'lipstick', 'bamboocane', 'pixiedust',
-           'baton', 'baton'),
-          ('banana', 'rake', 'marbles', 'quicksand', 'trapdoor', 'tnt', 'traintrack'),
-          ('1dollar', 'smmagnet', '5dollar', 'bigmagnet', '10dollar',
-           'hypnogogs', 'hypnogogs'),
-          ('bikehorn', 'whistle', 'bugle', 'aoogah', 'elephant', 'foghorn', 'singing'),
-          ('cupcake', 'fruitpieslice', 'creampieslice', 'fruitpie', 'creampie',
-           'cake', 'cake'),
-          ('flower', 'waterglass', 'waterballoon', 'bottle', 'firehose',
-           'stormcloud', 'stormcloud'),
-          ('flowerpot', 'sandbag', 'anvil', 'weight', 'safe', 'piano', 'piano')
-          ) 
+AvProps = (('feather', 'bullhorn', 'lipstick', 'bamboocane', 'pixiedust',
+            'baton', 'baton'),
+           ('banana', 'rake', 'marbles', 'quicksand', 'trapdoor', 'tnt', 'traintrack'),
+           ('1dollar', 'smmagnet', '5dollar', 'bigmagnet', '10dollar',
+            'hypnogogs', 'hypnogogs'),
+           ('bikehorn', 'whistle', 'bugle', 'aoogah', 'elephant', 'foghorn', 'singing'),
+           ('cupcake', 'fruitpieslice', 'creampieslice', 'fruitpie', 'creampie',
+            'cake', 'cake'),
+           ('flower', 'waterglass', 'waterballoon', 'bottle', 'firehose',
+            'stormcloud', 'stormcloud'),
+           ('flowerpot', 'sandbag', 'anvil', 'weight', 'safe', 'piano', 'piano')
+           )
 
-AvPropsNew = ( ('inventory_feather', 'inventory_megaphone', 'inventory_lipstick', 'inventory_bamboo_cane', 'inventory_pixiedust',
-           'inventory_juggling_cubes',  'inventory_ladder'),
-          ('inventory_bannana_peel', 'inventory_rake', 'inventory_marbles', 'inventory_quicksand_icon', 'inventory_trapdoor',
-           'inventory_tnt',  'inventory_traintracks'),
-          ('inventory_1dollarbill', 'inventory_small_magnet', 'inventory_5dollarbill', 'inventory_big_magnet',
-           'inventory_10dollarbill', 'inventory_hypno_goggles',  'inventory_screen'),
-          ('inventory_bikehorn', 'inventory_whistle', 'inventory_bugle', 'inventory_aoogah', 'inventory_elephant', 'inventory_fog_horn', 'inventory_opera_singer'),
-          ('inventory_tart', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_fruitpie',
-           'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
-          ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_seltzer_bottle',
-           'inventory_firehose', 'inventory_storm_cloud',  'inventory_geyser'),
-          ('inventory_flower_pot', 'inventory_sandbag', 'inventory_anvil', 'inventory_weight', 'inventory_safe_box', 'inventory_piano', 'inventory_ship')
-          ) 
-
+AvPropsNew = (
+('inventory_feather', 'inventory_megaphone', 'inventory_lipstick', 'inventory_bamboo_cane', 'inventory_pixiedust',
+ 'inventory_juggling_cubes', 'inventory_ladder'),
+('inventory_bannana_peel', 'inventory_rake', 'inventory_marbles', 'inventory_quicksand_icon', 'inventory_trapdoor',
+ 'inventory_tnt', 'inventory_traintracks'),
+('inventory_1dollarbill', 'inventory_small_magnet', 'inventory_5dollarbill', 'inventory_big_magnet',
+ 'inventory_10dollarbill', 'inventory_hypno_goggles', 'inventory_screen'),
+('inventory_bikehorn', 'inventory_whistle', 'inventory_bugle', 'inventory_aoogah', 'inventory_elephant',
+ 'inventory_fog_horn', 'inventory_opera_singer'),
+('inventory_tart', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_fruitpie',
+ 'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
+('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_seltzer_bottle',
+ 'inventory_firehose', 'inventory_storm_cloud', 'inventory_geyser'),
+('inventory_flower_pot', 'inventory_sandbag', 'inventory_anvil', 'inventory_weight', 'inventory_safe_box',
+ 'inventory_piano', 'inventory_ship')
+)
 
 # prettier on-screen versions of the prop names
 AvPropStrings = TTLocalizer.BattleGlobalAvPropStrings
@@ -228,12 +229,12 @@ AvPropStringsSingular = TTLocalizer.BattleGlobalAvPropStringsSingular
 AvPropStringsPlural = TTLocalizer.BattleGlobalAvPropStringsPlural
 
 # avatar prop accuracies
-AvPropAccuracy = ((70, 70, 70, 70, 70, 70, 100), # Heal
-                  (0, 0, 0, 0, 0, 0, 0),       # Trap (always hits)
-                  (50, 50, 60, 60, 70, 70, 90), # Lure
-                  (95, 95, 95, 95, 95, 95, 95), # Sound
-                  (75, 75, 75, 75, 75, 75, 75), # Throw
-                  (95, 95, 95, 95, 95, 95, 95), # Squirt
+AvPropAccuracy = ((70, 70, 70, 70, 70, 70, 100),  # Heal
+                  (0, 0, 0, 0, 0, 0, 0),  # Trap (always hits)
+                  (50, 50, 60, 60, 70, 70, 90),  # Lure
+                  (95, 95, 95, 95, 95, 95, 95),  # Sound
+                  (75, 75, 75, 75, 75, 75, 75),  # Throw
+                  (95, 95, 95, 95, 95, 95, 95),  # Squirt
                   (50, 50, 50, 50, 50, 50, 50)  # Drop
                   )
 AvLureBonusAccuracy = (60, 60, 70, 70, 80, 80, 100)
@@ -249,29 +250,29 @@ AvTrackAccStrings = TTLocalizer.BattleGlobalAvTrackAccStrings
 #
 AvPropDamage = (
     # Heal
-    (((8,10),(Levels[0][0], Levels[0][1])),#tickle
-     ((15,18),(Levels[0][1], Levels[0][2])),#group Joke
-     ((25,30),(Levels[0][2], Levels[0][3])),#kiss
-     ((40,45),(Levels[0][3], Levels[0][4])),#group Dance
-     ((60,70),(Levels[0][4], Levels[0][5])),#dust
-     ((90,120),(Levels[0][5], Levels[0][6])),#group Juggle
-     ((210,210),(Levels[0][6], MaxSkill))),#group Dive
+    (((8, 10), (Levels[0][0], Levels[0][1])),  # tickle
+     ((15, 18), (Levels[0][1], Levels[0][2])),  # group Joke
+     ((25, 30), (Levels[0][2], Levels[0][3])),  # kiss
+     ((40, 45), (Levels[0][3], Levels[0][4])),  # group Dance
+     ((60, 70), (Levels[0][4], Levels[0][5])),  # dust
+     ((90, 120), (Levels[0][5], Levels[0][6])),  # group Juggle
+     ((210, 210), (Levels[0][6], MaxSkill))),  # group Dive
     # Trap
-    (((10, 12),(Levels[1][0], Levels[1][1])),
-     ((18, 20),(Levels[1][1], Levels[1][2])),
-     ((30, 35),(Levels[1][2], Levels[1][3])),
-     ((45, 50),(Levels[1][3], Levels[1][4])),
-     ((60, 70),(Levels[1][4], Levels[1][5])),
-     ((90, 180),(Levels[1][5], Levels[1][6])),
-     ((195, 195),(Levels[1][6], MaxSkill))),
+    (((10, 12), (Levels[1][0], Levels[1][1])),
+     ((18, 20), (Levels[1][1], Levels[1][2])),
+     ((30, 35), (Levels[1][2], Levels[1][3])),
+     ((45, 50), (Levels[1][3], Levels[1][4])),
+     ((60, 70), (Levels[1][4], Levels[1][5])),
+     ((90, 180), (Levels[1][5], Levels[1][6])),
+     ((195, 195), (Levels[1][6], MaxSkill))),
     # Lure
-    (((0,0),(0,0)),
-     ((0,0),(0,0)),
-     ((0,0),(0,0)),
-     ((0,0),(0,0)),
-     ((0,0),(0,0)),
-     ((0,0),(0,0)),
-     ((0,0),(0,0))),
+    (((0, 0), (0, 0)),
+     ((0, 0), (0, 0)),
+     ((0, 0), (0, 0)),
+     ((0, 0), (0, 0)),
+     ((0, 0), (0, 0)),
+     ((0, 0), (0, 0)),
+     ((0, 0), (0, 0))),
     # Sound
     (((3, 4), (Levels[3][0], Levels[3][1])),
      ((5, 7), (Levels[3][1], Levels[3][2])),
@@ -314,42 +315,42 @@ AvPropDamage = (
 # toon attack track uses
 #
 ATK_SINGLE_TARGET = 0
-ATK_GROUP_TARGET  = 1
-AvPropTargetCat = ( ( ATK_SINGLE_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_GROUP_TARGET ),
-                    ( ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET ),
-                    ( ATK_GROUP_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_GROUP_TARGET,
-                      ATK_GROUP_TARGET ),
-                    ( ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_SINGLE_TARGET,
-                      ATK_GROUP_TARGET ),                    
-                    ) 
+ATK_GROUP_TARGET = 1
+AvPropTargetCat = ((ATK_SINGLE_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET),
+                   (ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET),
+                   (ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET,
+                    ATK_GROUP_TARGET),
+                   (ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_SINGLE_TARGET,
+                    ATK_GROUP_TARGET),
+                   )
 
-AvPropTarget = ( 0, 3, 0, 2, 3, 3, 3)
+AvPropTarget = (0, 3, 0, 2, 3, 3, 3)
 
 
-def getAvPropDamage( attackTrack, attackLevel, exp, organicBonus=False, propBonus = False,
-                     propAndOrganicBonusStack = False):
+def getAvPropDamage(attackTrack, attackLevel, exp, organicBonus = False, propBonus = False,
+                    propAndOrganicBonusStack = False):
     """
     ////////////////////////////////////////////////////////////////////
     // Function:   get the appropriate prop damage based on various
@@ -368,13 +369,13 @@ def getAvPropDamage( attackTrack, attackLevel, exp, organicBonus=False, propBonu
     # do 6 damage;  at more than 30 exp, the throw will max out at 6
     # damage
     #
-    minD = AvPropDamage[ attackTrack ][ attackLevel ][0][0]
-    maxD = AvPropDamage[ attackTrack ][ attackLevel ][0][1]
-    minE = AvPropDamage[ attackTrack ][ attackLevel ][1][0]
-    maxE = AvPropDamage[ attackTrack ][ attackLevel ][1][1]
-    expVal = min( exp, maxE )
-    expPerHp = float((maxE-minE)+1) / float((maxD-minD)+1)
-    damage = math.floor( ( expVal - minE ) / expPerHp ) + minD
+    minD = AvPropDamage[attackTrack][attackLevel][0][0]
+    maxD = AvPropDamage[attackTrack][attackLevel][0][1]
+    minE = AvPropDamage[attackTrack][attackLevel][1][0]
+    maxE = AvPropDamage[attackTrack][attackLevel][1][1]
+    expVal = min(exp, maxE)
+    expPerHp = float((maxE - minE) + 1) / float((maxD - minD) + 1)
+    damage = math.floor((expVal - minE) / expPerHp) + minD
     # In the gag purchase tutorial the sneak peak gags show as negative
     if damage <= 0:
         damage = minD
@@ -389,23 +390,26 @@ def getAvPropDamage( attackTrack, attackLevel, exp, organicBonus=False, propBonu
             damage += getDamageBonus(damage)
     return damage
 
+
 def getDamageBonus(normal):
     bonus = int(normal * 0.1)
     if (bonus < 1) and (normal > 0):
         bonus = 1
     return bonus
 
-#def isGroup(track, level):
+
+# def isGroup(track, level):
 #    if ((track == SOUND_TRACK) or
 #        (((track == HEAL_TRACK) or (track == LURE_TRACK)) and
 #         ((level == 1) or (level == 3) or (level == 5) or (level == 6)))):
 #        return 1
 #    else:
 #        return 0
-        
+
 def isGroup(track, level):
     return AvPropTargetCat[AvPropTarget[track]][level]
-    
+
+
 def getCreditMultiplier(floorIndex):
     """
     Returns the skill credit multiplier appropriate for a particular
@@ -414,7 +418,8 @@ def getCreditMultiplier(floorIndex):
     """
     # Currently, this is 1 for the first floor (floor 0), 1.5 for the
     # second floor (floor 1), etc.
-    return 1 + floorIndex * 0.5         
+    return 1 + floorIndex * 0.5
+
 
 def getFactoryCreditMultiplier(factoryId):
     """
@@ -423,6 +428,7 @@ def getFactoryCreditMultiplier(factoryId):
     """
     # for now, there's only one factory
     return 2.
+
 
 def getFactoryMeritMultiplier(factoryId):
     """
@@ -433,17 +439,19 @@ def getFactoryMeritMultiplier(factoryId):
     # we lowered the cog levels so I have upped this by a factor of two.
     return 4.
 
+
 def getMintCreditMultiplier(mintId):
     """
     Returns the skill credit multiplier for a particular mint.
     mintId is the mint-interior zone defined in ToontownGlobals.py.
     """
     return {
-        CashbotMintIntA : 2.,
-        CashbotMintIntB : 2.5,
-        CashbotMintIntC : 3.,
+        CashbotMintIntA: 2.,
+        CashbotMintIntB: 2.5,
+        CashbotMintIntC: 3.,
         }.get(mintId, 1.)
-         
+
+
 def getStageCreditMultiplier(floor):
     """
     Returns the skill credit multiplier for a particular mint.
@@ -451,15 +459,16 @@ def getStageCreditMultiplier(floor):
     """
     return getCreditMultiplier(floor)
 
+
 def getCountryClubCreditMultiplier(countryClubId):
     """
     Returns the skill credit multiplier for a particular mint.
     mintId is the mint-interior zone defined in ToontownGlobals.py.
     """
     return {
-        BossbotCountryClubIntA : 2.,
-        BossbotCountryClubIntB : 2.5,
-        BossbotCountryClubIntC : 3.,
+        BossbotCountryClubIntA: 2.,
+        BossbotCountryClubIntB: 2.5,
+        BossbotCountryClubIntC: 3.,
         }.get(countryClubId, 1.)
 
 
@@ -471,6 +480,7 @@ def getBossBattleCreditMultiplier(battleNumber):
     """
     return 1 + battleNumber
 
+
 def getInvasionMultiplier():
     """
     Returns the skill credit multiplier during invasions.
@@ -479,6 +489,7 @@ def getInvasionMultiplier():
     """
     return 2.0
 
+
 def getMoreXpHolidayMultiplier():
     """
     Returns the skill credit multiplier during the more xp holiday.
@@ -486,13 +497,15 @@ def getMoreXpHolidayMultiplier():
     User must first check to see if there is an invasion.
     """
     return 2.0
-    
+
+
 def encodeUber(trackList):
     bitField = 0
     for trackIndex in range(len(trackList)):
         if trackList[trackIndex] > 0:
-            bitField += pow(2,trackIndex)
+            bitField += pow(2, trackIndex)
     return bitField
+
 
 def decodeUber(flagMask):
     if flagMask == 0:
@@ -501,35 +514,37 @@ def decodeUber(flagMask):
     workNumber = flagMask
     workPower = maxPower
     trackList = []
-    #print("build")
-    #while (workNumber > 0) and (workPower >= 0):
+    # print("build")
+    # while (workNumber > 0) and (workPower >= 0):
     while (workPower >= 0):
-        if workNumber >= pow(2,workPower):
-            workNumber -= pow(2,workPower)
-            trackList.insert(0, 1) 
+        if workNumber >= pow(2, workPower):
+            workNumber -= pow(2, workPower)
+            trackList.insert(0, 1)
         else:
             trackList.insert(0, 0)
-        #print("Number %s List %s" % (workNumber, trackList))
+        # print("Number %s List %s" % (workNumber, trackList))
         workPower -= 1
     endList = len(trackList)
     foundOne = 0
-    #print("compress")
+    # print("compress")
     while not foundOne:
-        #print trackList
+        # print trackList
         if trackList[endList - 1] == 0:
             trackList.pop(endList - 1)
             endList -= 1
         else:
             foundOne = 1
     return trackList
-    
+
+
 def getUberFlag(flagMask, index):
     decode = decodeUber(flagMask)
     if index >= len(decode):
         return 0
     else:
         return decode[index]
-        
+
+
 def getUberFlagSafe(flagMask, index):
     if (flagMask == "unknown") or (flagMask < 0):
         return -1
