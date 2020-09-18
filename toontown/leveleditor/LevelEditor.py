@@ -28,6 +28,7 @@ import types
 from direct.task import Task
 import Pmw
 import builtins
+from locale import atof
 
 # [gjeon] to control avatar movement in drive mode
 from direct.controls import ControlManager
@@ -1389,7 +1390,7 @@ class LevelEditor(NodePath, DirectObject):
             buildingType = createHeightCode(heightList)
         else:
             # Use specified height list
-            heightList = list(map(string.atof, string.split(buildingType, '_')))
+            heightList = [atof(l) for l in buildingType.split('_')]
             height = calcHeight(heightList)
             # Is this a never before seen height list?  If so, record it.
             try:
@@ -5181,14 +5182,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 command = self.levelEditor.useDriveMode)
             self.driveModeButton.pack(side = LEFT, fill = X, expand = 1)
 
-        self.fColl = IntVar()
-        self.fColl.set(1)
-        base.direct.collButton = Checkbutton(
-            buttonFrame4,
-            text = 'Collide',
-            variable = self.fColl,
-            command = self.levelEditor.toggleCollisions)
-        base.direct.collButton.pack(side = LEFT, expand = 1, fill = X)
+        if ConfigVariableBool("want-experimental", False):
+            self.fColl = IntVar()
+            self.fColl.set(1)
+            base.direct.collButton = Checkbutton(
+                buttonFrame4,
+                text = 'Collide',
+                variable = self.fColl,
+                command = self.levelEditor.toggleCollisions)
+            base.direct.collButton.pack(side = LEFT, expand = 1, fill = X)
 
         self.fVis = IntVar()
         self.fVis.set(1)
@@ -5682,7 +5684,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.levelEditor.addInteractiveProp(self.interactivePropType)
 
     def updateSelectedWallWidth(self, strVal):
-        self.levelEditor.updateSelectedWallWidth(string.atof(strVal))
+        self.levelEditor.updateSelectedWallWidth(atof(strVal))
 
     def setCurrentColor(self, colorVec, fUpdate = 0):
         # Turn on/off update of selected before updating entry
