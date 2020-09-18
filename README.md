@@ -17,6 +17,11 @@
 
 ## Help
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
+    
+## Upcoming Features
+* Optional Auto PDNA compilation support for [libpandadna](https://github.com/loblao/libpandadna) and Corporate Clash's DNA reader.
+* Auto Saving
+* and much more!
 
 ## Known Incompatibilities
 * Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
