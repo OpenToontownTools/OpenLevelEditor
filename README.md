@@ -8,7 +8,7 @@
 * Build yourself a copy of [Disyer's libtoontown](https://github.com/darktohka/libtoontown)
 * Recent Panda3D build running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
 
-### You can also pick up a pre-built build in the releases tab
+~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon*
 
 
 ## Credits
