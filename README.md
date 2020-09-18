@@ -14,3 +14,7 @@
 ## Credits
 * [drewcification](https://github.com/drewc5131) - Project Lead | Developer
 * [Disyer](https://github.com/darktohka/) - Updating [LIBTOONTOWN](https://github.com/darktohka/libtoontown) to be compatible with modern panda and python 3 | Other Assistance
+
+## Known Incompatibilities
+* Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
+    * This is due to the models not being created with the proper node setup. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well. Ensure your custom buildings are created PROPERLY.
