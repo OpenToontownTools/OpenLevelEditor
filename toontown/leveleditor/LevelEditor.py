@@ -15,7 +15,7 @@ from tkinter import *
 # from whrandom import *
 # from random import *
 from direct.tkwidgets import Floater
-from direct.tkwidgets import VectorWidgets
+from toontown.fixes import VectorWidgets
 import string
 import os
 import glob
@@ -1649,6 +1649,7 @@ class LevelEditor(NodePath, DirectObject):
         self.setCurrent('toon_landmark_texture', landmarkType)
         # And create new landmark building
         block = self.getNextLandmarkBlock()
+        print(landmarkType)
         newDNALandmarkBuilding = DNALandmarkBuilding(
                 'tb' + block + ':' + landmarkType + '_DNARoot')
         newDNALandmarkBuilding.setCode(landmarkType)
@@ -5104,7 +5105,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.notebook.setnaturalsize()
 
         self.colorEntry = VectorWidgets.ColorEntry(
-                hull, text = 'Select Color',
+                hull, text = 'Select Color', value = (0, 0, 0, 255),
                 command = self.updateSelectedObjColor)
         self.colorEntry.menu.add_command(
                 label = 'Save Color', command = self.levelEditor.saveColor)
