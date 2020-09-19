@@ -7,13 +7,14 @@
 ## Requirements
 ### ***IMPORTANT***
 * **You need a Panda3D build with [THIS](https://github.com/drewc5131/panda3d/commit/2b735df2d0b8f9880311a9a08a28c7ec684e9583) fix (You can just edit the .py file in your SDK) This reverts a change that completely breaks the TTLE and RTM. This is IMPORTANT!**
+* Toontown phase files that include all the dna files. [These](https://github.com/open-toontown/resources) work fine.
+* Basic knowledge on how streets are setup
+
 * Build yourself a copy of [Disyer's libtoontown](https://github.com/darktohka/libtoontown), and drop the .pyd files in the root directory.
 * Recent Panda3D build (1.10.7 or later) running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
-* Basic knowledge on how streets are setup
-* Toontown phase files that include all the dna files. [These](https://github.com/open-toontown/resources) work fine.
+* You can do the above two, or you can download [my copy](https://drive.google.com/file/d/1EbfuG4AaPpeaDKWWeZIxUckFTvYfRQbL/view?usp=sharing). of panda with the compatible libtoontown files in there. Just drag Panda3D-1.11.0-Py37-x64 to your C drive root directory and the libotp.pyd and libtoontown.pyd files to the root level editor directory. Note that the PYD files in here are ONLY compatible with MY copy of panda, so if you are using any other build you have to rebuild them yourself.
 
-~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon, however you can grab my build of panda3d and compatible builds of lib toontown with it [HERE](https://drive.google.com/file/d/1EbfuG4AaPpeaDKWWeZIxUckFTvYfRQbL/view?usp=sharing). you MUST use that panda build if you use the pyd files in that zip.*
-
+~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon*
 
 ## Credits
 * [drewcification](https://github.com/drewc5131) - Project Lead | Developer
