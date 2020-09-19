@@ -17,7 +17,7 @@ class ToontownLevelEditor(ShowBase):
                             default=['TT', 'DD', 'BR', 'DG',
                                      'DL', 'MM', 'CC', 'CL',
                                      'CM', 'CS', 'GS', 'GZ',
-                                     'OZ', 'PA'])
+                                     'OZ', 'PA', 'ES', 'TUT'])
         args = parser.parse_args()
         if args.experimental:
             loadPrcFileData("", "want-experimental true")

@@ -125,6 +125,12 @@ except NameError:
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_town.dna', CSDefault, 1)
     if 'CS' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_9/dna/storage_CS.dna', CSDefault, 1)
+    if 'CM' in base.hoods:
+        loadDNAFile(DNASTORE, 'phase_10/dna/storage_CM_sz.dna', CSDefault, 1)
+    if 'CL' in base.hoods:
+        loadDNAFile(DNASTORE, 'phase_11/dna/storage_CL.dna', CSDefault, 1)
+    if 'CC' in base.hoods:
+        loadDNAFile(DNASTORE, 'phase_12/dna/storage_CC_sz.dna', CSDefault, 1)
     if 'GS' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS_sz.dna', CSDefault, 1)
@@ -135,10 +141,14 @@ except NameError:
     if 'GZ' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ_sz.dna', CSDefault, 1)
-    if 'CC' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_12/dna/storage_CC_sz.dna', CSDefault, 1)
     if 'PA' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_13/dna/storage_party_sz.dna', CSDefault, 1)
+    if 'ES' in base.hoods:
+        loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_estate.dna', CSDefault, 1)
+        loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
+    if 'TUT' in base.hoods:
+        loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_tutorial.dna', CSDefault, 1)
+        loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_interior.dna', CSDefault, 1)
     builtins.dnaLoaded = 1
 
 
