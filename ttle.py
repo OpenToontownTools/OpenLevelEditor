@@ -2,7 +2,7 @@
 from direct.showbase.ShowBase import ShowBase
 import builtins
 import argparse
-from panda3d.core import loadPrcFile
+from panda3d.core import loadPrcFile, loadPrcFileData
 
 
 class ToontownLevelEditor(ShowBase):
