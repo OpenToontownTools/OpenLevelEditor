@@ -7,7 +7,7 @@
 ## Requirements
 ### ***IMPORTANT***
 * **You need a Panda3D build with [THIS](https://github.com/drewc5131/panda3d/commit/2b735df2d0b8f9880311a9a08a28c7ec684e9583) fix (You can just edit the .py file in your SDK) This reverts a change that completely breaks the TTLE and RTM. This is IMPORTANT!**
-* Toontown phase files that include all the dna files. [These](https://github.com/open-toontown/resources) work fine.
+* Toontown phase files that include all the dna files. [These](https://github.com/open-toontown/resources) work fine. ***Toontown Rewritten's phase files do NOT contain .dna files since they use a completely different format, so you need to use them from elsewhere. Open-Toontown's resources are the closest to Toontown Online's that you can get, while also being completely updated and compatible with Panda3d 1.10.***
 * Basic knowledge on how streets are setup
 * Here you have two options:
     * The advanced option
@@ -53,3 +53,13 @@
 
 ### How do I scale props?
 * Select the prop and hold control + left mouse and drag
+
+### I did the setup properly, but the editor just closes on startup with no error message, and the last thing outputted is `Loading LevelEditor for Hoods: [xxxxx]`, how do I fix?
+* If you are downloading my redistributed copy of Panda from above, this may be an issue of having multiple installations of panda, and an incorrect one being targeted. Try one or both of the following:
+    * Edit the registry
+        * Open RegEdit
+        * Navigate to Computer\HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\3.7\InstallPath
+        * Change (Default)'s value to `C:\Panda3D-1.11.0-py37-x64\python`
+        * Change ExecutablePath's value to `C:\Panda3D-1.11.0-py37-x64\python\python.exe`
+        * Save, and if that does not work try restarting your PC, or doing option #2
+    * Remove all other versions of Panda3D.
