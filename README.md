@@ -54,7 +54,7 @@
 ### How do I scale props?
 * Select the prop and hold control + left mouse and drag
 
-### I did the setup properly, but the editor just closes on startup with no error message, and the last thing outputted is `Loading LevelEditor for Hoods: [xxxxx]`, how do I fix?
+### I did the setup properly, but the editor just closes on startup with no error message, how do I fix?
 * If you are downloading my redistributed copy of Panda from above, this may be an issue of having multiple installations of panda, and an incorrect one being targeted. Try one or both of the following:
     * Edit the registry
         * Open RegEdit
