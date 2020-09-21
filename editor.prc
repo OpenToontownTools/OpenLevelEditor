@@ -11,9 +11,8 @@ win-size 1280 720
 # The framebuffer-hardware flag forces it to use an accelerated driver.
 framebuffer-hardware #t
 
-# Use 4x msaa
-framebuffer-multisample #t
-multisamples 4
+# hw animation
+hardware-animated-vertices true
 
 # We want some more debugging info, but not too much
 notify-level info
