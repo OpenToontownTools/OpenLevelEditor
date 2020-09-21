@@ -1,12 +1,17 @@
 """ ToontownLevelEditor 2.0 Base Class  - Drewcification 091420 """
-from direct.showbase.ShowBase import ShowBase
-import builtins
+
+import asyncio
 import argparse
+import builtins
+import webbrowser
+from direct.directnotify.DirectNotifyGlobal import directNotify
+from direct.showbase.ShowBase import ShowBase
 from panda3d.core import loadPrcFile, loadPrcFileData
-import aiohttp, asyncio
+from tkinter import Tk, messagebox
 
 class ToontownLevelEditor(ShowBase):
-    APP_VERSION = '1.0.2'
+    notify = directNotify.newCategory("Open Level Editor")
+    APP_VERSION = open('ver', 'r').read()
     def __init__(self):
         # Check for -e or -d launch options
         ShowBase.__init__(self)
@@ -14,11 +19,13 @@ class ToontownLevelEditor(ShowBase):
         parser.add_argument("--experimental", action='store_true', help="Enables experimental features")
         parser.add_argument("--debug", action='store_true', help="Enables debugging features")
         parser.add_argument("--clash", action='store_true', help="Enables Corporate Clash features")
+        parser.add_argument("--noupdate", action='store_true', help="Disables Auto Updating")
         parser.add_argument("--hoods", nargs="*", help="Only loads the storage files of the specified hoods",
                             default=['TT', 'DD', 'BR', 'DG',
                                      'DL', 'MM', 'CC', 'CL',
                                      'CM', 'CS', 'GS', 'GZ',
                                      'OZ', 'PA', 'ES', 'TUT'])
+
         args = parser.parse_args()
         if args.experimental:
             loadPrcFileData("", "want-experimental true")
@@ -35,10 +42,31 @@ class ToontownLevelEditor(ShowBase):
 
         # Load the prc file
         loadPrcFile('editor.prc')
+        
+        tkroot = Tk()
+        tkroot.withdraw()
+        tkroot.title("Open Level Editor")
+        #tkroot.iconbitmap("resources/icon.ico")
+        self.tkRoot = tkroot
+        
+        if not args.noupdate:
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(self.checkUpdates())
 
         # Now we actually start the editor
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
 
-
+    async def checkUpdates(self):
+        import aiohttp
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://raw.githubusercontent.com/OpenToontownTools/TTOpenLevelEditor/master/ver") as resp:
+                ver = await resp.text()
+                ver = ver.splitlines()[0]
+                if ver != self.APP_VERSION:
+                    self.notify.info(f"Client is out of date! Latest: {ver} | Client: {self.APP_VERSION}")
+                    if messagebox.askokcancel("Error", f"Client is out of date!\nLatest: {ver} | Client: {self.APP_VERSION}. Press OK to be taken to the download page."):
+                        webbrowser.open("https://github.com/OpenToontownTools/TTOpenLevelEditor/releases/latest")
+                else:
+                    self.notify.info("Client is up to date!")
 ToontownLevelEditor().run()
