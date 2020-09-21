@@ -4425,7 +4425,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Start with balloon help disabled
         self.balloon.configure(state = 'none')
 
-        Pmw.aboutversion('1.0.2')
+        Pmw.aboutversion(base.APP_VERSION)
         Pmw.aboutcopyright('Maintained by drewcification#5131')
         Pmw.aboutcontact(
                 'For more information, check out the repo: http://github.com/OpenToontownTools/ToontownLevelEditor')

@@ -3,9 +3,10 @@ from direct.showbase.ShowBase import ShowBase
 import builtins
 import argparse
 from panda3d.core import loadPrcFile, loadPrcFileData
-
+import aiohttp, asyncio
 
 class ToontownLevelEditor(ShowBase):
+    APP_VERSION = '1.0.2'
     def __init__(self):
         # Check for -e or -d launch options
         ShowBase.__init__(self)
