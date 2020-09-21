@@ -210,6 +210,8 @@ class LevelEditor(NodePath, DirectObject):
         self.zoneLabels = []
         self.animPropDict = {}
 
+        self.collisionsToggled = False
+
         # Initialize LevelEditor variables DNAData, DNAToplevel, NPToplevel
         # DNAParent, NPParent, groupNum, lastAngle
         # Pass in the new toplevel group and don't clear out the old
@@ -298,6 +300,7 @@ class LevelEditor(NodePath, DirectObject):
             ('page_down', self.pageDown),
             ('shift-o', self.toggleOrth),
             ('f12', self.screenshot),
+            ('control-c', self.toggleVisibleCollisions),
             ('control-s', self.outputDNADefaultFile)
             ]
 
@@ -819,6 +822,13 @@ class LevelEditor(NodePath, DirectObject):
             self.collisionsOff()
             if (not (self.panel.fColl.get() or self.panel.fVis.get())):
                 self.traversalOff()
+
+    def toggleVisibleCollisions(self):
+        self.collisionsToggled = not self.collisionsToggled
+        if self.collisionsToggled:
+            render.findAllMatches('**/+CollisionNode').show()
+        else:
+            render.findAllMatches('**/+CollisionNode').hide()
 
     def initVisibilityData(self):
         # First make sure everything is shown
