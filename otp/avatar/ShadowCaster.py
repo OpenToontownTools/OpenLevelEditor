@@ -2,7 +2,7 @@ from pandac.PandaModules import *
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.ShadowPlacer import ShadowPlacer
-
+from otp.otpbase import OTPGlobals
 # This global variable will be set true or false according to whether
 # all avatar's drop shadows should be made visible, by the
 # TimeOfDayManager (which currently manages projected shadows).

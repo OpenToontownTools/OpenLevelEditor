@@ -599,7 +599,7 @@ def loadDialog():
                          )
     # load the audio files and store into the dialogue array
     for file in DogDialogueFiles:
-        DogDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        DogDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
     # load the cat dialogue
     catDialogueFiles = ( "AV_cat_short",
@@ -611,7 +611,7 @@ def loadDialog():
                          )
     # load the audio files and store into the dialogue array
     for file in catDialogueFiles:
-        CatDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        CatDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
     # load the horse dialogue
     horseDialogueFiles = ( "AV_horse_short",
@@ -624,7 +624,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in horseDialogueFiles:
-        HorseDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        HorseDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
     # load the rabbit dialogue
     rabbitDialogueFiles = ( "AV_rabbit_short",
@@ -637,7 +637,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in rabbitDialogueFiles:
-        RabbitDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        RabbitDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
     # load the mouse dialogue
     # for now the mouse reuses the rabbit sounds
@@ -651,7 +651,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in mouseDialogueFiles:
-        MouseDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        MouseDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
     # load the duck dialogue array
     duckDialogueFiles = ( "AV_duck_short",
@@ -664,7 +664,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in duckDialogueFiles:
-        DuckDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        DuckDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
     # load the monkey dialogue array
     monkeyDialogueFiles = ( "AV_monkey_short",
@@ -677,7 +677,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in monkeyDialogueFiles:
-        MonkeyDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        MonkeyDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
 
     # load the bear dialogue array
@@ -691,7 +691,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in bearDialogueFiles:
-        BearDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        BearDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
 
     # load the pig dialogue array
@@ -705,7 +705,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in pigDialogueFiles:
-        PigDialogueArray.append(base.loadSfx(loadPath + file + ".mp3"))
+        PigDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
 
 def unloadDialog():
     global DogDialogueArray
@@ -842,7 +842,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.setFont(ToontownGlobals.getToonFont())
 
         # chat balloon sound
-        self.soundChatBubble = base.loadSfx("phase_3/audio/sfx/GUI_balloon_popup.mp3")
+        self.soundChatBubble = base.loadSfx("phase_3/audio/sfx/GUI_balloon_popup.ogg")
 
         # The animFSM doesn't really have any restrictions on
         # transitions between states--we don't care which anim
@@ -2209,7 +2209,7 @@ class Toon(Avatar.Avatar, ToonHead):
         # This is loaded on demand so it does not need to be downloaded with the tutorial
         # which does not use it
         if not self.soundTeleport:
-            self.soundTeleport = base.loadSfx("phase_3.5/audio/sfx/AV_teleport.mp3")
+            self.soundTeleport = base.loadSfx("phase_3.5/audio/sfx/AV_teleport.ogg")
         return self.soundTeleport
 
     def getTeleportOutTrack(self, autoFinishTrack = 1):
@@ -2375,7 +2375,7 @@ class Toon(Avatar.Avatar, ToonHead):
         pass
 
     def getDiedInterval(self, autoFinishTrack = 1):
-        sound = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.mp3')
+        sound = loader.loadSfx('phase_5/audio/sfx/ENC_Lose.ogg')
 
         if hasattr(self, "uniqueName"):
             trackName = self.uniqueName("died")
@@ -2708,7 +2708,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def enterSquish(self, animMultiplier=1, ts=0, callback=None, extraArgs=[]):
         Emote.globalEmote.disableAll(self)
-        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.mp3')
+        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.ogg')
 
         lerpTime = .1
         node = self.getGeomNode().getChild(0)
@@ -3544,7 +3544,7 @@ class Toon(Avatar.Avatar, ToonHead):
         if pieType == 'actor':
             animPie = ActorInterval(pie, pieName, startFrame = 48)
 
-        sound = loader.loadSfx('phase_3.5/audio/sfx/AA_pie_throw_only.mp3')
+        sound = loader.loadSfx('phase_3.5/audio/sfx/AA_pie_throw_only.ogg')
 
         # First, create a ProjectileInterval to compute the relative
         # velocity.
@@ -3606,10 +3606,10 @@ class Toon(Avatar.Avatar, ToonHead):
 
         vol = 1.0
         if (pieName == 'lawbook'):
-            sound = loader.loadSfx('phase_11/audio/sfx/LB_evidence_miss.mp3')
+            sound = loader.loadSfx('phase_11/audio/sfx/LB_evidence_miss.ogg')
             vol = 0.25
         else:
-            sound = loader.loadSfx('phase_4/audio/sfx/AA_wholepie_only.mp3')
+            sound = loader.loadSfx('phase_4/audio/sfx/AA_wholepie_only.ogg')
 
         ival = Parallel(
             Func(splat.reparentTo, render),
@@ -3679,7 +3679,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def enterFlattened(self, animMultiplier=1, ts=0, callback=None, extraArgs=[]):
         Emote.globalEmote.disableAll(self)
-        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.mp3')
+        sound = loader.loadSfx('phase_9/audio/sfx/toon_decompress.ogg')
 
         lerpTime = .1
         node = self.getGeomNode().getChild(0)
