@@ -23,6 +23,7 @@
 ## Credits
 * [drewcification](https://github.com/drewc5131) - Project Lead | Developer
 * [Disyer](https://github.com/darktohka/) - Updating [LIBTOONTOWN](https://github.com/darktohka/libtoontown) to be compatible with modern panda and python 3 | Other Assistance
+* [Any other contributors are listed on the side](https://github.com/OpenToontownTools/TTOpenLevelEditor/graphs/contributors)
 
 ## Help
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
@@ -42,6 +43,7 @@
 
 ### Do I have to credit the use of this editor?
 * There is NO requirement to list this editor anywhere in your game credits, but you definitely can do so to spread the word!
+* I do ask however, that should you make a modification to the editor, that you fork the editor and leave it open source to promote open source software for the community.
 
 ### How do I move the camera?
 * Move: ALT + Middle Mouse
@@ -51,7 +53,7 @@
 * Note that the camera always moves around the object you have selected
 
 ### Some of my props are using textures as if they were in a different playgrond?
-* This is OK. This is just because you have support for more than 1 playground loaded. This is only visual in the editor, but I recommend you only load the zone you are working on.
+* This is OK. This is just because you have support for more than 1 playground loaded. This is only visible in the editor, but I recommend you only load the zone you are working on.
 
 ### How do I scale props?
 * Select the prop and hold control + left mouse and drag
