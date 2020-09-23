@@ -208,6 +208,61 @@ SUB_DNAS = [DNA_CORNICE,
             DNA_SIGN_GRAPHIC,
             DNA_WALL,
             DNA_WINDOWS]
+            
+            
+            
+CONTROLS = '''
+--Camera--
+Note: All camera transformations orbit the currently selected object
+Translate Camera: Alt + Middle Click and Drag
+Rotate / Orbit Camera: Alt + Left Click and Drag
+Zoom Camera: Alt + Right Click and Drag
+
+--Object Insertion--
+Move insertion point to currently selected object's origin: A
+Move object back to insertion point: J
+
+--Transform--
+Translate X/Y by 5 units: [Up, Down, Left, or Right]
+Translate X/Y by 1 unit: Shift + [Up, Down, Left, or Right]
+Translate Z by 5 units: Control + [Up or Down]
+Translate Z by 1 unit: Control + [Left (UP) or Right (DOWN)]
+Rotate by 15 degrees: Control + Shift + [Left or Right]
+Rotate by 1 degree: Control + Shift + [Up or Down]
+Scale: Control + Hold Left Click + Drag
+Note: you can use the [Place Selected] button to position using coordinates
+
+--Walls--
+Change full wall preset: Hold Right Click on anywhere BUT the selected wall
+Change wall section preset: Hold Right Click on wall section
+Change wall section texture: Shift + Hold Right Click on wall section
+Change knock-knock door: Hold Right Click near bottom center of wall piece
+Change windows: Hold Right Click near center of wall piece
+Change number of windows: Shift + Hold right click near center of wall piece
+Change cornice: Hold Right Rlick at top of wall piece
+Change color of part: Control + Hold right click in the same area you would to change the texture
+
+--Landmark Buildings--
+Change door: Hold Right Click bottom half of building
+Change sign background: Hold Right Click on top half of building
+
+--Flat Building Linking--
+Toggle Flat Building Linking mode: Shift + K
+Select Landmark Building to link to: Left Click
+Link Flat Building to Landmark Building: Left click Flat Building and press K
+
+--All Objects--
+Change Color: Control + Hold Right Click on object
+
+--Suits--
+Place Suit Point: Shift + S
+Place Battle Cell: Shift + C
+
+--Misc--
+Toggle Collision Boundaries: Control + C
+Save: Control + S
+Screenshot: F12
+'''
 
 
 # DNA Utility functions (possible class extensions?)

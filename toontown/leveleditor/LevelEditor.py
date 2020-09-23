@@ -43,6 +43,7 @@ from toontown.hood.GenericAnimatedProp import *
 from otp.otpbase import OTPGlobals
 
 from .LevelStyleManager import *
+from . import LevelEditorGlobals
 
 # Force direct and tk to be on
 base.startDirect(fWantDirect = 1, fWantTk = 1)
@@ -4423,6 +4424,8 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.defineoptions(kw, optiondefs)
 
         Pmw.MegaToplevel.__init__(self, parent, title = self['title'])
+        
+        self.iconbitmap("resources/openttle_ico_temp.ico")
 
         self.levelEditor = levelEditor
         self.styleManager = self.levelEditor.styleManager
@@ -4435,14 +4438,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Start with balloon help disabled
         self.balloon.configure(state = 'none')
 
-        Pmw.aboutversion(base.APP_VERSION)
-        Pmw.aboutcopyright('Maintained by drewcification#5131')
-        Pmw.aboutcontact(
-                'For more information, check out the repo: http://github.com/OpenToontownTools/ToontownLevelEditor')
-        self.about = Pmw.AboutDialog(hull,
-                                     applicationname = "OpenLevelEditor")
-
-        self.about.withdraw()
         menuFrame = Frame(hull, relief = GROOVE, bd = 2)
         menuFrame.pack(fill = X)
 
@@ -4533,8 +4528,27 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             variable = self.toggleBalloonVar,
                             command = self.toggleBalloon)
         menuBar.addmenuitem('Help', 'command',
+                            'Lists all the controls', 
+                            label = 'Controls...', command = self.showControls)
+        menuBar.addmenuitem('Help', 'command',
                             'About the Open Level Editor',
                             label = 'About...', command = self.showAbout)
+        # Create the HELP dialog
+        Pmw.aboutversion(base.APP_VERSION)
+        Pmw.aboutcopyright('Maintained by drewcification#5131')
+        Pmw.aboutcontact(
+                'For more information, check out the repo: http://github.com/OpenToontownTools/ToontownLevelEditor')
+        self.aboutDialog = Pmw.AboutDialog(hull,
+                                     applicationname = "OpenLevelEditor")
+
+        self.aboutDialog.withdraw()
+        
+        # Create the CONTROLS dialog
+        self.controlsDialog = Pmw.MessageDialog(parent,
+            title = 'Controls',
+            defaultbutton = 0,
+            message_text = LevelEditorGlobals.CONTROLS)
+        self.controlsDialog.withdraw()
 
         self.editMenu = Pmw.ComboBox(
                 menuFrame, labelpos = W,
@@ -5771,8 +5785,12 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.balloon.configure(state = 'none')
 
     def showAbout(self):
-        self.about.show()
-        self.about.focus_set()
+        self.aboutDialog.show()
+        self.aboutDialog.focus_set()
+        
+    def showControls(self):
+        self.controlsDialog.show()
+        self.controlsDialog.focus_set()
 
 
 class VisGroupsEditor(Pmw.MegaToplevel):
@@ -5786,7 +5804,7 @@ class VisGroupsEditor(Pmw.MegaToplevel):
         self.defineoptions(kw, optiondefs)
 
         Pmw.MegaToplevel.__init__(self, parent, title = self['title'])
-
+        self.iconbitmap("resources/openttle_ico_temp.ico")
         self.levelEditor = levelEditor
         self.visGroups = visGroups
         self.visGroupNames = [pair[1].getName() for pair in self.visGroups]
