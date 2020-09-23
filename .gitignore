@@ -112,3 +112,4 @@ ENV/
 buildCreativeTools.nsi
 notice.txt
 *.dna
+screenshots/

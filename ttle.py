@@ -48,7 +48,7 @@ class ToontownLevelEditor(ShowBase):
         tkroot = Tk()
         tkroot.withdraw()
         tkroot.title("Open Level Editor")
-        #tkroot.iconbitmap("resources/icon.ico")
+        tkroot.iconbitmap("resources/openttle_ico_temp.ico")
         self.tkRoot = tkroot
         
         if not args.noupdate:
