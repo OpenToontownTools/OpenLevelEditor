@@ -1,4 +1,4 @@
-# Toontown Open Level Editor
+![thumbnail](https://i.imgur.com/Q722uK2.png)
  
 ## An open sourced modernized version of Disney's in-house Toontown Online level editor used to create .dna files.
 
