@@ -4,9 +4,11 @@
 load-display pandagl
 
 # These control the placement and size of the default rendering window.
-
 win-origin 50 50
 win-size 1280 720
+
+# Set engine window title
+window-title Open Level Editor - Engine View
 
 # The framebuffer-hardware flag forces it to use an accelerated driver.
 framebuffer-hardware #t

@@ -13,8 +13,14 @@ class ToontownLevelEditor(ShowBase):
     notify = directNotify.newCategory("Open Level Editor")
     APP_VERSION = open('ver', 'r').read()
     def __init__(self):
-        # Check for -e or -d launch options
+                            
+        # Load the prc file prior to launching showbase in order
+        # to have it affect window related stuff
+        loadPrcFile('editor.prc')
+
         ShowBase.__init__(self)
+        
+        # Check for -e or -d launch options
         parser = argparse.ArgumentParser(description="Modes")
         parser.add_argument("--experimental", action='store_true', help="Enables experimental features")
         parser.add_argument("--debug", action='store_true', help="Enables debugging features")
@@ -40,8 +46,6 @@ class ToontownLevelEditor(ShowBase):
         builtins.__dict__.update(__import__('libotp', fromlist=['*']).__dict__)
         builtins.__dict__.update(__import__('libtoontown', fromlist=['*']).__dict__)
 
-        # Load the prc file
-        loadPrcFile('editor.prc')
         
         tkroot = Tk()
         tkroot.withdraw()
@@ -69,4 +73,7 @@ class ToontownLevelEditor(ShowBase):
                         webbrowser.open("https://github.com/OpenToontownTools/TTOpenLevelEditor/releases/latest")
                 else:
                     self.notify.info("Client is up to date!")
+
+
+# Run it
 ToontownLevelEditor().run()
