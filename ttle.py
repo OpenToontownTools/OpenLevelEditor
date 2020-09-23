@@ -17,8 +17,6 @@ class ToontownLevelEditor(ShowBase):
         # Load the prc file prior to launching showbase in order
         # to have it affect window related stuff
         loadPrcFile('editor.prc')
-
-        ShowBase.__init__(self)
         
         # Check for -e or -d launch options
         parser = argparse.ArgumentParser(description="Modes")
@@ -58,6 +56,7 @@ class ToontownLevelEditor(ShowBase):
             loop.run_until_complete(self.checkUpdates())
 
         # Now we actually start the editor
+        ShowBase.__init__(self)
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
 

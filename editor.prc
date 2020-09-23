@@ -16,28 +16,21 @@ framebuffer-hardware #t
 # hw animation
 hardware-animated-vertices true
 
-# We want some more debugging info, but not too much
-notify-level info
-default-directnotify-level info
+# We only want warning info, except for DNA which we spam
+notify-level warning
+default-directnotify-level warning
 notify-level-dna spam
 
 # Model Path
 model-path    $MAIN_DIR
 
-## This enable the automatic creation of a TK window when running
-## Direct.
-#
-#want-directtools  #f
-#want-tk           #f
-
 # Enable/disable performance profiling tool and frame-rate meter
-
 want-pstats            #f
 show-frame-rate-meter  #t
+frame-rate-meter-update-interval 0.01
 
 # Enable audio using the FMOD audio library by default:
 audio-library-name p3fmod_audio
-
 
 # Enable the model-cache, but only for models, not textures.
 model-cache-dir $USER_APPDATA/ToontownLevelEditor/cache
