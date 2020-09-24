@@ -28,7 +28,7 @@ model-path    $MAIN_DIR
 # Enable/disable performance profiling tool and frame-rate meter
 want-pstats            #f
 show-frame-rate-meter  #t
-frame-rate-meter-update-interval 0.01
+frame-rate-meter-update-interval 0.1
 
 # Enable audio using the FMOD audio library by default:
 audio-library-name p3fmod_audio
@@ -40,3 +40,6 @@ model-cache-textures #f
 # Default Extensions
 default-model-extension .bam
 screenshot-extension png
+
+# This is a MACOS fix, we don't need it as it locks framerates and can cause other issues
+tk-main-loop #f
