@@ -45,18 +45,11 @@
 * There is NO requirement to list this editor anywhere in your game credits, but you definitely can do so to spread the word!
 * I do ask however, that should you make a modification to the editor, that you fork the editor and leave it open source to promote open source software for the community.
 
-### How do I move the camera?
-* Move: ALT + Middle Mouse
-* Rotate: ALT + Left Mouse
-* Zoom: ALT + Right Mouse
-* You can also use your number pad or number row to view preset angles
-* Note that the camera always moves around the object you have selected
+### What are the controls?
+* Under the HELP drop-down menu at the top of the window, press the CONTROLS button and a popup will appear.
 
 ### Some of my props are using textures as if they were in a different playgrond?
 * This is OK. This is just because you have support for more than 1 playground loaded. This is only visible in the editor, but I recommend you only load the zone you are working on.
-
-### How do I scale props?
-* Select the prop and hold control + left mouse and drag
 
 ### I did the setup properly, but the editor just closes on startup with no error message, how do I fix?
 * If you are downloading my redistributed copy of Panda from above, this may be an issue of having multiple installations of panda, and an incorrect one being targeted. Try one or both of the following:
