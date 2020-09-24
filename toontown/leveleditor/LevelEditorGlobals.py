@@ -22,7 +22,7 @@ HOOD_IDS = {'TT': 'toontown_central',
             'GZ': 'golf_zone',
             'PA': 'party_zone',
             'ES': 'estate',
-            'tut': 'tutorial'
+            'TUT': 'tutorial'
             }
 
 # Init neighborhood arrays
