@@ -2036,7 +2036,8 @@ class LevelEditor(NodePath, DirectObject):
         wallNum = self.computeWallNum(dnaObject, hitPt)
         if wallNum < 0:
             # Do building related operations
-            if base.direct.gotAlt(modifiers):
+            # If we are using maya mode, allow the user to adjust width holding SHIFT instead of alt
+            if base.direct.gotShift(modifiers):
                 menuMode = 'building_width'
             else:
                 menuMode = 'building_style_all'

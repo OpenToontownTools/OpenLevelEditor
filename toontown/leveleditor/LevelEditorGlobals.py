@@ -241,6 +241,8 @@ Change windows: Hold Right Click near center of wall piece
 Change number of windows: Shift + Hold right click near center of wall piece
 Change cornice: Hold Right Rlick at top of wall piece
 Change color of part: Control + Hold right click in the same area you would to change the texture
+Change Width of wall: Shift + Hold Right click anywhere BUT the wall.
+Change direction of wall part: Alt + Hold Right Click on part (MayaCam MUST be disabled)
 
 --Landmark Buildings--
 Change door: Hold Right Click bottom half of building
