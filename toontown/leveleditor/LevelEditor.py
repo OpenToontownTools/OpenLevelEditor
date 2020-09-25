@@ -3637,6 +3637,8 @@ class LevelEditor(NodePath, DirectObject):
         for np, dna in visGroups:
             name = dna.getName()
             label = DirectGui.DirectLabel(text = name,
+                                          text_font = ToontownGlobals.getSignFont(),
+                                          text_fg = (0.152, 0.750, 0.258, 1),
                                           parent = np.getParent(),
                                           relief = None, scale = 3)
             label.setBillboardPointEye(0)
