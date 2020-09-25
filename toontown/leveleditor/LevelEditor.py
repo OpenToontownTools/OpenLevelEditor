@@ -150,6 +150,10 @@ except NameError:
     if 'TUT' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_tutorial.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_interior.dna', CSDefault, 1)
+
+    DNASTORE.storeFont('humanist', ToontownGlobals.getInterfaceFont())
+    DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())
+    DNASTORE.storeFont('suit', ToontownGlobals.getSuitFont())
     builtins.dnaLoaded = 1
 
 

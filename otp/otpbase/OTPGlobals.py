@@ -202,7 +202,7 @@ def getSignFont():
             InterfaceFont = TextNode.getDefaultFont()
             SignFont = TextNode.getDefaultFont()
         else:
-            SignFont = loader.loadFont(SignFontPath, lineHeight = 1.0, pixelsPerUnit = 80)
+            SignFont = loader.loadFont(SignFontPath, lineHeight = 1.0)
     return SignFont
 
 def setSignFont(path):

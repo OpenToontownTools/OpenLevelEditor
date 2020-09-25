@@ -250,7 +250,7 @@ SuitFont = None
 def getToonFont():
     global ToonFont
     if (ToonFont == None):
-        ToonFont = loader.loadFont(TTLocalizer.ToonFont, lineHeight = 1.0, pixelsPerUnit = 80)
+        ToonFont = loader.loadFont(TTLocalizer.ToonFont, lineHeight = 1.0)
     return ToonFont
 
 
