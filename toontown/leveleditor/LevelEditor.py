@@ -466,7 +466,7 @@ class LevelEditor(NodePath, DirectObject):
 
         # Create new toplevel node path and DNA
         if fCreateToplevel:
-            self.createToplevel(DNANode('level'))
+            self.createToplevel(DNAGroup('level'))
 
         # Initialize variables
         # Reset grid
@@ -1631,7 +1631,7 @@ class LevelEditor(NodePath, DirectObject):
         """ Create a new DNA Node group under the active parent """
         # Create a new DNA Node group
         if type == 'dna':
-            newDNANode = DNANode('group_' + repr(self.getGroupNum()))
+            newDNANode = DNAGroup('group_' + repr(self.getGroupNum()))
         else:
             newDNANode = DNAVisGroup('VisGroup_' + repr(self.getGroupNum()))
             # Increment group counter
