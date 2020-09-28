@@ -111,5 +111,8 @@ ENV/
 .idea/
 buildCreativeTools.nsi
 notice.txt
+
+# UGC
 *.dna
 screenshots/
+maps/
