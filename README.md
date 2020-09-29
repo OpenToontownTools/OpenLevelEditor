@@ -27,6 +27,8 @@
 
 ## Help
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
+
+* [*Please only contact me if you need assistance with the editor. No, I will not help you hack toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
     
 ## Upcoming Features
 * Optional Auto PDNA compilation support for [libpandadna](https://github.com/loblao/libpandadna) and Corporate Clash's DNA reader.
