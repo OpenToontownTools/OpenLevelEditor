@@ -47,8 +47,8 @@ class ToontownLevelEditor(ShowBase):
         parser.add_argument("--server", nargs="*", help="Enables features exclusive to various Toontown projects", default='online')
         parser.add_argument("--hoods", nargs="*", help="Only loads the storage files of the specified hoods",
                             default=['TT', 'DD', 'BR', 'DG',
-                                     'DL', 'MM', 'CC', 'CL',
-                                     'CM', 'CS', 'GS', 'GZ',
+                                     'DL', 'MM', 'GS', 'GZ',
+                                     'SBHQ', 'LBHQ', 'CBHQ', 'BBHQ',
                                      'OZ', 'PA', 'ES', 'TUT'])
         parser.add_argument("dnaPath", nargs="?", help="Load the DNA file through the specified path")
 
