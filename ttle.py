@@ -25,13 +25,6 @@ SERVER_TO_ID = {'online': TOONTOWN_ONLINE,
                 'clash': TOONTOWN_CORPORATE_CLASH,
                 'offline': TOONTOWN_OFFLINE}
 
-# Sample custom hood
-customHoodSample = '''{
- "name_shorthand": "TT",
- "name_longhand": "toontown_central",
- "storage_files": ["phase_4/dna/storage_TT.dna", "phase_4/dna/storage_TT_sz.dna", "phase_5/dna/storage_TT_town.dna"]
- }'''
-
 # Make custom hood directory if it doesn't exist
 if not os.path.exists('leveleditor/hoods/'):
     os.mkdir('leveleditor/hoods/')
