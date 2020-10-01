@@ -319,8 +319,9 @@ class LevelEditor(NodePath, DirectObject):
         self.panel.streetSelector.invoke()
         self.panel.toonBuildingSelector.selectitem(0)
         self.panel.toonBuildingSelector.invoke()
-        self.panel.landmarkBuildingSelector.selectitem(0)
-        self.panel.landmarkBuildingSelector.invoke()
+        if hasattr(self.panel, 'landmarkBuildingSelector'):
+            self.panel.landmarkBuildingSelector.selectitem(0)
+            self.panel.landmarkBuildingSelector.invoke()
         self.panel.propSelector.selectitem(0)
         self.panel.propSelector.invoke()
         # Start off with 20 foot buildings
@@ -4650,87 +4651,95 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # LANDMARK BUILDINGS
         Label(landmarkBuildingsPage, text = 'Landmark Buildings',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('toon_landmark', 0) == "":
+            Label(landmarkBuildingsPage, text = 'There are no landmark buildings in any of your loaded storages.').pack(expand = 0)
+        else:
 
-        """
-        self.landmarkHQIntVar = IntVar()
-        self.landmarkHQIntVar.set(0)
-        self.landmarkHQButton = Checkbutton(
-            landmarkBuildingsPage,
-            text = 'HQ',
-            variable=self.landmarkHQIntVar,
-            command=self.setLandmarkHQ)
-        self.landmarkHQButton.pack(side = LEFT, expand = 1, fill = X)
-        """
-
-        self.addLandmarkBuildingButton = Button(
+            """
+            self.landmarkHQIntVar = IntVar()
+            self.landmarkHQIntVar.set(0)
+            self.landmarkHQButton = Checkbutton(
                 landmarkBuildingsPage,
-                text = 'ADD LANDMARK BUILDING',
-                command = self.addLandmark)
-        self.addLandmarkBuildingButton.pack(fill = X, padx = 20, pady = 10)
-        bldgs = [s[14:] for s in self.styleManager.getCatalogCodes(
-                'toon_landmark')]
-        bldgs.sort()
-        self.landmarkBuildingSelector = Pmw.ComboBox(
-                landmarkBuildingsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Bldg type:',
-                entry_width = 30,
-                selectioncommand = self.setLandmarkType,
-                scrolledlist_items = bldgs
-                )
-        self.landmarkType = self.styleManager.getCatalogCode(
-                'toon_landmark', 0)
-        self.landmarkBuildingSelector.selectitem(
-                self.styleManager.getCatalogCode('toon_landmark', 0)[14:])
-        self.landmarkBuildingSelector.pack(expand = 1, fill = BOTH)
+                text = 'HQ',
+                variable=self.landmarkHQIntVar,
+                command=self.setLandmarkHQ)
+            self.landmarkHQButton.pack(side = LEFT, expand = 1, fill = X)
+            """
 
-        self.landmarkBuildingSpecialSelector = Pmw.ComboBox(
-                landmarkBuildingsPage,
-                dropdown = 0,
-                listheight = 100,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Special type:',
-                entry_width = 30,
-                selectioncommand = self.setLandmarkSpecialType,
-                scrolledlist_items = LANDMARK_SPECIAL_TYPES
-                )
-        self.landmarkSpecialType = LANDMARK_SPECIAL_TYPES[0]
-        self.landmarkBuildingSpecialSelector.selectitem(
-                LANDMARK_SPECIAL_TYPES[0])
-        self.landmarkBuildingSpecialSelector.pack(expand = 0)
+            self.addLandmarkBuildingButton = Button(
+                    landmarkBuildingsPage,
+                    text = 'ADD LANDMARK BUILDING',
+                    command = self.addLandmark)
+            self.addLandmarkBuildingButton.pack(fill = X, padx = 20, pady = 10)
+            bldgs = [s[14:] for s in self.styleManager.getCatalogCodes(
+                    'toon_landmark')]
+            bldgs.sort()
+            self.landmarkBuildingSelector = Pmw.ComboBox(
+                    landmarkBuildingsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Bldg type:',
+                    entry_width = 30,
+                    selectioncommand = self.setLandmarkType,
+                    scrolledlist_items = bldgs
+                    )
+            self.landmarkType = self.styleManager.getCatalogCode(
+                    'toon_landmark', 0)
+            self.landmarkBuildingSelector.selectitem(
+                    self.styleManager.getCatalogCode('toon_landmark', 0)[14:])
+            self.landmarkBuildingSelector.pack(expand = 1, fill = BOTH)
 
+            self.landmarkBuildingSpecialSelector = Pmw.ComboBox(
+                    landmarkBuildingsPage,
+                    dropdown = 0,
+                    listheight = 100,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Special type:',
+                    entry_width = 30,
+                    selectioncommand = self.setLandmarkSpecialType,
+                    scrolledlist_items = LANDMARK_SPECIAL_TYPES
+                    )
+            self.landmarkSpecialType = LANDMARK_SPECIAL_TYPES[0]
+            self.landmarkBuildingSpecialSelector.selectitem(
+                    LANDMARK_SPECIAL_TYPES[0])
+            self.landmarkBuildingSpecialSelector.pack(expand = 0)
+        
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
-        self.addAnimBuildingsButton = Button(
-                animBuildingsPage,
-                text = 'ADD ANIMATED BUILDING',
-                command = self.addAnimBuilding)
-        self.addAnimBuildingsButton.pack(fill = X, padx = 20, pady = 10)
-        codes = (self.styleManager.getCatalogCodes('anim_building'))
-        codes.sort()
-        self.animBuildingSelector = Pmw.ComboBox(
-                animBuildingsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Animated Building type:',
-                entry_width = 30,
-                selectioncommand = self.setAnimBuildingType,
-                scrolledlist_items = codes
-                )
-        self.animBuildingType = self.styleManager.getCatalogCode('anim_building', 0)
-        self.animBuildingSelector.selectitem(
-                self.styleManager.getCatalogCode('anim_building', 0))
-        self.animBuildingSelector.pack(expand = 1, fill = BOTH)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('anim_building', 0) == "":
+            Label(animBuildingsPage, text = 'There are no animated buildings in any of your loaded storages.').pack(expand = 0)
+        else:
+            self.addAnimBuildingsButton = Button(
+                    animBuildingsPage,
+                    text = 'ADD ANIMATED BUILDING',
+                    command = self.addAnimBuilding)
+            self.addAnimBuildingsButton.pack(fill = X, padx = 20, pady = 10)
+            codes = (self.styleManager.getCatalogCodes('anim_building'))
+            codes.sort()
+            self.animBuildingSelector = Pmw.ComboBox(
+                    animBuildingsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Animated Building type:',
+                    entry_width = 30,
+                    selectioncommand = self.setAnimBuildingType,
+                    scrolledlist_items = codes
+                    )
+            self.animBuildingType = self.styleManager.getCatalogCode('anim_building', 0)
+            self.animBuildingSelector.selectitem(
+                    self.styleManager.getCatalogCode('anim_building', 0))
+            self.animBuildingSelector.pack(expand = 1, fill = BOTH)
 
         # SIGNS
         Label(signPage, text = 'Signs',
@@ -4930,56 +4939,64 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # ANIMATED PROPS
         Label(animPropsPage, text = 'Animated Props',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
-        self.addAnimPropsButton = Button(
-                animPropsPage,
-                text = 'ADD ANIMATED PROP',
-                command = self.addAnimProp)
-        self.addAnimPropsButton.pack(fill = X, padx = 20, pady = 10)
-        codes = (self.styleManager.getCatalogCodes('anim_prop'))
-        codes.sort()
-        self.animPropSelector = Pmw.ComboBox(
-                animPropsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Animated Prop type:',
-                entry_width = 30,
-                selectioncommand = self.setAnimPropType,
-                scrolledlist_items = codes
-                )
-        self.animPropType = self.styleManager.getCatalogCode('anim_prop', 0)
-        self.animPropSelector.selectitem(
-                self.styleManager.getCatalogCode('anim_prop', 0))
-        self.animPropSelector.pack(expand = 1, fill = BOTH)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('anim_prop', 0) == "":
+            Label(animPropsPage, text = 'There are no animated props in any of your loaded storages.').pack(expand = 0)
+        else:
+            self.addAnimPropsButton = Button(
+                    animPropsPage,
+                    text = 'ADD ANIMATED PROP',
+                    command = self.addAnimProp)
+            self.addAnimPropsButton.pack(fill = X, padx = 20, pady = 10)
+            codes = (self.styleManager.getCatalogCodes('anim_prop'))
+            codes.sort()
+            self.animPropSelector = Pmw.ComboBox(
+                    animPropsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Animated Prop type:',
+                    entry_width = 30,
+                    selectioncommand = self.setAnimPropType,
+                    scrolledlist_items = codes
+                    )
+            self.animPropType = self.styleManager.getCatalogCode('anim_prop', 0)
+            self.animPropSelector.selectitem(
+                    self.styleManager.getCatalogCode('anim_prop', 0))
+            self.animPropSelector.pack(expand = 1, fill = BOTH)
 
         # ITERACTIVE PROPS
         Label(interactivePropsPage, text = 'Interactive Props',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
-        self.addInteractivePropsButton = Button(
-                interactivePropsPage,
-                text = 'ADD INTERACTIVE PROP',
-                command = self.addInteractiveProp)
-        self.addInteractivePropsButton.pack(fill = X, padx = 20, pady = 10)
-        codes = (self.styleManager.getCatalogCodes('interactive_prop'))
-        codes.sort()
-        self.interactivePropSelector = Pmw.ComboBox(
-                interactivePropsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Interactive Prop type:',
-                entry_width = 30,
-                selectioncommand = self.setInteractivePropType,
-                scrolledlist_items = codes
-                )
-        self.interactivePropType = self.styleManager.getCatalogCode('interactive_prop', 0)
-        self.interactivePropSelector.selectitem(
-                self.styleManager.getCatalogCode('interactive_prop', 0))
-        self.interactivePropSelector.pack(expand = 1, fill = BOTH)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('interactive_prop', 0) == "":
+            Label(interactivePropsPage, text = 'There are no interactive props in any of your loaded storages.').pack(expand = 0)
+        else:
+            self.addInteractivePropsButton = Button(
+                    interactivePropsPage,
+                    text = 'ADD INTERACTIVE PROP',
+                    command = self.addInteractiveProp)
+            self.addInteractivePropsButton.pack(fill = X, padx = 20, pady = 10)
+            codes = (self.styleManager.getCatalogCodes('interactive_prop'))
+            codes.sort()
+            self.interactivePropSelector = Pmw.ComboBox(
+                    interactivePropsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Interactive Prop type:',
+                    entry_width = 30,
+                    selectioncommand = self.setInteractivePropType,
+                    scrolledlist_items = codes
+                    )
+            self.interactivePropType = self.styleManager.getCatalogCode('interactive_prop', 0)
+            self.interactivePropSelector.selectitem(
+                    self.styleManager.getCatalogCode('interactive_prop', 0))
+            self.interactivePropSelector.pack(expand = 1, fill = BOTH)
 
         # SUIT PATHS
         Label(suitPathPage, text = 'Suit Paths',
