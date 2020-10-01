@@ -1,0 +1,7 @@
+{
+	"name_longhand": "estate",
+	"storage_files": [
+		"phase_5.5/dna/storage_estate.dna",
+		"phase_5.5/dna/storage_house_interior.dna"
+	]
+}

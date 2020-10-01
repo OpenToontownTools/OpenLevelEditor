@@ -1,0 +1,7 @@
+{
+	"name_longhand": "tutorial",
+	"storage_files": [
+		"phase_3.5/dna/storage_tutorial.dna",
+	    "phase_3.5/dna/storage_interior.dna"
+	]
+}

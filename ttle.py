@@ -33,15 +33,8 @@ customHoodSample = '''{
  }'''
 
 # Make custom hood directory if it doesn't exist
-if not os.path.exists('hoods/'):
-    os.mkdir('hoods/')
-
-# Create sample custom hood if it doesn't exist
-if not os.path.isfile('hoods/sample.json'):
-    with open('hoods/sample.json', 'w') as data:
-        data.write(customHoodSample)
-        data.close()
-
+if not os.path.exists('leveleditor/hoods/'):
+    os.mkdir('leveleditor/hoods/')
 
 class ToontownLevelEditor(ShowBase):
     notify = directNotify.newCategory("Open Level Editor")
@@ -82,22 +75,7 @@ class ToontownLevelEditor(ShowBase):
                 args.dnaPath = hood
                 args.hoods.remove(hood)
                 break
-
-        # Let's do our custom hood loading now
-        self.customHoods = []
-
-        if os.path.exists('./hoods'):
-            # Iterate over all files in the hoods folder
-            files = os.listdir('./hoods')
-            for fileName in files:
-                # Don't include our sample json, and make sure to only include json to begin with
-                if fileName != 'sample.json' and fileName[-5:] == '.json':
-                    with open('hoods/{}'.format(fileName)) as info:
-                        hood = json.load(info)
-                        shorthand = hood.get('name_shorthand')
-                        self.hoods.append(shorthand)
-                        self.customHoods.append(hood)
-
+                
         # Import the main dlls so we don't have to repeatedly import them everywhere
         builtins.__dict__.update(__import__('panda3d.core', fromlist=['*']).__dict__)
         builtins.__dict__.update(__import__('libotp', fromlist=['*']).__dict__)

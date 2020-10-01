@@ -12,48 +12,10 @@ SERVER_TO_ID = {'online': TOONTOWN_ONLINE,
                 'clash': TOONTOWN_CORPORATE_CLASH,
                 'offline': TOONTOWN_OFFLINE}
 
-CUSTOM_HOOD_NAME_SHORTHAND = 'name_shorthand'
-CUSTOM_HOOD_NAME_LONGHAND = 'name_longhand'
-CUSTOM_HOOD_PATH = 'storage_files'
+HOOD_NAME_SHORTHAND = 'name_shorthand'
+HOOD_NAME_LONGHAND = 'name_longhand'
+HOOD_PATH = 'storage_files'
 
-hoodString = 'TT DD DL'
-# hoodString = base.config.GetString('level-editor-hoods',
-#                                       'TT DD BR DG DL MM CC CL CM CS GS GZ OZ PA')
-hoods = hoodString.split()
-
-# The list of neighborhoods to edit
-HOOD_IDS = {'TT': 'toontown_central',
-            'DD': 'donalds_dock',
-            'MM': 'minnies_melody_land',
-            'BR': 'the_burrrgh',
-            'DG': 'daisys_garden',
-            'DL': 'donalds_dreamland',
-            'CC': 'cog_hq_bossbot',
-            'CL': 'cog_hq_lawbot',
-            'CM': 'cog_hq_cashbot',
-            'CS': 'cog_hq_sellbot',
-            'GS': 'goofy_speedway',
-            'OZ': 'outdoor_zone',
-            'GZ': 'golf_zone',
-            'PA': 'party_zone',
-            'ES': 'estate',
-            'TUT': 'tutorial'}
-
-for hood in base.customHoods:
-    shorthand = hood.get(CUSTOM_HOOD_NAME_SHORTHAND)
-    longhand = hood.get(CUSTOM_HOOD_NAME_LONGHAND)
-    HOOD_IDS[shorthand] = longhand
-
-# Init neighborhood arrays
-NEIGHBORHOODS = []
-NEIGHBORHOOD_CODES = {}
-for hoodId in hoods:
-    if hoodId in HOOD_IDS:
-        hoodName = HOOD_IDS[hoodId]
-        NEIGHBORHOOD_CODES[hoodName] = hoodId
-        NEIGHBORHOODS.append(hoodName)
-    else:
-        print('Error: no hood defined for: ', hoodId)
 
 # Colors used by all color menus
 DEFAULT_COLORS = [

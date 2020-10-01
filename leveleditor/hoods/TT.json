@@ -1,0 +1,8 @@
+{
+	"name_longhand": "toontown_central",
+	"storage_files": [
+		"phase_4/dna/storage_TT.dna", 
+		"phase_4/dna/storage_TT_sz.dna", 
+		"phase_5/dna/storage_TT_town.dna"
+	]
+}

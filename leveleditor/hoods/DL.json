@@ -1,0 +1,8 @@
+{
+	"name_longhand": "donalds_dreamland",
+	"storage_files": [
+		"phase_8/dna/storage_DL.dna", 
+		"phase_8/dna/storage_DL_sz.dna", 
+		"phase_8/dna/storage_DL_town.dna"
+	]
+}

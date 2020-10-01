@@ -20,6 +20,7 @@ import string
 import os
 import glob
 import getopt
+import json
 import sys
 # import whrandom
 import random
@@ -60,16 +61,7 @@ useSnowTree = base.config.GetBool("use-snow-tree", 0)
 #    ppython LevelEditor.py DD TT BR
 #
 
-# Init neighborhood arrays
-NEIGHBORHOODS = []
-NEIGHBORHOOD_CODES = {}
-for hoodId in base.hoods:
-    if hoodId in HOOD_IDS:
-        hoodName = HOOD_IDS[hoodId]
-        NEIGHBORHOOD_CODES[hoodName] = hoodId
-        NEIGHBORHOODS.append(hoodName)
-    else:
-        print('Error: no hood defined for: ', hoodId)
+
 
 
 # To safely load the storage files
@@ -100,65 +92,17 @@ except NameError:
 
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_estate.dna', CSDefault, 1)
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
-
-    # Load all the neighborhood specific storage files
-    if 'TT' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_5/dna/storage_TT_town.dna', CSDefault, 1)
-    if 'DD' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_town.dna', CSDefault, 1)
-    if 'MM' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_town.dna', CSDefault, 1)
-    if 'BR' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_town.dna', CSDefault, 1)
-    if 'DG' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_town.dna', CSDefault, 1)
-    if 'DL' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_town.dna', CSDefault, 1)
-    if 'CS' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_9/dna/storage_CS.dna', CSDefault, 1)
-    if 'CM' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_10/dna/storage_CM_sz.dna', CSDefault, 1)
-    if 'CL' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_11/dna/storage_CL.dna', CSDefault, 1)
-    if 'CC' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_12/dna/storage_CC_sz.dna', CSDefault, 1)
-    if 'GS' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS_sz.dna', CSDefault, 1)
-    if 'OZ' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_town.dna', CSDefault, 1)
-    if 'GZ' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ_sz.dna', CSDefault, 1)
-    if 'PA' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_13/dna/storage_party_sz.dna', CSDefault, 1)
-    if 'ES' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_estate.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
-    if 'TUT' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_tutorial.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_interior.dna', CSDefault, 1)
-
-    # Load storage files for custom hoods
-    if base.customHoods:
-        for data in base.customHoods:
-            paths = data.get(LevelEditorGlobals.CUSTOM_HOOD_PATH)
-            for path in paths:
-                loadDNAFile(DNASTORE, path, CSDefault, 1)
+    NEIGHBORHOODS = []
+    NEIGHBORHOOD_CODES = {}
+    for hood in base.hoods:
+        with open(f'./leveleditor/hoods/{hood}.json') as info:
+            data = json.load(info)
+            hoodName = data.get(LevelEditorGlobals.HOOD_NAME_LONGHAND)
+            NEIGHBORHOOD_CODES[hoodName] = hood
+            NEIGHBORHOODS.append(hoodName)
+            storages = data.get(LevelEditorGlobals.HOOD_PATH)
+            for storage in storages:
+                loadDNAFile(DNASTORE, storage, CSDefault, 1)
 
     DNASTORE.storeFont('humanist', ToontownGlobals.getInterfaceFont())
     DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())

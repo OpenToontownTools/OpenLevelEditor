@@ -1,0 +1,8 @@
+{
+	"name_longhand": "outdoor_zone",
+	"storage_files": [
+		"phase_6/dna/storage_OZ.dna", 
+		"phase_6/dna/storage_OZ_sz.dna", 
+		"phase_6/dna/storage_OZ_town.dna"
+	]
+}
