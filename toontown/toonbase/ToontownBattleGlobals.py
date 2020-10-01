@@ -435,7 +435,7 @@ def getFactoryMeritMultiplier(factoryId):
     Returns the skill merit multiplier for a particular factory.
     factoryId is the factory-interior zone defined in ToontownGlobals.py.
     """
-    # Many people complained about how many runs you must make now that 
+    # Many people complained about how many runs you must make now that
     # we lowered the cog levels so I have upped this by a factor of two.
     return 4.
 

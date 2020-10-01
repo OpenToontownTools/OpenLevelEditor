@@ -31,12 +31,12 @@ class RobotAvatarBase:
         self.setEndHpr(endHpr)
         self.setPosHpr(self.startPos, self.startHpr)
         self.ival = self.victoryIval = None
-        if not base.config.GetBool('want-new-anims',1):        
+        if not base.config.GetBool('want-new-anims',1):
             self.updateWalkIval()
             self.accept('playVictoryIval', lambda: self.setAnimState('victory'))
             self.accept('playRTMWalkIval', lambda: self.setAnimState('walk'))
             self.accept('playRTMRunIval', lambda: self.setAnimState('run'))
-        self.setAnimState(state)        
+        self.setAnimState(state)
         self.state = state
     def convertServerDNAString(self, serverString, type = 't'):
         # Strip out blank space and take last 30 characters
@@ -54,7 +54,7 @@ class RobotAvatarBase:
     def setAnimState(self,state):
         self.stopIvals()
         self.state = state
-        if not base.config.GetBool('want-new-anims',1):     
+        if not base.config.GetBool('want-new-anims',1):
             if state == 'victory':
                 if self.victoryIval != None:
                     self.victoryIval.start()
@@ -167,7 +167,7 @@ class RobotToon(Toon.Toon, RobotAvatarBase):
         RobotAvatarBase.__init__(self, parent, startPos, startHpr,
                                  endPos, endHpr, state)
         self.showHiRes()
-        
+
     def updateDNA(self, description):
         # Create dna
         if isinstance(description, ToonDNA.ToonDNA):

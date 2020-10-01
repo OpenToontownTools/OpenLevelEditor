@@ -189,9 +189,9 @@ SUB_DNAS = [DNA_CORNICE,
             DNA_SIGN_GRAPHIC,
             DNA_WALL,
             DNA_WINDOWS]
-            
-            
-            
+
+
+
 CONTROLS = '''
 --Camera--
 Note: All camera transformations orbit the currently selected object

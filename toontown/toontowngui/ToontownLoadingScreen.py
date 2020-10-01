@@ -91,7 +91,7 @@ class ToontownLoadingScreen:
         return (self.__expectedCount, self.__count)
 
     def abort(self):
-        self.gui.reparentTo(hidden)        
+        self.gui.reparentTo(hidden)
 
     def tick(self):
         self.__count = self.__count + 1

@@ -122,3 +122,6 @@ notice.txt
 screenshots/
 maps/
 phase_*/
+
+# VS Code
+.history
