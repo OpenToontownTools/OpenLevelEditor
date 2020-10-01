@@ -7,7 +7,7 @@ from direct.showbase.TkGlobal import *
 from direct.directtools.DirectUtil import *
 from direct.directtools.DirectGeometry import *
 from direct.interval.IntervalGlobal import *
-from direct.tkwidgets.SceneGraphExplorer import *
+from .LESceneGraphExplorer import *
 from direct.directnotify import DirectNotifyGlobal
 from tkinter.messagebox import showinfo
 from tkinter.filedialog import *
@@ -217,6 +217,7 @@ class LevelEditor(NodePath, DirectObject):
 
         self.collisionsToggled = False
 
+    def startUp(self, dnaPath=None):
         # Initialize LevelEditor variables DNAData, DNAToplevel, NPToplevel
         # DNAParent, NPParent, groupNum, lastAngle
         # Pass in the new toplevel group and don't clear out the old
@@ -399,6 +400,11 @@ class LevelEditor(NodePath, DirectObject):
         self.startT = None
         self.startF = None
         self.newObjPos = Point3(0)
+
+        # Load the DNA file passed (normally through an argument)
+        if dnaPath:
+            self.loadDNAFromFile(dnaPath)
+            self.outputFile = dnaPath
 
     # ENABLE/DISABLE
     def enable(self):
@@ -2443,6 +2449,11 @@ class LevelEditor(NodePath, DirectObject):
     def connectToCell(self, disconnect = False):
         selectedNPs = base.direct.selected.getSelectedAsList()
         if len(selectedNPs) != 2:
+            if not disconnect:
+                message = 'To connect a cell to a prop, make sure that "Show Cells" are enabled, select a prop you want to connect with,\n' + \
+                          'and while holding shift, click on the cell you want to connect to (this will select both at the same time),\n' + \
+                          'And then click on "Connect prop to cell" again.  You should see a line connecting the two if you\'ve done everything correctly.'
+                showinfo('Level Editor', message)
             return
 
         if self.selectedNPRoot:  # when interactiveProp is selected last
@@ -4431,8 +4442,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.defineoptions(kw, optiondefs)
 
         Pmw.MegaToplevel.__init__(self, parent, title = self['title'])
-        
-        self.iconbitmap("resources/openttle_ico_temp.ico")
+
+        if sys.platform == 'win32':
+            # FIXME: This doesn't work in other platforms for some reason...
+            self.iconbitmap("resources/openttle_ico_temp.ico")
 
         self.levelEditor = levelEditor
         self.styleManager = self.levelEditor.styleManager
@@ -4535,7 +4548,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             variable = self.toggleBalloonVar,
                             command = self.toggleBalloon)
         menuBar.addmenuitem('Help', 'command',
-                            'Lists all the controls', 
+                            'Lists all the controls',
                             label = 'Controls...', command = self.showControls)
         menuBar.addmenuitem('Help', 'command',
                             'About the Open Level Editor',
@@ -4549,7 +4562,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                      applicationname = "OpenLevelEditor")
 
         self.aboutDialog.withdraw()
-        
+
         # Create the CONTROLS dialog
         self.controlsDialog = Pmw.MessageDialog(parent,
             title = 'Controls',
@@ -5099,11 +5112,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.colorZoneButton2.pack(side = LEFT, expand = 1, fill = X)
 
         Button(bcButtons,
-               text = 'Connect to cell',
+               text = 'Connect prop to cell',
                command = self.levelEditor.connectToCell).pack(side = LEFT, expand = 1, fill = X)
 
         Button(bcButtons,
-               text = 'Disconnect',
+               text = 'Disconnect prop',
                command = lambda p0 = True: self.levelEditor.connectToCell(p0)).pack(side = LEFT, expand = 1, fill = X)
 
         bcButtons.pack(fill = X)
@@ -5599,7 +5612,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                     baseline.setFlags(flags + flagChar)
             elif flagChar in flags:
                 # Remove the flag:
-                flags = string.join(flags.split(flagChar), '')
+                flags = ''.join(flags.split(flagChar))
                 baseline.setFlags(flags)
             self.levelEditor.replaceSelected()
 
@@ -5794,7 +5807,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def showAbout(self):
         self.aboutDialog.show()
         self.aboutDialog.focus_set()
-        
+
     def showControls(self):
         self.controlsDialog.show()
         self.controlsDialog.focus_set()
@@ -5811,7 +5824,9 @@ class VisGroupsEditor(Pmw.MegaToplevel):
         self.defineoptions(kw, optiondefs)
 
         Pmw.MegaToplevel.__init__(self, parent, title = self['title'])
-        self.iconbitmap("resources/openttle_ico_temp.ico")
+        if sys.platform == 'win32':
+            # FIXME: This doesn't work in other platforms for some reason...
+            self.iconbitmap("resources/openttle_ico_temp.ico")
         self.levelEditor = levelEditor
         self.visGroups = visGroups
         self.visGroupNames = [pair[1].getName() for pair in self.visGroups]

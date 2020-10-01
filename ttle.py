@@ -4,6 +4,7 @@ import asyncio
 import argparse
 import builtins
 import webbrowser
+import sys
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import loadPrcFile, loadPrcFileData
@@ -13,11 +14,11 @@ class ToontownLevelEditor(ShowBase):
     notify = directNotify.newCategory("Open Level Editor")
     APP_VERSION = open('ver', 'r').read()
     def __init__(self):
-                            
+
         # Load the prc file prior to launching showbase in order
         # to have it affect window related stuff
         loadPrcFile('editor.prc')
-        
+
         # Check for -e or -d launch options
         parser = argparse.ArgumentParser(description="Modes")
         parser.add_argument("--experimental", action='store_true', help="Enables experimental features")
@@ -29,6 +30,7 @@ class ToontownLevelEditor(ShowBase):
                                      'DL', 'MM', 'CC', 'CL',
                                      'CM', 'CS', 'GS', 'GZ',
                                      'OZ', 'PA', 'ES', 'TUT'])
+        parser.add_argument("dnaPath", nargs="?", help="Load the DNA file through the specified path")
 
         args = parser.parse_args()
         if args.experimental:
@@ -38,19 +40,28 @@ class ToontownLevelEditor(ShowBase):
         if args.clash:
             loadPrcFileData("", "want-clash-specific-options true")
         self.hoods = args.hoods
+        # HACK: Check for dnaPath in args.hoods
+        for hood in self.hoods[:]:
+            if hood.endswith('.dna'):
+                args.dnaPath = hood
+                args.hoods.remove(hood)
+                break
 
         # Import the main dlls so we don't have to repeatedly import them everywhere
         builtins.__dict__.update(__import__('panda3d.core', fromlist=['*']).__dict__)
         builtins.__dict__.update(__import__('libotp', fromlist=['*']).__dict__)
         builtins.__dict__.update(__import__('libtoontown', fromlist=['*']).__dict__)
 
-        
+
         tkroot = Tk()
         tkroot.withdraw()
         tkroot.title("Open Level Editor")
-        tkroot.iconbitmap("resources/openttle_ico_temp.ico")
+        if sys.platform == 'win32':
+            # FIXME: This doesn't work in other platforms for some reason...
+            tkroot.iconbitmap("resources/openttle_ico_temp.ico")
+
         self.tkRoot = tkroot
-        
+
         if not args.noupdate:
             loop = asyncio.get_event_loop()
             loop.run_until_complete(self.checkUpdates())
@@ -59,6 +70,7 @@ class ToontownLevelEditor(ShowBase):
         ShowBase.__init__(self)
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
+        self.le.startUp(args.dnaPath)
 
     async def checkUpdates(self):
         import aiohttp
