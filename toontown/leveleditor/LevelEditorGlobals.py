@@ -1,6 +1,21 @@
 import string
 from pandac.PandaModules import *
 
+# Valid Toontown projects
+TOONTOWN_ONLINE = 0
+TOONTOWN_REWRITTEN = 1
+TOONTOWN_CORPORATE_CLASH = 2
+TOONTOWN_OFFLINE = 3
+
+SERVER_TO_ID = {'online': TOONTOWN_ONLINE,
+                'rewritten': TOONTOWN_REWRITTEN,
+                'clash': TOONTOWN_CORPORATE_CLASH,
+                'offline': TOONTOWN_OFFLINE}
+
+CUSTOM_HOOD_NAME_SHORTHAND = 'name_shorthand'
+CUSTOM_HOOD_NAME_LONGHAND = 'name_longhand'
+CUSTOM_HOOD_PATH = 'storage_files'
+
 hoodString = 'TT DD DL'
 # hoodString = base.config.GetString('level-editor-hoods',
 #                                       'TT DD BR DG DL MM CC CL CM CS GS GZ OZ PA')
@@ -22,8 +37,12 @@ HOOD_IDS = {'TT': 'toontown_central',
             'GZ': 'golf_zone',
             'PA': 'party_zone',
             'ES': 'estate',
-            'TUT': 'tutorial'
-            }
+            'TUT': 'tutorial'}
+
+for hood in base.customHoods:
+    shorthand = hood.get(CUSTOM_HOOD_NAME_SHORTHAND)
+    longhand = hood.get(CUSTOM_HOOD_NAME_LONGHAND)
+    HOOD_IDS[shorthand] = longhand
 
 # Init neighborhood arrays
 NEIGHBORHOODS = []
@@ -59,7 +78,7 @@ BUILDING_HEIGHTS = [10, 14, 20, 24, 25, 30]
 NUM_WALLS = [1, 2, 3]
 LANDMARK_SPECIAL_TYPES = ['', 'hq', 'gagshop', 'clotheshop', 'petshop', 'kartshop']
 # Corporate Clash has an UNCAPTURABLE building type to flag uncapturable buildings
-if ConfigVariableBool("want-clash-specific-options", False): 
+if base.server == TOONTOWN_CORPORATE_CLASH:
     LANDMARK_SPECIAL_TYPES.append('uncapturable')
 
 OBJECT_SNAP_POINTS = {
