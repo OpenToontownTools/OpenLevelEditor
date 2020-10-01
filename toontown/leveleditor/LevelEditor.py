@@ -97,8 +97,10 @@ except NameError:
     loadDNAFile(DNASTORE, 'dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)
+
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_estate.dna', CSDefault, 1)
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
+
     # Load all the neighborhood specific storage files
     if 'TT' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT.dna', CSDefault, 1)
@@ -150,6 +152,13 @@ except NameError:
     if 'TUT' in base.hoods:
         loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_tutorial.dna', CSDefault, 1)
         loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_interior.dna', CSDefault, 1)
+
+    # Load storage files for custom hoods
+    if base.customHoods:
+        for data in base.customHoods:
+            paths = data.get(LevelEditorGlobals.CUSTOM_HOOD_PATH)
+            for path in paths:
+                loadDNAFile(DNASTORE, path, CSDefault, 1)
 
     DNASTORE.storeFont('humanist', ToontownGlobals.getInterfaceFont())
     DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())

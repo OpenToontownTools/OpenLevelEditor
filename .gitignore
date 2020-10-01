@@ -4,6 +4,8 @@ __pycache__/
 *.pyd
 *$py.class
 phase_*/
+hoods/
+leveleditor/stylefiles
 
 # C extensions
 *.so
