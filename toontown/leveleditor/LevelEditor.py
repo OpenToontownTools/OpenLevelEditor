@@ -4494,6 +4494,21 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Reload Building Style Palettes',
                             label = 'Reload Bldg Styles',
                             command = self.styleManager.createBuildingStyleAttributes)
+                            
+        menuBar.addmenu('Advanced', 'Level Editor Advanced Options')
+        menuBar.addmenuitem('Advanced', 'command',
+                        'Open Injector',
+                        label = 'Injector',
+                        command = self.showInjector)
+                        
+        self.injectorDialog = Pmw.Dialog(parent, title = 'Injector',
+                                         buttons = ('Run',),
+                                         command = self.runInject)
+        self.injectorDialog.withdraw()
+        #self.injectorTextBox = Pmw.EntryField (parent = self.injectorDialog.interior())
+        self.injectorTextBox = Text(self.injectorDialog.interior(), height=30)
+        self.injectorTextBox.pack(expand = 1, fill = BOTH)
+                                         
 
         menuBar.addmenu('Help', 'Level Editor Help Operations')
         self.toggleBalloonVar = IntVar()
@@ -5783,6 +5798,18 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def showControls(self):
         self.controlsDialog.show()
         self.controlsDialog.focus_set()
+        
+    def showInjector(self):
+        self.injectorDialog.show()
+        self.injectorDialog.focus_set()
+        
+        
+    def runInject(self, e):
+        if e == None:
+            self.injectorDialog.withdraw()
+        if e == 'Run':
+            exec(self.injectorTextBox.get('1.0', 'end'), globals())
+        pass
 
 
 class VisGroupsEditor(Pmw.MegaToplevel):
