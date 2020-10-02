@@ -43,6 +43,7 @@ class ToontownLevelEditor(ShowBase):
         parser = argparse.ArgumentParser(description="Modes")
         parser.add_argument("--experimental", action='store_true', help="Enables experimental features")
         parser.add_argument("--debug", action='store_true', help="Enables debugging features")
+        parser.add_argument("--injector", "--want-injector", action='store_true', help="Enables the Python injector for debug and/or experimental purposes.")
         parser.add_argument("--noupdate", action='store_true', help="Disables Auto Updating")
         parser.add_argument("--server", nargs="*", help="Enables features exclusive to various Toontown projects", default='online')
         parser.add_argument("--hoods", nargs="*", help="Only loads the storage files of the specified hoods",
@@ -58,6 +59,7 @@ class ToontownLevelEditor(ShowBase):
         if args.debug:
             loadPrcFileData("", "want-debug true")
 
+
         server = SERVER_TO_ID.get(args.server[0].lower(), TOONTOWN_ONLINE)
         self.server = server
 
@@ -68,7 +70,7 @@ class ToontownLevelEditor(ShowBase):
                 args.dnaPath = hood
                 args.hoods.remove(hood)
                 break
-                
+
         # Import the main dlls so we don't have to repeatedly import them everywhere
         builtins.__dict__.update(__import__('panda3d.core', fromlist=['*']).__dict__)
         builtins.__dict__.update(__import__('libotp', fromlist=['*']).__dict__)
@@ -93,6 +95,11 @@ class ToontownLevelEditor(ShowBase):
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
 
+        # Check for debug injector flag
+        debugInjector = base.config.GetBool("want-injector", 0)
+        if args.injector or debugInjector:
+            self.loadInjector()
+
     async def checkUpdates(self):
         import aiohttp
         async with aiohttp.ClientSession() as session:
@@ -105,6 +112,32 @@ class ToontownLevelEditor(ShowBase):
                         webbrowser.open("https://github.com/OpenToontownTools/TTOpenLevelEditor/releases/latest")
                 else:
                     self.notify.info("Client is up to date!")
+
+    def loadInjector(self):
+        import platform
+        if platform.system() != "Darwin":  # Injector doesn't work on mac
+            from direct.stdpy import threading, thread
+            import wx
+
+            def inject_code(_):
+                exec(textbox.GetValue(), globals())
+
+            # Create the injector
+            app = wx.App(redirect=False)
+            frame = wx.Frame(
+                None,
+                title="Client Injector",
+                size=(650, 450),
+                style=wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX | wx.MINIMIZE_BOX # using wxpython in a tkinter environment ftw
+            )
+            panel = wx.Panel(frame)
+            button = wx.Button(parent=panel, id=-1, label="Inject", size=(600, 30), pos=(20, 0))
+            global textbox
+            textbox = wx.TextCtrl(parent=panel, id=-1, pos=(20, 35), size=(600, 340), style=wx.TE_MULTILINE)
+            frame.Bind(wx.EVT_BUTTON, inject_code, button)
+            frame.Show()
+            app.SetTopWindow(frame)
+            threading.Thread(target=app.MainLoop).start()
 
 
 # Run it

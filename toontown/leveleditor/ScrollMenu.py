@@ -34,8 +34,8 @@ class ScrollMenu:
                 decButton_borderWidth = (0.005, 0.005),
                 decButton_text0_fg = (0.152, 0.750, 0.258, 1),
                 decButton_text1_fg = (0.152, 0.750, 0.258, 1),
-                decButton_text2_fg = (0.977, 0.816, 0.133, 1), 
-                decButton_text3_fg = (0.3, 0.3, 0.3, 1), 
+                decButton_text2_fg = (0.977, 0.816, 0.133, 1),
+                decButton_text3_fg = (0.3, 0.3, 0.3, 1),
 
                 incButton_pos = (0.35, 0, -0.02),
                 incButton_text = "Inc",
@@ -44,8 +44,8 @@ class ScrollMenu:
                 incButton_borderWidth = (0.005, 0.005),
                 incButton_text0_fg = (0.152, 0.750, 0.258, 1),
                 incButton_text1_fg = (0.152, 0.750, 0.258, 1),
-                incButton_text2_fg = (0.977, 0.816, 0.133, 1), 
-                incButton_text3_fg = (0.3, 0.3, 0.3, 1), 
+                incButton_text2_fg = (0.977, 0.816, 0.133, 1),
+                incButton_text3_fg = (0.3, 0.3, 0.3, 1),
 
                 frameSize = (0.0, 0.8, -0.05, 0.59),
                 frameColor = (0, 0, 1, 0.5),

@@ -1,6 +1,5 @@
 """
         ZoneUtil
-        
         Get various information from a zone ID.
 """
 

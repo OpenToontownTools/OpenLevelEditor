@@ -1,5 +1,4 @@
 """Toon module: contains the Toon class"""
-"""Toon module: contains the Toon class"""
 
 from otp.avatar import Avatar
 from . import ToonDNA
@@ -219,7 +218,7 @@ Phase4AnimList = (
     ("pet-start", "petin"),
     ("pet-loop", "petloop"),
     ("pet-end", "petend"),
-    
+
     # For toonhall
     ("scientistJealous", "scientistJealous"),
     ("scientistEmcee", "scientistEmcee"),
@@ -380,7 +379,7 @@ def loadModels():
             model = loader.loadModelNode("phase_3" + fileRoot + "500")
             Preloaded.append(model)
             model = loader.loadModelNode("phase_3" + fileRoot + "250")
-            Preloaded.append(model)                   
+            Preloaded.append(model)
 
         #preload the torso models
         for key in list(TorsoDict.keys()):
@@ -392,7 +391,7 @@ def loadModels():
                         model = loader.loadModelNode("phase_3" + fileRoot + "500")
                         Preloaded.append(model)
                         model = loader.loadModelNode("phase_3" + fileRoot + "250")
-                        Preloaded.append(model)    
+                        Preloaded.append(model)
 
         #preload the head models
         for key in list(HeadDict.keys()):
@@ -734,7 +733,7 @@ class Toon(Avatar.Avatar, ToonHead):
     notify = DirectNotifyGlobal.directNotify.newCategory("Toon")
 
     afkTimeout = base.config.GetInt('afk-timeout', 600)
-    
+
     # This is the tuple of allowed animations that can be set by using toon.setAnimState().
     # If you add an animation that you want to do a setAnimState on please add this
     # animation to this list.
@@ -902,7 +901,7 @@ class Toon(Avatar.Avatar, ToonHead):
             )
         self.animFSM.enterInitialState()
         # Note: When you add an animation to this animFSM list also add it to
-        # setAnimStateAllowedList if you want to use setAnimState to change to that animation. 
+        # setAnimStateAllowedList if you want to use setAnimState to change to that animation.
 
     def stopAnimations(self):
         assert self.notify.debugStateCall(self, "animFsm")
@@ -1231,7 +1230,7 @@ class Toon(Avatar.Avatar, ToonHead):
         if filePrefix is None:
             self.notify.error("unknown leg style: %s" % legStyle)
         # load the models
-        self.loadModel("phase_3" + filePrefix + "1000", "legs", "1000", copy)        
+        self.loadModel("phase_3" + filePrefix + "1000", "legs", "1000", copy)
         self.loadModel("phase_3" + filePrefix + "500", "legs", "500", copy)
         self.loadModel("phase_3" + filePrefix + "250", "legs", "250", copy)
         if not copy:
@@ -1288,7 +1287,7 @@ class Toon(Avatar.Avatar, ToonHead):
             self.loadModel("phase_3" + filePrefix + "1000", "torso", "250", copy)
         else:
             self.loadModel("phase_3" + filePrefix + "500", "torso", "500", copy)
-            self.loadModel("phase_3" + filePrefix + "250", "torso", "250", copy)                       
+            self.loadModel("phase_3" + filePrefix + "250", "torso", "250", copy)
         if not copy:
             self.showPart('torso', '1000')
             self.showPart('torso', '500')
@@ -2826,7 +2825,7 @@ class Toon(Avatar.Avatar, ToonHead):
         if self.effectTrack != None:
             self.effectTrack.finish()
             self.effectTrack = None
-        
+
         if self.cheesyEffect != effect:
             oldEffect = self.cheesyEffect
             self.cheesyEffect = effect
@@ -2938,7 +2937,7 @@ class Toon(Avatar.Avatar, ToonHead):
                 track.append(Wait(0.5))
             else:
                 dust.finish()
-            
+
             def hideParts():
                 self.notify.debug("HidePaths")
                 for hi in range(self.headParts.getNumPaths()):
@@ -2949,7 +2948,7 @@ class Toon(Avatar.Avatar, ToonHead):
                         if not p.isHidden():
                             p.hide()
                             p.setTag("pumpkin", "enabled")
-                            
+
             track.append(Func(hideParts))
             track.append(Func(self.enablePumpkins,True))
         else:
@@ -2958,7 +2957,7 @@ class Toon(Avatar.Avatar, ToonHead):
                 track.append(Wait(0.5))
             else:
                 dust.finish()
-                
+
             def showHiddenParts():
                 self.notify.debug("ShowHiddenPaths")
                 for hi in range(self.headParts.getNumPaths()):
@@ -2969,12 +2968,12 @@ class Toon(Avatar.Avatar, ToonHead):
                         if (not self.pumpkins.hasPath(p)) and p.getTag("pumpkin") == "enabled":
                             p.show()
                             p.setTag("pumpkin", "disabled")
-            
-            track.append(Func(showHiddenParts))            
+
+            track.append(Func(showHiddenParts))
             track.append(Func(self.enablePumpkins,False))
             track.append(Func(self.startBlink))
         return track
-        
+
     def __doSnowManHeadSwitch(self, lerpTime, toSnowMan):
         node = self.getGeomNode()
 
@@ -3002,7 +3001,7 @@ class Toon(Avatar.Avatar, ToonHead):
                 track.append(Wait(0.5))
             else:
                 dust.finish()
-            
+
             def hideParts():
                 self.notify.debug("HidePaths")
                 for hi in range(self.headParts.getNumPaths()):
@@ -3013,7 +3012,7 @@ class Toon(Avatar.Avatar, ToonHead):
                         if not p.isHidden():
                             p.hide()
                             p.setTag("snowman", "enabled")
-                            
+
             track.append(Func(hideParts))
             track.append(Func(self.enableSnowMen,True))
         else:
@@ -3024,7 +3023,7 @@ class Toon(Avatar.Avatar, ToonHead):
                 dust.finish()
             def showHiddenParts():
                 self.notify.debug("ShowHiddenPaths")
-                
+
                 for hi in range(self.headParts.getNumPaths()):
                     head = self.headParts[hi]
                     parts = head.getChildren()
@@ -3033,8 +3032,8 @@ class Toon(Avatar.Avatar, ToonHead):
                         if (not self.snowMen.hasPath(p)) and p.getTag("snowman") == "enabled":
                             p.show()
                             p.setTag("snowman", "disabled")
-                            
-            track.append(Func(showHiddenParts))    
+
+            track.append(Func(showHiddenParts))
             track.append(Func(self.enableSnowMen,False))
             track.append(Func(self.startBlink))
         return track
@@ -3717,15 +3716,15 @@ class Toon(Avatar.Avatar, ToonHead):
     def exitCogThiefRunning(self):
         self.standWalkRunReverse = None
         self.stop()
-        self.motion.exit()        
-        
+        self.motion.exit()
+
     def enterScientistJealous(self, animMultiplier=1, ts=0,
                       callback=None, extraArgs=[]):
         self.loop("scientistJealous")
 
     def exitScientistJealous(self):
         self.stop()
-   
+
     def enterScientistEmcee(self, animMultiplier=1, ts=0,
                       callback=None, extraArgs=[]):
         #self.loop("scientistEmcee", fromFrame = 1, toFrame = 315)
@@ -3733,21 +3732,21 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def exitScientistEmcee(self):
         self.stop()
-        
+
     def enterScientistWork(self, animMultiplier=1, ts=0,
                       callback=None, extraArgs=[]):
         self.loop("scientistWork")
 
     def exitScientistWork(self):
         self.stop()
-        
+
     def enterScientistLessWork(self, animMultiplier=1, ts=0,
                       callback=None, extraArgs=[]):
         self.loop("scientistWork", fromFrame = 319, toFrame=619)
 
     def exitScientistLessWork(self):
         self.stop()
-        
+
     def enterScientistPlay(self, animMultiplier=1, ts=0,
                       callback=None, extraArgs=[]):
         self.loop("scientistGame")

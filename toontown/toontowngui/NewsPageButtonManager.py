@@ -9,7 +9,7 @@ from toontown.toonbase import TTLocalizer
 class NewsPageButtonManager (FSM.FSM):
     """This will control which button shows up in the HUD, the Goto News, Goto Prev Page, or Goto 3d World."""
     notify = DirectNotifyGlobal.directNotify.newCategory("NewsPageButtonManager")
-    
+
     def __init__(self):
         """Create the buttons."""
         FSM.FSM.__init__(self,"NewsPageButtonManager")
@@ -19,7 +19,7 @@ class NewsPageButtonManager (FSM.FSM):
         self.__blinkIval = None
 
         self.load()
-            
+
 ##        if not launcher.getPhaseComplete(5.5):
 ##            # We haven't downloaded phase 5.5 yet; set a callback hook
 ##            # so the pages will load when we do get phase 5.5.
@@ -47,7 +47,7 @@ class NewsPageButtonManager (FSM.FSM):
         self.closeNewsUp = btnGui.find('**/tt_t_gui_ign_open')
         self.closeNewsHover = btnGui.find('**/tt_t_gui_ign_closeHover')
         btnGui.removeNode()
-        
+
         oldScale = 0.5
         newScale = 0.9
         newPos = VBase3(0.914, 0, 0.862)
@@ -64,7 +64,7 @@ class NewsPageButtonManager (FSM.FSM):
             scale = newScale,
             command = self.__handleGotoNewsButton,
             )
-        
+
         self.newIssueButton = DirectButton(
             relief = None,
             image = (self.openNewNewsUp, self.openNewNewsHover, self.openNewNewsHover),
@@ -77,7 +77,7 @@ class NewsPageButtonManager (FSM.FSM):
             scale = newScale,
             command = self.__handleGotoNewsButton,
             )
-        
+
         self.gotoPrevPageButton = DirectButton(
             relief = None,
             image = (self.closeNewsUp, self.closeNewsHover, self.closeNewsHover),
@@ -102,7 +102,7 @@ class NewsPageButtonManager (FSM.FSM):
             pos = newPos,
             scale = newScale,
             command = self.__handleGoto3dWorldButton,
-            ) 
+            )
 
         self.newIssueButton.hide()
         self.gotoNewsButton.hide()
@@ -111,17 +111,17 @@ class NewsPageButtonManager (FSM.FSM):
 
 
         self.accept('newIssueOut', self.handleNewIssueOut)
-        
+
         bounce1Pos = VBase3(newPos.getX(), newPos.getY(), newPos.getZ() + 0.022)    # (0.914, 0, 0.902)
         bounce2Pos = VBase3(newPos.getX(), newPos.getY(), newPos.getZ() + 0.015)    # (0.914, 0, 0.895)
-        
+
         bounceIval = Sequence(
             LerpPosInterval(self.newIssueButton, 0.1, bounce1Pos, blendType = 'easeOut'),
             LerpPosInterval(self.newIssueButton, 0.1, newPos, blendType = 'easeIn'),
             LerpPosInterval(self.newIssueButton, 0.07, bounce2Pos, blendType = 'easeOut'),
             LerpPosInterval(self.newIssueButton, 0.07, newPos, blendType = 'easeIn')
         )
-        
+
         self.__blinkIval = Sequence(
             Func(self.__showOpenEyes), Wait(2),
             bounceIval, Wait (0.5),
@@ -129,22 +129,22 @@ class NewsPageButtonManager (FSM.FSM):
             Func(self.__showOpenEyes), Wait(0.1),
             Func(self.__showClosedEyes), Wait(0.1),
             )
-            
-        
+
+
 
         # Start it looping, but pause it, so we can resume/pause it to
         # start/stop the flashing.
         self.__blinkIval.loop()
         self.__blinkIval.pause()
-        
+
         self.buttonsLoaded = True
-        
+
     def __showOpenEyes(self):
         self.newIssueButton['image'] = (self.openNewNewsUp, self.openNewNewsHover, self.openNewNewsHover)
-            
+
     def __showClosedEyes(self):
         self.newIssueButton['image'] = (self.openNewNewsUpBlink, self.openNewNewsHover, self.openNewNewsHover)
-    
+
     def clearGoingToNewsInfo(self):
         """Clear our flags on how we got to the news page."""
         self.goingToNewsPageFrom3dWorld = False
@@ -175,7 +175,7 @@ class NewsPageButtonManager (FSM.FSM):
                     fsm.request("stickerBook")
                     self.goingToNewsPageFromStickerBook = True
                     self.showAppropriateButton()
-                    
+
 
 
     def __handleGotoPrevPageButton(self):
@@ -189,7 +189,7 @@ class NewsPageButtonManager (FSM.FSM):
         assert self.notify.debugStateCall(self)
         localAvatar.book.closeBook()
         pass
-            
+
 
     def hideAllButtons(self):
         """Hide everything."""
@@ -257,7 +257,7 @@ class NewsPageButtonManager (FSM.FSM):
         self.hideAllButtons()
 ##        localAvatar.book.setPageBeforeNews()
         self.clearGoingToNewsInfo()
-    
+
     def showAppropriateButton(self):
         """We know we want to show one of the 3 buttons, figure out which one."""
         self.notify.debugStateCall(self)
@@ -295,7 +295,7 @@ class NewsPageButtonManager (FSM.FSM):
                     else:
                         self.request("Hidden")
 
-                
+
     def setGoingToNewsPageFromStickerBook(self, newVal):
         """Called when the news page tab gets clicked in sticker book."""
         assert self.notify.debugStateCall(self)
@@ -306,16 +306,16 @@ class NewsPageButtonManager (FSM.FSM):
         self.ignoreAll()
         if not self.buttonsLoaded:
             return
-                
+
         if self.__blinkIval:
             self.__blinkIval.finish()
             self.__blinkIval = None
-        
+
         self.gotoNewsButton.destroy()
         self.newIssueButton.destroy()
         self.gotoPrevPageButton.destroy()
         self.goto3dWorldButton.destroy()
-        
+
         del self.openNewNewsUp
         del self.openNewNewsUpBlink
         del self.openNewNewsHover
@@ -331,7 +331,7 @@ class NewsPageButtonManager (FSM.FSM):
     def simulateEscapeKeyPress(self):
         # Go back to the 3D World if you have come from the 3D World.
         if self.goingToNewsPageFrom3dWorld:
-            self.__handleGoto3dWorldButton()        
+            self.__handleGoto3dWorldButton()
         # Else, go back to the previous page in the shticker book if you have come from there.
         if self.goingToNewsPageFromStickerBook:
             self.__handleGotoPrevPageButton()

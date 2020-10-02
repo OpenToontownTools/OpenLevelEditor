@@ -1,5 +1,5 @@
 ![thumbnail](https://i.imgur.com/Q722uK2.png)
- 
+
 ## An open sourced modernized version of Disney's in-house Toontown Online level editor used to create .dna files.
 
 # [***READ THE FAQ BEFORE ASKING QUESTIONS***](#faq)
@@ -28,8 +28,8 @@
 ## Help
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
 
-* [*Please only contact me if you need assistance with the editor. No, I will not help you hack toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
-    
+* [*Please only contact me if you need assistance with the editor. No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
+
 ## Upcoming Features
 * Optional Auto PDNA compilation support for [libpandadna](https://github.com/loblao/libpandadna) and Corporate Clash's DNA reader.
 * Auto Saving
@@ -50,7 +50,7 @@
 ### What are the controls?
 * Under the HELP drop-down menu at the top of the window, press the CONTROLS button and a popup will appear.
 
-### Some of my props are using textures as if they were in a different playgrond?
+### Some of my props are using textures as if they were in a different playground?
 * This is OK. This is just because you have support for more than 1 playground loaded. This is only visible in the editor, but I recommend you only load the zone you are working on.
 
 ### I did the setup properly, but the editor just closes on startup with no error message, how do I fix?
