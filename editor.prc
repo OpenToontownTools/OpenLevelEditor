@@ -50,6 +50,4 @@ tk-main-loop #f
 
 # Miscellaneous
 visualize-zones #f
-level-editor-use-cvs #t
-use-snow-tree #f
 want-injector #f
