@@ -1,5 +1,5 @@
-# Toontown Open Level Editor
- 
+![thumbnail](https://i.imgur.com/Q722uK2.png)
+
 ## An open sourced modernized version of Disney's in-house Toontown Online level editor used to create .dna files.
 
 # [***READ THE FAQ BEFORE ASKING QUESTIONS***](#faq)
@@ -27,7 +27,9 @@
 
 ## Help
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
-    
+
+* [*Please only contact me if you need assistance with the editor. No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
+
 ## Upcoming Features
 * Optional Auto PDNA compilation support for [libpandadna](https://github.com/loblao/libpandadna) and Corporate Clash's DNA reader.
 * Auto Saving
@@ -35,7 +37,7 @@
 
 ## Known Incompatibilities
 * Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
-    * This is due to the models not being created with the proper node setup. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well. Ensure your custom buildings are created PROPERLY.
+    * This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.
 
 # FAQ
 ### Why can't I load a street from X playground?
@@ -45,18 +47,11 @@
 * There is NO requirement to list this editor anywhere in your game credits, but you definitely can do so to spread the word!
 * I do ask however, that should you make a modification to the editor, that you fork the editor and leave it open source to promote open source software for the community.
 
-### How do I move the camera?
-* Move: ALT + Middle Mouse
-* Rotate: ALT + Left Mouse
-* Zoom: ALT + Right Mouse
-* You can also use your number pad or number row to view preset angles
-* Note that the camera always moves around the object you have selected
+### What are the controls?
+* Under the HELP drop-down menu at the top of the window, press the CONTROLS button and a popup will appear.
 
-### Some of my props are using textures as if they were in a different playgrond?
+### Some of my props are using textures as if they were in a different playground?
 * This is OK. This is just because you have support for more than 1 playground loaded. This is only visible in the editor, but I recommend you only load the zone you are working on.
-
-### How do I scale props?
-* Select the prop and hold control + left mouse and drag
 
 ### I did the setup properly, but the editor just closes on startup with no error message, how do I fix?
 * If you are downloading my redistributed copy of Panda from above, this may be an issue of having multiple installations of panda, and an incorrect one being targeted. Try one or both of the following:

@@ -29,13 +29,23 @@ class ScrollMenu:
         myScrolledList = DirectScrolledList(
                 decButton_pos = (0.35, 0, 0.53),
                 decButton_text = "Dec",
+                decButton_text_font = ToontownGlobals.getSignFont(),
                 decButton_text_scale = 0.04,
                 decButton_borderWidth = (0.005, 0.005),
+                decButton_text0_fg = (0.152, 0.750, 0.258, 1),
+                decButton_text1_fg = (0.152, 0.750, 0.258, 1),
+                decButton_text2_fg = (0.977, 0.816, 0.133, 1),
+                decButton_text3_fg = (0.3, 0.3, 0.3, 1),
 
                 incButton_pos = (0.35, 0, -0.02),
                 incButton_text = "Inc",
+                incButton_text_font = ToontownGlobals.getSignFont(),
                 incButton_text_scale = 0.04,
                 incButton_borderWidth = (0.005, 0.005),
+                incButton_text0_fg = (0.152, 0.750, 0.258, 1),
+                incButton_text1_fg = (0.152, 0.750, 0.258, 1),
+                incButton_text2_fg = (0.977, 0.816, 0.133, 1),
+                incButton_text3_fg = (0.3, 0.3, 0.3, 1),
 
                 frameSize = (0.0, 0.8, -0.05, 0.59),
                 frameColor = (0, 0, 1, 0.5),
@@ -51,15 +61,16 @@ class ScrollMenu:
             myScrolledList.addItem(DirectButton(text = (t, t, t),
                                                 text_scale = 0.05, command = self.__selected,
                                                 extraArgs = [t], relief = None,
-                                                # text_font = ToontownGlobals.getSignFont(),
+                                                text_font = ToontownGlobals.getToonFont(),
                                                 text0_fg = (0.152, 0.750, 0.258, 1),
                                                 text1_fg = (0.152, 0.750, 0.258, 1),
                                                 text2_fg = (0.977, 0.816, 0.133, 1), ))
         myScrolledList.reparentTo(self.frame)
 
         # An exit button
-        b1 = DirectButton(parent = self.frame, text = "Exit",
-                          text_scale = 0.05, borderWidth = (0.01, 0.01),
+        b1 = DirectButton(parent = self.frame, text = "Exit", text_font = ToontownGlobals.getSignFont(),
+                          text0_fg = (0.152, 0.750, 0.258, 1), text1_fg = (0.152, 0.750, 0.258, 1),
+                          text2_fg = (0.977, 0.816, 0.133, 1), text_scale = 0.05, borderWidth = (0.01, 0.01),
                           relief = 1, command = self.__hide)
         b1.setPos(0.15, 0, -0.025)
 

@@ -1,11 +1,11 @@
 from toontown.toonbase.TTLocalizerEnglishProperty import *
 
-InterfaceFont = 'phase_3/models/fonts/ImpressBT.ttf'
-ToonFont = 'phase_3/models/fonts/ImpressBT.ttf'
-SuitFont = 'phase_3/models/fonts/vtRemingtonPortable.ttf'
-SignFont = 'phase_3/models/fonts/MickeyFont'
-MinnieFont = 'phase_3/models/fonts/MinnieFont'
-FancyFont = 'phase_3/models/fonts/Comedy'
+InterfaceFont = 'resources/fonts/ToonFont.ttf'
+ToonFont = 'resources/fonts/ToonFont.ttf'
+SuitFont = 'resources/fonts/vtRemingtonPortable.ttf'
+SignFont = 'resources/fonts/MickeyFont'
+MinnieFont = 'resources/fonts/MinnieFont.ttf'
+FancyFont = 'resources/fonts/Comedy'
 NametagFonts = ('phase_3/models/fonts/AnimGothic',      # 0 *
                 'phase_3/models/fonts/Aftershock',      # 1 *
                 'phase_3/models/fonts/JiggeryPokery',   # 2 *

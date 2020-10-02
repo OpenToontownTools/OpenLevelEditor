@@ -29,7 +29,7 @@ Pages = {
     #                  image format flag [square = 2, portrait = 1, landscape = 0],
     #                  members only flag,
     #                  )
-    
+
     'otherHoods' : (TTLocalizer.TeaserOtherHoods,),
     'typeAName' : (TTLocalizer.TeaserTypeAName,),
     'sixToons'   : (TTLocalizer.TeaserSixToons,),
@@ -89,7 +89,7 @@ class TeaserPanel(DirectObject):
     def __init__(self, pageName, doneFunc=None):
 
         self.doneFunc = doneFunc
- 
+
         # if we don't have a feature browser, make one
         if not hasattr(self, "browser"):
             self.browser = FeatureBrowser()
@@ -98,29 +98,29 @@ class TeaserPanel(DirectObject):
             # make room for the top five features
             self.browser.setScale(0.75)
             self.browser.reparentTo(hidden)
-        
+
         self.upsellBackground = loader.loadModel("phase_3/models/gui/tt_m_gui_ups_panelBg")
-        
+
         self.leaveDialog = None
         self.showPage(pageName)
-        
+
         # The player might be able to exit the stop state either through some other
-        # panel or if his boarding party leader boards the elevator. 
+        # panel or if his boarding party leader boards the elevator.
         # Close any Teaser panel if the toon moves out of the stopped state.
         self.ignore("exitingStoppedState")
         self.accept("exitingStoppedState", self.cleanup)
-        
+
 
     def __handleDone(self, choice = 0):
         # clean up the teaser panel and take appropriate action
         self.cleanup()
         self.unload()
-        
+
         if choice == 1:
             self.__handlePay()
         else:
             self.__handleContinue()
-            
+
     def __handleContinue(self):
         # call the user done function
         if self.doneFunc:
@@ -140,7 +140,7 @@ class TeaserPanel(DirectObject):
 
     def destroy(self):
         self.cleanup()
-        
+
     # dialog callback code passes a value
     def cleanup(self):
         if hasattr(self, 'browser'):
@@ -160,14 +160,14 @@ class TeaserPanel(DirectObject):
         if hasattr(self, 'browser'):
             self.browser.destroy()
             del self.browser
-        
+
     def showPage(self, pageName):
         if not pageName in PageOrder:
             self.notify.error("unknown page '%s'" % pageName)
 
         # log velvet rope hits
         base.cr.centralLogger.writeClientEvent('velvetRope: %s' % pageName)
-        
+
         # map page name to browser index
         self.browser.scrollTo(PageOrder.index(pageName))
 
@@ -198,7 +198,7 @@ class TeaserPanel(DirectObject):
         self.dialog.setPos(0, 0, 0.75)
         self.browser.reparentTo(self.dialog)
         base.transitions.fadeScreen(.5)
-        
+
         if base.config.GetBool('want-teaser-scroll-keys',0):
             self.accept('arrow_right', self.showNextPage)
             self.accept('arrow_left',  self.showPrevPage)
@@ -207,7 +207,7 @@ class TeaserPanel(DirectObject):
     def showNextPage(self):
         self.notify.debug("show next")
         self.browser.scrollBy(1)
-        
+
     def showPrevPage(self):
         self.notify.debug("show prev")
         self.browser.scrollBy(-1)
@@ -240,19 +240,19 @@ class FeatureBrowser(DirectScrolledList):
         assert PythonUtil.sameElements(list(Pages.keys()), PageOrder)
 
         self.parent = parent
-                
+
         optiondefs = (
             ('parent', self.parent,    None),
             ('relief', None,    None),
             ('numItemsVisible',  1,    None),
             ('items', [],    None),
             )
-            
+
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
         # Initialize superclasses
         DirectScrolledList.__init__(self, parent)
-        # We'll scroll using the arrow keys on the keyboard   
+        # We'll scroll using the arrow keys on the keyboard
         self.incButton.hide()
         self.decButton.hide()
         self.initialiseoptions(FeatureBrowser)
@@ -265,11 +265,11 @@ class FeatureBrowser(DirectScrolledList):
         # upsellModel = loader.loadModel("phase_3/models/gui/tt_m_gui_ups_mainGui")
         # guiModel = upsellModel.find("**/tt_t_gui_ups_logo_noBubbles")
         guiModel = loader.loadModel("phase_3/models/gui/tt_m_gui_ups_logo_noText")
-        
-        
+
+
         leftLocator = guiModel.find("**/bubbleLeft_locator")
         rightLocator = guiModel.find("**/bubbleRight_locator")
-        
+
         haveFunNode = TextNode("Have Fun")
         haveFunNode.setText(TTLocalizer.TeaserHaveFun)
         haveFunNode.setTextColor(0,0,0,1)
@@ -279,7 +279,7 @@ class FeatureBrowser(DirectScrolledList):
         haveFun = NodePath(haveFunNode)
         haveFun.reparentTo(rightLocator)
         haveFun.setScale(TTLocalizer.TSRPhaveFunText)
-        
+
         JoinUsNode = TextNode("Join Us")
         JoinUsNode.setText(TTLocalizer.TeaserJoinUs)
         JoinUsNode.setTextColor(0,0,0,1)
@@ -290,15 +290,15 @@ class FeatureBrowser(DirectScrolledList):
         JoinUs.reparentTo(leftLocator)
         JoinUs.setPos(0,0,-0.025)
         JoinUs.setScale(TTLocalizer.TSRPjoinUsText)
-        
+
         # axis = loader.loadModel("models/misc/xyzAxis")
         # axis.reparentTo(guiModel)
-        
+
         # make a panel for each feature
         for page in PageOrder:
             textInfo = Pages.get(page)
             textInfo = textInfo[0] +TTLocalizer.TeaserDefault
-                
+
             panel = DirectFrame(
                 parent = self,
                 relief = None,

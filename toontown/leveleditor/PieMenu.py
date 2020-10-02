@@ -81,7 +81,7 @@ class PieMenu(NodePath, DirectObject):
         deltaY = mouseY - self.originY
 
         # Update the line
-        # self.lines.setVertex(1, (deltaX/self.sfx), 0.0, (deltaY/self.sfz))
+        self.lines.setVertex(1, (deltaX/self.sfx), 0.0, (deltaY/self.sfz))
 
         # How far from starting point has user moved the cursor?
         if ((abs(deltaX) < 0.1) and (abs(deltaY) < 0.1)):

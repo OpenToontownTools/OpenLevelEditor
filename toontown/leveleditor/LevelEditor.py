@@ -7,7 +7,7 @@ from direct.showbase.TkGlobal import *
 from direct.directtools.DirectUtil import *
 from direct.directtools.DirectGeometry import *
 from direct.interval.IntervalGlobal import *
-from direct.tkwidgets.SceneGraphExplorer import *
+from .LESceneGraphExplorer import *
 from direct.directnotify import DirectNotifyGlobal
 from tkinter.messagebox import showinfo
 from tkinter.filedialog import *
@@ -20,6 +20,7 @@ import string
 import os
 import glob
 import getopt
+import json
 import sys
 # import whrandom
 import random
@@ -43,6 +44,7 @@ from toontown.hood.GenericAnimatedProp import *
 from otp.otpbase import OTPGlobals
 
 from .LevelStyleManager import *
+from . import LevelEditorGlobals
 
 # Force direct and tk to be on
 base.startDirect(fWantDirect = 1, fWantTk = 1)
@@ -50,7 +52,7 @@ base.startDirect(fWantDirect = 1, fWantTk = 1)
 visualizeZones = base.config.GetBool("visualize-zones", 0)
 dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "leveleditor"))
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
-fUseCVS = base.config.GetBool("level-editor-use-cvs", 1)
+fUseCVS = base.config.GetBool("level-editor-use-cvs", 0)
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
 
 # NEIGHBORHOOD DATA
@@ -59,16 +61,7 @@ useSnowTree = base.config.GetBool("use-snow-tree", 0)
 #    ppython LevelEditor.py DD TT BR
 #
 
-# Init neighborhood arrays
-NEIGHBORHOODS = []
-NEIGHBORHOOD_CODES = {}
-for hoodId in base.hoods:
-    if hoodId in HOOD_IDS:
-        hoodName = HOOD_IDS[hoodId]
-        NEIGHBORHOOD_CODES[hoodName] = hoodId
-        NEIGHBORHOODS.append(hoodName)
-    else:
-        print('Error: no hood defined for: ', hoodId)
+
 
 
 # To safely load the storage files
@@ -96,59 +89,24 @@ except NameError:
     loadDNAFile(DNASTORE, 'dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)
+
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_estate.dna', CSDefault, 1)
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
-    # Load all the neighborhood specific storage files
-    if 'TT' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_TT_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_5/dna/storage_TT_town.dna', CSDefault, 1)
-    if 'DD' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_DD_town.dna', CSDefault, 1)
-    if 'MM' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_MM_town.dna', CSDefault, 1)
-    if 'BR' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_BR_town.dna', CSDefault, 1)
-    if 'DG' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DG_town.dna', CSDefault, 1)
-    if 'DL' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_town.dna', CSDefault, 1)
-    if 'CS' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_9/dna/storage_CS.dna', CSDefault, 1)
-    if 'CM' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_10/dna/storage_CM_sz.dna', CSDefault, 1)
-    if 'CL' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_11/dna/storage_CL.dna', CSDefault, 1)
-    if 'CC' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_12/dna/storage_CC_sz.dna', CSDefault, 1)
-    if 'GS' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_4/dna/storage_GS_sz.dna', CSDefault, 1)
-    if 'OZ' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_sz.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_OZ_town.dna', CSDefault, 1)
-    if 'GZ' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_6/dna/storage_GZ_sz.dna', CSDefault, 1)
-    if 'PA' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_13/dna/storage_party_sz.dna', CSDefault, 1)
-    if 'ES' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_estate.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
-    if 'TUT' in base.hoods:
-        loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_tutorial.dna', CSDefault, 1)
-        loadDNAFile(DNASTORE, 'phase_3.5/dna/storage_interior.dna', CSDefault, 1)
+    NEIGHBORHOODS = []
+    NEIGHBORHOOD_CODES = {}
+    for hood in base.hoods:
+        with open(f'./leveleditor/hoods/{hood}.json') as info:
+            data = json.load(info)
+            hoodName = data.get(LevelEditorGlobals.HOOD_NAME_LONGHAND)
+            NEIGHBORHOOD_CODES[hoodName] = hood
+            NEIGHBORHOODS.append(hoodName)
+            storages = data.get(LevelEditorGlobals.HOOD_PATH)
+            for storage in storages:
+                loadDNAFile(DNASTORE, storage, CSDefault, 1)
+
+    DNASTORE.storeFont('humanist', ToontownGlobals.getInterfaceFont())
+    DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())
+    DNASTORE.storeFont('suit', ToontownGlobals.getSuitFont())
     builtins.dnaLoaded = 1
 
 
@@ -212,6 +170,7 @@ class LevelEditor(NodePath, DirectObject):
 
         self.collisionsToggled = False
 
+    def startUp(self, dnaPath=None):
         # Initialize LevelEditor variables DNAData, DNAToplevel, NPToplevel
         # DNAParent, NPParent, groupNum, lastAngle
         # Pass in the new toplevel group and don't clear out the old
@@ -360,8 +319,9 @@ class LevelEditor(NodePath, DirectObject):
         self.panel.streetSelector.invoke()
         self.panel.toonBuildingSelector.selectitem(0)
         self.panel.toonBuildingSelector.invoke()
-        self.panel.landmarkBuildingSelector.selectitem(0)
-        self.panel.landmarkBuildingSelector.invoke()
+        if hasattr(self.panel, 'landmarkBuildingSelector'):
+            self.panel.landmarkBuildingSelector.selectitem(0)
+            self.panel.landmarkBuildingSelector.invoke()
         self.panel.propSelector.selectitem(0)
         self.panel.propSelector.invoke()
         # Start off with 20 foot buildings
@@ -394,6 +354,11 @@ class LevelEditor(NodePath, DirectObject):
         self.startT = None
         self.startF = None
         self.newObjPos = Point3(0)
+
+        # Load the DNA file passed (normally through an argument)
+        if dnaPath:
+            self.loadDNAFromFile(dnaPath)
+            self.outputFile = dnaPath
 
     # ENABLE/DISABLE
     def enable(self):
@@ -461,7 +426,7 @@ class LevelEditor(NodePath, DirectObject):
 
         # Create new toplevel node path and DNA
         if fCreateToplevel:
-            self.createToplevel(DNANode('level'))
+            self.createToplevel(DNAGroup('level'))
 
         # Initialize variables
         # Reset grid
@@ -1626,7 +1591,7 @@ class LevelEditor(NodePath, DirectObject):
         """ Create a new DNA Node group under the active parent """
         # Create a new DNA Node group
         if type == 'dna':
-            newDNANode = DNANode('group_' + repr(self.getGroupNum()))
+            newDNANode = DNAGroup('group_' + repr(self.getGroupNum()))
         else:
             newDNANode = DNAVisGroup('VisGroup_' + repr(self.getGroupNum()))
             # Increment group counter
@@ -2035,7 +2000,8 @@ class LevelEditor(NodePath, DirectObject):
         wallNum = self.computeWallNum(dnaObject, hitPt)
         if wallNum < 0:
             # Do building related operations
-            if base.direct.gotAlt(modifiers):
+            # If we are using maya mode, allow the user to adjust width holding SHIFT instead of alt
+            if base.direct.gotShift(modifiers):
                 menuMode = 'building_width'
             else:
                 menuMode = 'building_style_all'
@@ -2437,6 +2403,11 @@ class LevelEditor(NodePath, DirectObject):
     def connectToCell(self, disconnect = False):
         selectedNPs = base.direct.selected.getSelectedAsList()
         if len(selectedNPs) != 2:
+            if not disconnect:
+                message = 'To connect a cell to a prop, make sure that "Show Cells" are enabled, select a prop you want to connect with,\n' + \
+                          'and while holding shift, click on the cell you want to connect to (this will select both at the same time),\n' + \
+                          'And then click on "Connect prop to cell" again.  You should see a line connecting the two if you\'ve done everything correctly.'
+                showinfo('Level Editor', message)
             return
 
         if self.selectedNPRoot:  # when interactiveProp is selected last
@@ -3635,6 +3606,8 @@ class LevelEditor(NodePath, DirectObject):
         for np, dna in visGroups:
             name = dna.getName()
             label = DirectGui.DirectLabel(text = name,
+                                          text_font = ToontownGlobals.getSignFont(),
+                                          text_fg = (0.152, 0.750, 0.258, 1),
                                           parent = np.getParent(),
                                           relief = None, scale = 3)
             label.setBillboardPointEye(0)
@@ -4144,8 +4117,7 @@ class LevelEditor(NodePath, DirectObject):
                                               "prop_tree_large_ur",
                                               "prop_tree_large_ul"])
 
-                        # use snow if necessaryy
-
+                        # use snow if necessary
                         if (useSnowTree):
                             tree = random.choice(["prop_snow_tree_small_ul",
                                                   "prop_snow_tree_small_ur",
@@ -4414,6 +4386,9 @@ class OldLevelEditor(NodePath, DirectObject):
 
 
 class LevelEditorPanel(Pmw.MegaToplevel):
+    """
+    Class used to initialize the Tkinter GUI.
+    """
     def __init__(self, levelEditor, parent = None, **kw):
 
         INITOPT = Pmw.INITOPT
@@ -4423,6 +4398,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.defineoptions(kw, optiondefs)
 
         Pmw.MegaToplevel.__init__(self, parent, title = self['title'])
+
+        if sys.platform == 'win32':
+            # FIXME: This doesn't work in other platforms for some reason...
+            self.iconbitmap("resources/openttle_ico_temp.ico")
 
         self.levelEditor = levelEditor
         self.styleManager = self.levelEditor.styleManager
@@ -4435,14 +4414,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Start with balloon help disabled
         self.balloon.configure(state = 'none')
 
-        Pmw.aboutversion(base.APP_VERSION)
-        Pmw.aboutcopyright('Maintained by drewcification#5131')
-        Pmw.aboutcontact(
-                'For more information, check out the repo: http://github.com/OpenToontownTools/ToontownLevelEditor')
-        self.about = Pmw.AboutDialog(hull,
-                                     applicationname = "OpenLevelEditor")
-
-        self.about.withdraw()
         menuFrame = Frame(hull, relief = GROOVE, bd = 2)
         menuFrame.pack(fill = X)
 
@@ -4533,8 +4504,27 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             variable = self.toggleBalloonVar,
                             command = self.toggleBalloon)
         menuBar.addmenuitem('Help', 'command',
+                            'Lists all the controls',
+                            label = 'Controls...', command = self.showControls)
+        menuBar.addmenuitem('Help', 'command',
                             'About the Open Level Editor',
                             label = 'About...', command = self.showAbout)
+        # Create the HELP dialog
+        Pmw.aboutversion(base.APP_VERSION)
+        Pmw.aboutcopyright('Maintained by drewcification#5131')
+        Pmw.aboutcontact(
+                'For more information, check out the repo: http://github.com/OpenToontownTools/ToontownLevelEditor')
+        self.aboutDialog = Pmw.AboutDialog(hull,
+                                     applicationname = "OpenLevelEditor")
+
+        self.aboutDialog.withdraw()
+
+        # Create the CONTROLS dialog
+        self.controlsDialog = Pmw.MessageDialog(parent,
+            title = 'Controls',
+            defaultbutton = 0,
+            message_text = LevelEditorGlobals.CONTROLS)
+        self.controlsDialog.withdraw()
 
         self.editMenu = Pmw.ComboBox(
                 menuFrame, labelpos = W,
@@ -4663,87 +4653,95 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # LANDMARK BUILDINGS
         Label(landmarkBuildingsPage, text = 'Landmark Buildings',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('toon_landmark', 0) == "":
+            Label(landmarkBuildingsPage, text = 'There are no landmark buildings in any of your loaded storages.').pack(expand = 0)
+        else:
 
-        """
-        self.landmarkHQIntVar = IntVar()
-        self.landmarkHQIntVar.set(0)
-        self.landmarkHQButton = Checkbutton(
-            landmarkBuildingsPage,
-            text = 'HQ',
-            variable=self.landmarkHQIntVar,
-            command=self.setLandmarkHQ)
-        self.landmarkHQButton.pack(side = LEFT, expand = 1, fill = X)
-        """
-
-        self.addLandmarkBuildingButton = Button(
+            """
+            self.landmarkHQIntVar = IntVar()
+            self.landmarkHQIntVar.set(0)
+            self.landmarkHQButton = Checkbutton(
                 landmarkBuildingsPage,
-                text = 'ADD LANDMARK BUILDING',
-                command = self.addLandmark)
-        self.addLandmarkBuildingButton.pack(fill = X, padx = 20, pady = 10)
-        bldgs = [s[14:] for s in self.styleManager.getCatalogCodes(
-                'toon_landmark')]
-        bldgs.sort()
-        self.landmarkBuildingSelector = Pmw.ComboBox(
-                landmarkBuildingsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Bldg type:',
-                entry_width = 30,
-                selectioncommand = self.setLandmarkType,
-                scrolledlist_items = bldgs
-                )
-        self.landmarkType = self.styleManager.getCatalogCode(
-                'toon_landmark', 0)
-        self.landmarkBuildingSelector.selectitem(
-                self.styleManager.getCatalogCode('toon_landmark', 0)[14:])
-        self.landmarkBuildingSelector.pack(expand = 1, fill = BOTH)
+                text = 'HQ',
+                variable=self.landmarkHQIntVar,
+                command=self.setLandmarkHQ)
+            self.landmarkHQButton.pack(side = LEFT, expand = 1, fill = X)
+            """
 
-        self.landmarkBuildingSpecialSelector = Pmw.ComboBox(
-                landmarkBuildingsPage,
-                dropdown = 0,
-                listheight = 100,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Special type:',
-                entry_width = 30,
-                selectioncommand = self.setLandmarkSpecialType,
-                scrolledlist_items = LANDMARK_SPECIAL_TYPES
-                )
-        self.landmarkSpecialType = LANDMARK_SPECIAL_TYPES[0]
-        self.landmarkBuildingSpecialSelector.selectitem(
-                LANDMARK_SPECIAL_TYPES[0])
-        self.landmarkBuildingSpecialSelector.pack(expand = 0)
+            self.addLandmarkBuildingButton = Button(
+                    landmarkBuildingsPage,
+                    text = 'ADD LANDMARK BUILDING',
+                    command = self.addLandmark)
+            self.addLandmarkBuildingButton.pack(fill = X, padx = 20, pady = 10)
+            bldgs = [s[14:] for s in self.styleManager.getCatalogCodes(
+                    'toon_landmark')]
+            bldgs.sort()
+            self.landmarkBuildingSelector = Pmw.ComboBox(
+                    landmarkBuildingsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Bldg type:',
+                    entry_width = 30,
+                    selectioncommand = self.setLandmarkType,
+                    scrolledlist_items = bldgs
+                    )
+            self.landmarkType = self.styleManager.getCatalogCode(
+                    'toon_landmark', 0)
+            self.landmarkBuildingSelector.selectitem(
+                    self.styleManager.getCatalogCode('toon_landmark', 0)[14:])
+            self.landmarkBuildingSelector.pack(expand = 1, fill = BOTH)
 
+            self.landmarkBuildingSpecialSelector = Pmw.ComboBox(
+                    landmarkBuildingsPage,
+                    dropdown = 0,
+                    listheight = 100,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Special type:',
+                    entry_width = 30,
+                    selectioncommand = self.setLandmarkSpecialType,
+                    scrolledlist_items = LANDMARK_SPECIAL_TYPES
+                    )
+            self.landmarkSpecialType = LANDMARK_SPECIAL_TYPES[0]
+            self.landmarkBuildingSpecialSelector.selectitem(
+                    LANDMARK_SPECIAL_TYPES[0])
+            self.landmarkBuildingSpecialSelector.pack(expand = 0)
+        
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
-        self.addAnimBuildingsButton = Button(
-                animBuildingsPage,
-                text = 'ADD ANIMATED BUILDING',
-                command = self.addAnimBuilding)
-        self.addAnimBuildingsButton.pack(fill = X, padx = 20, pady = 10)
-        codes = (self.styleManager.getCatalogCodes('anim_building'))
-        codes.sort()
-        self.animBuildingSelector = Pmw.ComboBox(
-                animBuildingsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Animated Building type:',
-                entry_width = 30,
-                selectioncommand = self.setAnimBuildingType,
-                scrolledlist_items = codes
-                )
-        self.animBuildingType = self.styleManager.getCatalogCode('anim_building', 0)
-        self.animBuildingSelector.selectitem(
-                self.styleManager.getCatalogCode('anim_building', 0))
-        self.animBuildingSelector.pack(expand = 1, fill = BOTH)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('anim_building', 0) == "":
+            Label(animBuildingsPage, text = 'There are no animated buildings in any of your loaded storages.').pack(expand = 0)
+        else:
+            self.addAnimBuildingsButton = Button(
+                    animBuildingsPage,
+                    text = 'ADD ANIMATED BUILDING',
+                    command = self.addAnimBuilding)
+            self.addAnimBuildingsButton.pack(fill = X, padx = 20, pady = 10)
+            codes = (self.styleManager.getCatalogCodes('anim_building'))
+            codes.sort()
+            self.animBuildingSelector = Pmw.ComboBox(
+                    animBuildingsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Animated Building type:',
+                    entry_width = 30,
+                    selectioncommand = self.setAnimBuildingType,
+                    scrolledlist_items = codes
+                    )
+            self.animBuildingType = self.styleManager.getCatalogCode('anim_building', 0)
+            self.animBuildingSelector.selectitem(
+                    self.styleManager.getCatalogCode('anim_building', 0))
+            self.animBuildingSelector.pack(expand = 1, fill = BOTH)
 
         # SIGNS
         Label(signPage, text = 'Signs',
@@ -4943,56 +4941,64 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # ANIMATED PROPS
         Label(animPropsPage, text = 'Animated Props',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
-        self.addAnimPropsButton = Button(
-                animPropsPage,
-                text = 'ADD ANIMATED PROP',
-                command = self.addAnimProp)
-        self.addAnimPropsButton.pack(fill = X, padx = 20, pady = 10)
-        codes = (self.styleManager.getCatalogCodes('anim_prop'))
-        codes.sort()
-        self.animPropSelector = Pmw.ComboBox(
-                animPropsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Animated Prop type:',
-                entry_width = 30,
-                selectioncommand = self.setAnimPropType,
-                scrolledlist_items = codes
-                )
-        self.animPropType = self.styleManager.getCatalogCode('anim_prop', 0)
-        self.animPropSelector.selectitem(
-                self.styleManager.getCatalogCode('anim_prop', 0))
-        self.animPropSelector.pack(expand = 1, fill = BOTH)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('anim_prop', 0) == "":
+            Label(animPropsPage, text = 'There are no animated props in any of your loaded storages.').pack(expand = 0)
+        else:
+            self.addAnimPropsButton = Button(
+                    animPropsPage,
+                    text = 'ADD ANIMATED PROP',
+                    command = self.addAnimProp)
+            self.addAnimPropsButton.pack(fill = X, padx = 20, pady = 10)
+            codes = (self.styleManager.getCatalogCodes('anim_prop'))
+            codes.sort()
+            self.animPropSelector = Pmw.ComboBox(
+                    animPropsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Animated Prop type:',
+                    entry_width = 30,
+                    selectioncommand = self.setAnimPropType,
+                    scrolledlist_items = codes
+                    )
+            self.animPropType = self.styleManager.getCatalogCode('anim_prop', 0)
+            self.animPropSelector.selectitem(
+                    self.styleManager.getCatalogCode('anim_prop', 0))
+            self.animPropSelector.pack(expand = 1, fill = BOTH)
 
         # ITERACTIVE PROPS
         Label(interactivePropsPage, text = 'Interactive Props',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
-        self.addInteractivePropsButton = Button(
-                interactivePropsPage,
-                text = 'ADD INTERACTIVE PROP',
-                command = self.addInteractiveProp)
-        self.addInteractivePropsButton.pack(fill = X, padx = 20, pady = 10)
-        codes = (self.styleManager.getCatalogCodes('interactive_prop'))
-        codes.sort()
-        self.interactivePropSelector = Pmw.ComboBox(
-                interactivePropsPage,
-                dropdown = 0,
-                listheight = 200,
-                labelpos = W,
-                label_width = 12,
-                label_anchor = W,
-                label_text = 'Interactive Prop type:',
-                entry_width = 30,
-                selectioncommand = self.setInteractivePropType,
-                scrolledlist_items = codes
-                )
-        self.interactivePropType = self.styleManager.getCatalogCode('interactive_prop', 0)
-        self.interactivePropSelector.selectitem(
-                self.styleManager.getCatalogCode('interactive_prop', 0))
-        self.interactivePropSelector.pack(expand = 1, fill = BOTH)
+        # Don't try to load this stuff if there is none
+        if self.styleManager.getCatalogCode('interactive_prop', 0) == "":
+            Label(interactivePropsPage, text = 'There are no interactive props in any of your loaded storages.').pack(expand = 0)
+        else:
+            self.addInteractivePropsButton = Button(
+                    interactivePropsPage,
+                    text = 'ADD INTERACTIVE PROP',
+                    command = self.addInteractiveProp)
+            self.addInteractivePropsButton.pack(fill = X, padx = 20, pady = 10)
+            codes = (self.styleManager.getCatalogCodes('interactive_prop'))
+            codes.sort()
+            self.interactivePropSelector = Pmw.ComboBox(
+                    interactivePropsPage,
+                    dropdown = 0,
+                    listheight = 200,
+                    labelpos = W,
+                    label_width = 12,
+                    label_anchor = W,
+                    label_text = 'Interactive Prop type:',
+                    entry_width = 30,
+                    selectioncommand = self.setInteractivePropType,
+                    scrolledlist_items = codes
+                    )
+            self.interactivePropType = self.styleManager.getCatalogCode('interactive_prop', 0)
+            self.interactivePropSelector.selectitem(
+                    self.styleManager.getCatalogCode('interactive_prop', 0))
+            self.interactivePropSelector.pack(expand = 1, fill = BOTH)
 
         # SUIT PATHS
         Label(suitPathPage, text = 'Suit Paths',
@@ -5078,11 +5084,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.colorZoneButton2.pack(side = LEFT, expand = 1, fill = X)
 
         Button(bcButtons,
-               text = 'Connect to cell',
+               text = 'Connect prop to cell',
                command = self.levelEditor.connectToCell).pack(side = LEFT, expand = 1, fill = X)
 
         Button(bcButtons,
-               text = 'Disconnect',
+               text = 'Disconnect prop',
                command = lambda p0 = True: self.levelEditor.connectToCell(p0)).pack(side = LEFT, expand = 1, fill = X)
 
         bcButtons.pack(fill = X)
@@ -5578,7 +5584,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                     baseline.setFlags(flags + flagChar)
             elif flagChar in flags:
                 # Remove the flag:
-                flags = string.join(flags.split(flagChar), '')
+                flags = ''.join(flags.split(flagChar))
                 baseline.setFlags(flags)
             self.levelEditor.replaceSelected()
 
@@ -5771,8 +5777,12 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.balloon.configure(state = 'none')
 
     def showAbout(self):
-        self.about.show()
-        self.about.focus_set()
+        self.aboutDialog.show()
+        self.aboutDialog.focus_set()
+
+    def showControls(self):
+        self.controlsDialog.show()
+        self.controlsDialog.focus_set()
 
 
 class VisGroupsEditor(Pmw.MegaToplevel):
@@ -5786,7 +5796,9 @@ class VisGroupsEditor(Pmw.MegaToplevel):
         self.defineoptions(kw, optiondefs)
 
         Pmw.MegaToplevel.__init__(self, parent, title = self['title'])
-
+        if sys.platform == 'win32':
+            # FIXME: This doesn't work in other platforms for some reason...
+            self.iconbitmap("resources/openttle_ico_temp.ico")
         self.levelEditor = levelEditor
         self.visGroups = visGroups
         self.visGroupNames = [pair[1].getName() for pair in self.visGroups]

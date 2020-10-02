@@ -1,9 +1,14 @@
+# If you add your own hoods, ignore them here please
+# e.g.
+# leveleditor/hoods/FF.json
+# leveleditor/stylefiles/funny_farm/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
 *.pyd
 *$py.class
-phase_*/
+
 
 # C extensions
 *.so
@@ -111,4 +116,12 @@ ENV/
 .idea/
 buildCreativeTools.nsi
 notice.txt
+
+# UGC
 *.dna
+screenshots/
+maps/
+phase_*/
+
+# VS Code
+.history

@@ -1,40 +1,21 @@
 import string
 from pandac.PandaModules import *
 
-hoodString = 'TT DD DL'
-# hoodString = base.config.GetString('level-editor-hoods',
-#                                       'TT DD BR DG DL MM CC CL CM CS GS GZ OZ PA')
-hoods = hoodString.split()
+# Valid Toontown projects
+TOONTOWN_ONLINE = 0
+TOONTOWN_REWRITTEN = 1
+TOONTOWN_CORPORATE_CLASH = 2
+TOONTOWN_OFFLINE = 3
 
-# The list of neighborhoods to edit
-HOOD_IDS = {'TT': 'toontown_central',
-            'DD': 'donalds_dock',
-            'MM': 'minnies_melody_land',
-            'BR': 'the_burrrgh',
-            'DG': 'daisys_garden',
-            'DL': 'donalds_dreamland',
-            'CC': 'cog_hq_bossbot',
-            'CL': 'cog_hq_lawbot',
-            'CM': 'cog_hq_cashbot',
-            'CS': 'cog_hq_sellbot',
-            'GS': 'goofy_speedway',
-            'OZ': 'outdoor_zone',
-            'GZ': 'golf_zone',
-            'PA': 'party_zone',
-            'ES': 'estate',
-            'tut': 'tutorial'
-            }
+SERVER_TO_ID = {'online': TOONTOWN_ONLINE,
+                'rewritten': TOONTOWN_REWRITTEN,
+                'clash': TOONTOWN_CORPORATE_CLASH,
+                'offline': TOONTOWN_OFFLINE}
 
-# Init neighborhood arrays
-NEIGHBORHOODS = []
-NEIGHBORHOOD_CODES = {}
-for hoodId in hoods:
-    if hoodId in HOOD_IDS:
-        hoodName = HOOD_IDS[hoodId]
-        NEIGHBORHOOD_CODES[hoodName] = hoodId
-        NEIGHBORHOODS.append(hoodName)
-    else:
-        print('Error: no hood defined for: ', hoodId)
+HOOD_NAME_SHORTHAND = 'name_shorthand'
+HOOD_NAME_LONGHAND = 'name_longhand'
+HOOD_PATH = 'storage_files'
+
 
 # Colors used by all color menus
 DEFAULT_COLORS = [
@@ -59,7 +40,7 @@ BUILDING_HEIGHTS = [10, 14, 20, 24, 25, 30]
 NUM_WALLS = [1, 2, 3]
 LANDMARK_SPECIAL_TYPES = ['', 'hq', 'gagshop', 'clotheshop', 'petshop', 'kartshop']
 # Corporate Clash has an UNCAPTURABLE building type to flag uncapturable buildings
-if ConfigVariableBool("want-clash-specific-options", False): 
+if base.server == TOONTOWN_CORPORATE_CLASH:
     LANDMARK_SPECIAL_TYPES.append('uncapturable')
 
 OBJECT_SNAP_POINTS = {
@@ -208,6 +189,63 @@ SUB_DNAS = [DNA_CORNICE,
             DNA_SIGN_GRAPHIC,
             DNA_WALL,
             DNA_WINDOWS]
+
+
+
+CONTROLS = '''
+--Camera--
+Note: All camera transformations orbit the currently selected object
+Translate Camera: Alt + Middle Click and Drag
+Rotate / Orbit Camera: Alt + Left Click and Drag
+Zoom Camera: Alt + Right Click and Drag
+
+--Object Insertion--
+Move insertion point to currently selected object's origin: A
+Move object back to insertion point: J
+
+--Transform--
+Translate X/Y by 5 units: [Up, Down, Left, or Right]
+Translate X/Y by 1 unit: Shift + [Up, Down, Left, or Right]
+Translate Z by 5 units: Control + [Up or Down]
+Translate Z by 1 unit: Control + [Left (UP) or Right (DOWN)]
+Rotate by 15 degrees: Control + Shift + [Left or Right]
+Rotate by 1 degree: Control + Shift + [Up or Down]
+Scale: Control + Hold Left Click + Drag
+Note: you can use the [Place Selected] button to position using coordinates
+
+--Walls--
+Change full wall preset: Hold Right Click on anywhere BUT the selected wall
+Change wall section preset: Hold Right Click on wall section
+Change wall section texture: Shift + Hold Right Click on wall section
+Change knock-knock door: Hold Right Click near bottom center of wall piece
+Change windows: Hold Right Click near center of wall piece
+Change number of windows: Shift + Hold right click near center of wall piece
+Change cornice: Hold Right Rlick at top of wall piece
+Change color of part: Control + Hold right click in the same area you would to change the texture
+Change Width of wall: Shift + Hold Right click anywhere BUT the wall.
+Change direction of wall part: Alt + Hold Right Click on part (MayaCam MUST be disabled)
+
+--Landmark Buildings--
+Change door: Hold Right Click bottom half of building
+Change sign background: Hold Right Click on top half of building
+
+--Flat Building Linking--
+Toggle Flat Building Linking mode: Shift + K
+Select Landmark Building to link to: Left Click
+Link Flat Building to Landmark Building: Left click Flat Building and press K
+
+--All Objects--
+Change Color: Control + Hold Right Click on object
+
+--Suits--
+Place Suit Point: Shift + S
+Place Battle Cell: Shift + C
+
+--Misc--
+Toggle Collision Boundaries: Control + C
+Save: Control + S
+Screenshot: F12
+'''
 
 
 # DNA Utility functions (possible class extensions?)

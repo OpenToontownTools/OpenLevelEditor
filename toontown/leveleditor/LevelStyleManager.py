@@ -49,7 +49,7 @@ class LevelStyleManager:
         """
         Create a dictionary of baseline styles for a neighborhood
         """
-        filename = neighborhood + '_baseline_styles.txt'
+        filename = neighborhood + '/baseline_styles.txt'
         print('Loading baseline styles from: ' + filename)
         styleData = self.getStyleFileData(filename)
         return self.initializeBaselineStyleDictionary(styleData, neighborhood)
@@ -185,7 +185,7 @@ class LevelStyleManager:
         """
         Create a dictionary of wall styles for a neighborhood
         """
-        filename = neighborhood + '_wall_styles.txt'
+        filename = neighborhood + '/wall_styles.txt'
         print('Loading wall styles from: ' + filename)
         styleData = self.getStyleFileData(filename)
         return self.initializeWallStyleDictionary(styleData, neighborhood)
@@ -394,7 +394,7 @@ class LevelStyleManager:
         """
         Create a dictionary of wall styles for a neighborhood
         """
-        filename = neighborhood + '_building_styles.txt'
+        filename = neighborhood + '/building_styles.txt'
         print('Loading building styles from: ' + filename)
         styleData = self.getStyleFileData(filename)
         return self.initializeBuildingStyleDictionary(styleData, neighborhood)
@@ -641,7 +641,7 @@ class LevelStyleManager:
                 neighborhoodDict[neighborhood] = attribute
 
     def createColorDictionary(self, neighborhood):
-        filename = neighborhood + '_colors.txt'
+        filename = neighborhood + '/colors.txt'
         print('Loading Color Palettes from: ' + filename)
         colorData = self.getStyleFileData(filename)
         return self.getColorDictionary(colorData)

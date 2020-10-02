@@ -24,7 +24,7 @@ class Motion(StateData.StateData):
         # The motionFSM keeps track of whether you are playing the
         # run/walk/reverse/stand animation.  It is seperate from
         # the animFSM states, because you can be in the "happy" or
-        # "sad" animFSM state and also be running/walking/standing, etc.  
+        # "sad" animFSM state and also be running/walking/standing, etc.
         # SDN: should this be defined here or somewhere else?
         self.fsm = ClassicFSM.ClassicFSM('Motion',
                            [State.State('off',
@@ -63,7 +63,7 @@ class Motion(StateData.StateData):
                            # Final State
                            'off',
                            )
-        
+
         self.fsm.enterInitialState()
 
         #self.parentFSMState = parentFSMState
@@ -71,10 +71,10 @@ class Motion(StateData.StateData):
 
     def delete(self):
         del self.fsm
-        
+
     def load(self):
         pass
-            
+
     def unload(self):
         pass
 
@@ -84,7 +84,7 @@ class Motion(StateData.StateData):
 
     def exit(self):
         self.fsm.requestFinalState()
-    
+
     def enterOff(self, rate=0):
         self.notify.debug('enterOff')
 
@@ -96,7 +96,7 @@ class Motion(StateData.StateData):
 
     def exitNeutral(self):
         self.notify.debug('exitNeutral')
-        
+
     def enterWalk(self, rate=0):
         self.notify.debug('enterWalk')
         # disable emotes using the whole body

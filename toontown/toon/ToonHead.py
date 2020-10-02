@@ -369,7 +369,7 @@ class ToonHead(Actor.Actor):
                             tuple lods)
         Load the head model for the toon.
         If copy = 0, instance geom instead of copying.
-        """        
+        """
         headStyle = style.head
         #ToonHead.notify.debug('RAU headstyle = %s' % headStyle)
 
@@ -548,7 +548,7 @@ class ToonHead(Actor.Actor):
             ToonHead.notify.error("unknown head style: %s" % headStyle)
 
         # load the model and massage the geometry
-        if len(lods) == 1:        
+        if len(lods) == 1:
             self.loadModel("phase_3" + filePrefix + lods[0], "head", "lodRoot",
                            copy)
             if not forGui:
@@ -571,7 +571,7 @@ class ToonHead(Actor.Actor):
 
         else:
             for lod in lods:
-                self.loadModel("phase_3" + filePrefix + lod, "head", lod, copy)                
+                self.loadModel("phase_3" + filePrefix + lod, "head", lod, copy)
                 if not forGui:
                     pLoaded = self.loadPumpkin(headStyle[1], lod, copy)
                     self.loadSnowMan(headStyle[1], lod, copy)
@@ -638,19 +638,19 @@ class ToonHead(Actor.Actor):
                 return False
         else:
             ToonHead.notify.debug("phase_4 not complete yet. Postponing pumpkin head load.")
-            
+
     def loadSnowMan(self, headStyle, lod, copy):
-        if hasattr(base, 'launcher') and ((not base.launcher) or 
+        if hasattr(base, 'launcher') and ((not base.launcher) or
                     (base.launcher and base.launcher.getPhaseComplete(4))):
             if not hasattr(self, 'snowMen'):
                 self.snowMen = NodePathCollection()
-            
+
             snowManPath = 'phase_4/models/props/tt_m_int_snowmanHead_'
             if headStyle is 'l':
                 snowManPath = snowManPath+'tall'
             else:
                 snowManPath = snowManPath + 'short'
-                
+
             model = loader.loadModel(snowManPath)
             if model:
                 model.setScale(0.4)
@@ -711,7 +711,7 @@ class ToonHead(Actor.Actor):
                 if self.__eyelashClosed:
                     self.__eyelashClosed.unstash()
                 self.pumpkins.stash()
-    
+
     def enableSnowMen(self, enable):
         if not hasattr(self, 'snowMen'):
             if len(self.__lods) == 1:
@@ -719,7 +719,7 @@ class ToonHead(Actor.Actor):
             else:
                 for lod in self.__lds:
                     self.loadSnowMan(self.__headStyle[1], lod, self.__copy)
-            
+
         if hasattr(self, 'snowMen'):
             if enable:
                 if self.__eyelashOpen:
@@ -772,13 +772,13 @@ class ToonHead(Actor.Actor):
                 if base.config.GetBool('want-new-anims', 1):
                     if not self.find("**/joint_pupil*").isEmpty():
                         self.drawInFront("joint_pupil*", "eyes*", -1, lodName=lodName)
-                    else:                    
+                    else:
                         self.drawInFront("def_*_pupil", "eyes*", -1, lodName=lodName)
                 else:
-                    self.drawInFront("joint_pupil*", "eyes*", -1, lodName=lodName)  
-                              
+                    self.drawInFront("joint_pupil*", "eyes*", -1, lodName=lodName)
+
             # Save the various eye LODs for blinking.
-            self.__eyes = self.getLOD(1000).find('**/eyes*')            
+            self.__eyes = self.getLOD(1000).find('**/eyes*')
             self.__lod500Eyes = self.getLOD(500).find('**/eyes*')
             self.__lod250Eyes = self.getLOD(250).find('**/eyes*')
 
@@ -818,7 +818,7 @@ class ToonHead(Actor.Actor):
             if base.config.GetBool('want-new-anims', 1):
                 if not self.find("joint_pupil*").isEmpty():
                     self.drawInFront("joint_pupil*", "eyes*", -1)
-                else:                
+                else:
                     self.drawInFront("def_*_pupil", "eyes*", -1)
             else:
                 self.drawInFront("joint_pupil*", "eyes*", -1)
@@ -831,25 +831,25 @@ class ToonHead(Actor.Actor):
             self.__eyes.setColorOff()
             self.__lpupil = None
             self.__rpupil = None
-            if base.config.GetBool('want-new-anims', 1):  
-                if not self.find('**/joint_pupilL*').isEmpty():                
-                    if self.getLOD(1000): 
+            if base.config.GetBool('want-new-anims', 1):
+                if not self.find('**/joint_pupilL*').isEmpty():
+                    if self.getLOD(1000):
                         lp = self.getLOD(1000).find('**/joint_pupilL*')
-                        rp = self.getLOD(1000).find('**/joint_pupilR*')                        
-                    else:                    
+                        rp = self.getLOD(1000).find('**/joint_pupilR*')
+                    else:
                         lp = self.find('**/joint_pupilL*')
                         rp = self.find('**/joint_pupilR*')
-                else:                
-                    if not self.getLOD(1000):                    
+                else:
+                    if not self.getLOD(1000):
                         lp = self.find('**/def_left_pupil*')
-                        rp = self.find('**/def_right_pupil*')  
-                    else:  
+                        rp = self.find('**/def_right_pupil*')
+                    else:
                         lp = self.getLOD(1000).find('**/def_left_pupil*')
                         rp = self.getLOD(1000).find('**/def_right_pupil*')
             else:
                 lp = self.__eyes.find('**/joint_pupilL*')
-                rp = self.__eyes.find('**/joint_pupilR*')                
-                                
+                rp = self.__eyes.find('**/joint_pupilR*')
+
             if lp.isEmpty() or rp.isEmpty():
                 print("Unable to locate pupils.")
             else:
@@ -886,10 +886,10 @@ class ToonHead(Actor.Actor):
 
                 # Also bump up the override parameter on the pupil
                 # textures so they won't get overridden when we set
-                # the blink texture.                
-                
+                # the blink texture.
+
                 self.__lpupil.adjustAllPriorities(1)
-                self.__rpupil.adjustAllPriorities(1)                    
+                self.__rpupil.adjustAllPriorities(1)
                 if self.__lod500Eyes:
                     self.__lod500lPupil.adjustAllPriorities(1)
                     self.__lod500rPupil.adjustAllPriorities(1)
@@ -902,7 +902,7 @@ class ToonHead(Actor.Actor):
                 animalType = style.getAnimal()
                 if animalType != "dog":
                     self.__lpupil.flattenStrong()
-                    self.__rpupil.flattenStrong()                    
+                    self.__rpupil.flattenStrong()
 
     def __setPupilDirection(self, x, y):
         """__setPupilDirection(self, float x, float y)
