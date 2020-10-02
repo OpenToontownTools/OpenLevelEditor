@@ -8,7 +8,7 @@
 
 ## Requirements
 ### ***IMPORTANT***
-* **You need a Panda3D build with [THIS](https://github.com/drewc5131/panda3d/commit/2b735df2d0b8f9880311a9a08a28c7ec684e9583) fix (You can just edit the .py file in your SDK) This reverts a change that completely breaks the TTLE and RTM. This is IMPORTANT!**
+* **You need a Panda3D build that INCLUDES commit [b507c88](https://github.com/panda3d/panda3d/commit/b507c88cd9fd5d3a432aae42fdc9165422a527b4), as this is a CRITICAL fix for the editor. You will NOT be able to use it without this fix!**
 * Toontown phase files that include all the dna files. [These](https://github.com/open-toontown/resources) work fine. ***Toontown Rewritten's phase files do NOT contain .dna files since they use a completely different format, so you need to use them from elsewhere. Open-Toontown's resources are the closest to Toontown Online's that you can get, while also being completely updated and compatible with Panda3d 1.10.***
 * Basic knowledge on how streets are setup
 * Here you have two options:
