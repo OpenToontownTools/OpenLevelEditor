@@ -37,9 +37,19 @@ audio-library-name p3fmod_audio
 model-cache-dir $USER_APPDATA/ToontownLevelEditor/cache
 model-cache-textures #f
 
+# Directory for hoods & style files.
+dna-directory leveleditor
+dna-built-directory $TTMODELS/built # Currently unused
+
 # Default Extensions
 default-model-extension .bam
 screenshot-extension png
 
 # This is a MACOS fix, we don't need it as it locks framerates and can cause other issues
 tk-main-loop #f
+
+# Miscellaneous
+visualize-zones #f
+level-editor-use-cvs #t
+use-snow-tree #f
+want-injector #f

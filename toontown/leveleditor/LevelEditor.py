@@ -51,9 +51,10 @@ base.startDirect(fWantDirect = 1, fWantTk = 1)
 
 visualizeZones = base.config.GetBool("visualize-zones", 0)
 dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "leveleditor"))
-dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
+dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built")) # This is probably for libpandadna support
 fUseCVS = base.config.GetBool("level-editor-use-cvs", 1)
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
+debugInjector = base.config.GetBool("want-injector", 0)
 
 # NEIGHBORHOOD DATA
 # If you run this from the command line you can pass in the hood codes
@@ -354,10 +355,41 @@ class LevelEditor(NodePath, DirectObject):
         self.startF = None
         self.newObjPos = Point3(0)
 
+        # Enable debug injector
+        if debugInjector:
+            self.loadInjector()
+
         # Load the DNA file passed (normally through an argument)
         if dnaPath:
             self.loadDNAFromFile(dnaPath)
             self.outputFile = dnaPath
+
+    def loadInjector(self):
+        import platform
+        if platform.system() != "Darwin":  # Injector doesn't work on mac
+            from direct.stdpy import threading, thread
+            import wx
+
+            def inject_code(_):
+                exec(textbox.GetValue(), globals())
+
+            # Create the injector
+            app = wx.App(redirect=False)
+            frame = wx.Frame(
+                None,
+                title="Client Injector",
+                size=(650, 450),
+                style=wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX | wx.MINIMIZE_BOX # using wxpython in a tkinter environment ftw
+            )
+            panel = wx.Panel(frame)
+            button = wx.Button(parent=panel, id=-1, label="Execute", size=(600, 30), pos=(20, 0))
+            global textbox
+            textbox = wx.TextCtrl(parent=panel, id=-1, pos=(20, 35), size=(600, 340), style=wx.TE_MULTILINE)
+            frame.Bind(wx.EVT_BUTTON, inject_code, button)
+            frame.Show()
+            app.SetTopWindow(frame)
+            threading.Thread(target=app.MainLoop).start()
+
 
     # ENABLE/DISABLE
     def enable(self):
@@ -4116,8 +4148,7 @@ class LevelEditor(NodePath, DirectObject):
                                               "prop_tree_large_ur",
                                               "prop_tree_large_ul"])
 
-                        # use snow if necessaryy
-
+                        # use snow if necessary
                         if (useSnowTree):
                             tree = random.choice(["prop_snow_tree_small_ul",
                                                   "prop_snow_tree_small_ur",
@@ -4386,6 +4417,9 @@ class OldLevelEditor(NodePath, DirectObject):
 
 
 class LevelEditorPanel(Pmw.MegaToplevel):
+    """
+    Class used to initialize the Tkinter GUI.
+    """
     def __init__(self, levelEditor, parent = None, **kw):
 
         INITOPT = Pmw.INITOPT
