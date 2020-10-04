@@ -4,7 +4,7 @@
 load-display pandagl
 
 # These control the placement and size of the default rendering window.
-win-origin 50 50
+win-origin -2 -2
 win-size 1280 720
 
 # Set engine window title
