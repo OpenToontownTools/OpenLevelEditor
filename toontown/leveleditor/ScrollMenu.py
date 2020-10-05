@@ -23,8 +23,8 @@ class ScrollMenu:
                                  frameSize = (-0.5, 0.2, -0.05, 0.59),
                                  frameColor = (0.737, 0.573, 0.345, 0.000))
 
-        numItemsVisible = 4
-        itemHeight = 0.08
+        numItemsVisible = 9
+        itemHeight = 0.05
 
         myScrolledList = DirectScrolledList(
                 decButton_pos = (0.35, 0, 0.53),
@@ -47,14 +47,13 @@ class ScrollMenu:
                 incButton_text2_fg = (0.977, 0.816, 0.133, 1),
                 incButton_text3_fg = (0.3, 0.3, 0.3, 1),
 
-                frameSize = (0.0, 0.8, -0.05, 0.59),
+                frameSize = (-0.1, 0.9, -0.05, 0.59),
                 frameColor = (0, 0, 1, 0.5),
                 pos = (-0.5, 0, 0),
                 items = [],
                 numItemsVisible = numItemsVisible,
                 forceHeight = itemHeight,
-                itemFrame_frameSize = (-0.35, 0.35, -0.37, 0.11),
-                itemFrame_pos = (0.4, 0, 0.4),
+                itemFrame_pos = (0.4, 0, 0.45),
                 )
 
         for t in self.textList:
