@@ -13,6 +13,7 @@ icon-filename resources/openttle_ico_temp.ico
 
 # The framebuffer-hardware flag forces it to use an accelerated driver.
 framebuffer-hardware #t
+multisamples 4
 
 # hw animation
 hardware-animated-vertices true

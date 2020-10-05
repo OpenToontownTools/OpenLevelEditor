@@ -90,6 +90,7 @@ class ToontownLevelEditor(ShowBase):
 
         # Now we actually start the editor
         ShowBase.__init__(self)
+        aspect2d.setAntialias(AntialiasAttrib.MAuto)
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
