@@ -54,6 +54,7 @@ dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "level
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
 fUseCVS = base.config.GetBool("level-editor-use-cvs", 0)
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
+wantHalloweenStorage = base.config.GetBool("want-halloween-props", 0)
 
 # NEIGHBORHOOD DATA
 # If you run this from the command line you can pass in the hood codes
@@ -94,6 +95,9 @@ except NameError:
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
     NEIGHBORHOODS = []
     NEIGHBORHOOD_CODES = {}
+    HOLIDAYS = []
+    HOLIDAY_CODES= {}
+
     for hood in base.hoods:
         with open(f'./leveleditor/hoods/{hood}.json') as info:
             data = json.load(info)
@@ -107,6 +111,16 @@ except NameError:
     DNASTORE.storeFont('humanist', ToontownGlobals.getInterfaceFont())
     DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())
     DNASTORE.storeFont('suit', ToontownGlobals.getSuitFont())
+
+    if wantHalloweenStorage:
+        with open(f'./leveleditor/holidays/halloween.json') as info:
+            data = json.load(info)
+            hoodName = data.get(LevelEditorGlobals.HOOD_NAME_LONGHAND) # Same value as hood
+            HOLIDAYS.append(hoodName)
+            storages = data.get(LevelEditorGlobals.HOOD_PATH)
+            for storage in storages:
+                loadDNAFile(DNASTORE, storage, CSDefault, 1)
+
     builtins.dnaLoaded = 1
 
 
@@ -4494,13 +4508,13 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Reload Building Style Palettes',
                             label = 'Reload Bldg Styles',
                             command = self.styleManager.createBuildingStyleAttributes)
-                            
+
         menuBar.addmenu('Advanced', 'Level Editor Advanced Options')
         menuBar.addmenuitem('Advanced', 'command',
                         'Open Injector',
                         label = 'Injector',
                         command = self.showInjector)
-                        
+
         self.injectorDialog = Pmw.Dialog(parent, title = 'Injector',
                                          buttons = ('Run',),
                                          command = self.runInject)
@@ -4508,7 +4522,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         #self.injectorTextBox = Pmw.EntryField (parent = self.injectorDialog.interior())
         self.injectorTextBox = Text(self.injectorDialog.interior(), height=30)
         self.injectorTextBox.pack(expand = 1, fill = BOTH)
-                                         
+
 
         menuBar.addmenu('Help', 'Level Editor Help Operations')
         self.toggleBalloonVar = IntVar()
@@ -4726,7 +4740,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.landmarkBuildingSpecialSelector.selectitem(
                     LANDMARK_SPECIAL_TYPES[0])
             self.landmarkBuildingSpecialSelector.pack(expand = 0)
-        
+
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
@@ -5798,12 +5812,12 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def showControls(self):
         self.controlsDialog.show()
         self.controlsDialog.focus_set()
-        
+
     def showInjector(self):
         self.injectorDialog.show()
         self.injectorDialog.focus_set()
-        
-        
+
+
     def runInject(self, e):
         if e == None:
             self.injectorDialog.withdraw()

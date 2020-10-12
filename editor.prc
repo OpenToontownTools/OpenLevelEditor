@@ -42,6 +42,9 @@ model-cache-textures #f
 dna-directory leveleditor
 dna-built-directory $TTMODELS/built # Currently unused
 
+# Enable loading holiday storage files.
+want-halloween-props #f
+
 # Default Extensions
 default-model-extension .bam
 screenshot-extension png
