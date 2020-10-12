@@ -1,8 +1,8 @@
 {
-	"name_longhand": "minnies_melody_land",
-	"storage_files": [
-		"phase_6/dna/storage_MM.dna", 
-		"phase_6/dna/storage_MM_sz.dna", 
-		"phase_6/dna/storage_MM_town.dna"
-	]
+    "name_longhand": "minnies_melody_land",
+    "storage_files": [
+        "phase_6/dna/storage_MM.dna",
+        "phase_6/dna/storage_MM_sz.dna",
+        "phase_6/dna/storage_MM_town.dna"
+    ]
 }

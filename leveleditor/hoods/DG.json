@@ -1,8 +1,8 @@
 {
 	"name_longhand": "daisy_gardens",
 	"storage_files": [
-		"phase_8/dna/storage_DG.dna", 
-		"phase_8/dna/storage_DG_sz.dna", 
+		"phase_8/dna/storage_DG.dna",
+		"phase_8/dna/storage_DG_sz.dna",
 		"phase_8/dna/storage_DG_town.dna"
 	]
 }

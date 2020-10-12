@@ -1,6 +1,6 @@
 {
-	"name_longhand": "cog_hq_cashbot",
-	"storage_files": [
-		"phase_10/dna/storage_CM_sz.dna"
-	]
+    "name_longhand": "cog_hq_cashbot",
+    "storage_files": [
+        "phase_10/dna/storage_CM_sz.dna"
+    ]
 }
