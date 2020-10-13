@@ -1,6 +1,7 @@
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 from .PieMenu import *
+from .RadialMenu import RadialMenu, RadialItem
 import direct.gui.DirectGuiGlobals as DGG
 from direct.gui import DirectGui
 from direct.showbase.TkGlobal import *
@@ -260,7 +261,8 @@ class LevelEditor(NodePath, DirectObject):
             ('shift-o', self.toggleOrth),
             ('f12', self.screenshot),
             ('control-c', self.toggleVisibleCollisions),
-            ('control-s', self.outputDNADefaultFile)
+            ('control-s', self.outputDNADefaultFile),
+            ('tab', self.enterGlobalRadialMenu)
             ]
 
         self.overrideEvents = [
@@ -4379,7 +4381,42 @@ class LevelEditor(NodePath, DirectObject):
             else:
                 return self.findBldgEndPoint(bldgWidth, curve, currT, currPoint, startT = midT, endT = endT,
                                              rd = rd + 1)
-
+        
+    async def enterGlobalRadialMenu(self):
+        ''' Radial Menu with general commands '''
+        
+        # Load the gui model
+        gui = await loader.loadModel("resources/level_editor_gui.bam", blocking = False)
+        
+        # Create the menu with the items
+        rm = RadialMenu([
+            RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
+            RadialItem(gui.find("**/icon_save"), 'Save'),
+            RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
+            RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
+        ])
+        rm.activate()
+        
+        del gui
+        
+        # Wait for the user to release tab, simpler way of accept('tab-up', exitGlobalRadialMenu)
+        await messenger.future('tab-up')
+        
+        # Now that the user has released tab,
+        # Get the choice
+        result = rm.getChoice()
+        
+        # Destroy everything
+        rm.deactivate()
+        rm.destroy()
+        
+        # Do the selected action
+        if result == 1:
+            self.outputDNADefaultFile()
+        if result == 2:
+            self.toggleShowLandmarkBlock()
+        if result == 3:
+            self.toggleVisibleCollisions()
 
 class OldLevelEditor(NodePath, DirectObject):
     pass
