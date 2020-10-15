@@ -53,7 +53,6 @@ base.startDirect(fWantDirect = 1, fWantTk = 1)
 visualizeZones = base.config.GetBool("visualize-zones", 0)
 dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "leveleditor"))
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
-fUseCVS = base.config.GetBool("level-editor-use-cvs", 0)
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
 
 # NEIGHBORHOOD DATA
@@ -2859,63 +2858,6 @@ class LevelEditor(NodePath, DirectObject):
                 # Update grid to get ready for the next object
                 self.autoPositionGrid()
 
-    # CVS OPERATIONS
-    def cvsUpdate(self, filename):
-        dirname = os.path.dirname(filename)
-        if not os.path.isdir(dirname):
-            print('Cannot CVS update %s: invalid directory' % (filename))
-            return
-
-        basename = os.path.basename(filename)
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs update ' + basename
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
-    def cvsAdd(self, filename):
-        dirname = os.path.dirname(filename)
-        if not os.path.isdir(dirname):
-            print('Cannot CVS add %s: invalid directory' % (filename))
-            return
-
-        basename = os.path.basename(filename)
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs add ' + basename
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
-    def cvsUpdateAll(self):
-        # Update the entire dna source directory.
-        dirname = dnaDirectory.toOsSpecific()
-        if not os.path.isdir(dirname):
-            print('Cannot CVS commit: invalid directory')
-            return
-
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs update -dP'
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
-    def cvsCommitAll(self):
-        # cvs commit always commits the entire dna source directory.
-        dirname = dnaDirectory.toOsSpecific()
-        if not os.path.isdir(dirname):
-            print('Cannot CVS commit: invalid directory')
-            return
-
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs commit -m "level editor"'
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
     # STYLE/DNA FILE FUNCTIONS
     def loadSpecifiedDNAFile(self):
         path = dnaDirectory.toOsSpecific()
@@ -2956,8 +2898,6 @@ class LevelEditor(NodePath, DirectObject):
         self.reset(fDeleteToplevel = 1, fCreateToplevel = 0,
                    fUpdateExplorer = 0)
         # Now load in new file
-        if fUseCVS:
-            self.cvsUpdate(filename)
         try:
             self.notify.debug("Trying to load file")
             node = loadDNAFile(DNASTORE, Filename.fromOsSpecific(filename).cStr(), CSDefault, 1)
@@ -4469,14 +4409,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Save DNA File',
                             label = 'Save DNA',
                             command = self.levelEditor.outputDNADefaultFile)
-        menuBar.addmenuitem('Level Editor', 'command',
-                            'CVS update directory',
-                            label = 'CVS update',
-                            command = self.levelEditor.cvsUpdateAll)
-        menuBar.addmenuitem('Level Editor', 'command',
-                            'CVS commit directory',
-                            label = 'CVS commit',
-                            command = self.levelEditor.cvsCommitAll)
         menuBar.addmenuitem('Level Editor', 'command',
                             'Edit Visibility Groups',
                             label = 'Edit Vis Groups',
