@@ -1,4 +1,4 @@
-''' Camera Radial Menu - drewcification 091720/091720 '''
+''' Camera Radial Menu - drewcification 091720 '''
 from panda3d.core import *
 from direct.gui.DirectFrame import DirectFrame, OnscreenImage, OnscreenText
 from direct.showbase.DirectObject import DirectObject
