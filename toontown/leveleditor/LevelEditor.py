@@ -2953,6 +2953,13 @@ class LevelEditor(NodePath, DirectObject):
         binaryFilename = Filename(filename)
         binaryFilename.setBinary()
         self.DNAData.writeDna(binaryFilename, Notify.out(), DNASTORE)
+        if ConfigVariableString("compiler") in ['libpandadna', 'clash']:
+            print(f"Compiling PDNA for {ConfigVariableString('compiler')}")
+            self.compileDNA(binaryFilename)
+        
+    def compileDNA(self, filename):
+        from toontown.compiler.compile import process_single_file
+        process_single_file(filename)
 
     def saveColor(self):
         self.appendColorToColorPaletteFile(self.panel.colorEntry.get())
