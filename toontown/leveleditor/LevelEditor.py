@@ -1,6 +1,7 @@
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 from .PieMenu import *
+from .RadialMenu import RadialMenu, RadialItem
 import direct.gui.DirectGuiGlobals as DGG
 from direct.gui import DirectGui
 from direct.showbase.TkGlobal import *
@@ -52,7 +53,6 @@ base.startDirect(fWantDirect = 1, fWantTk = 1)
 visualizeZones = base.config.GetBool("visualize-zones", 0)
 dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "leveleditor"))
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
-fUseCVS = base.config.GetBool("level-editor-use-cvs", 0)
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
 
 # NEIGHBORHOOD DATA
@@ -260,7 +260,8 @@ class LevelEditor(NodePath, DirectObject):
             ('shift-o', self.toggleOrth),
             ('f12', self.screenshot),
             ('control-c', self.toggleVisibleCollisions),
-            ('control-s', self.outputDNADefaultFile)
+            ('control-s', self.outputDNADefaultFile),
+            ('tab', self.enterGlobalRadialMenu)
             ]
 
         self.overrideEvents = [
@@ -2857,63 +2858,6 @@ class LevelEditor(NodePath, DirectObject):
                 # Update grid to get ready for the next object
                 self.autoPositionGrid()
 
-    # CVS OPERATIONS
-    def cvsUpdate(self, filename):
-        dirname = os.path.dirname(filename)
-        if not os.path.isdir(dirname):
-            print('Cannot CVS update %s: invalid directory' % (filename))
-            return
-
-        basename = os.path.basename(filename)
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs update ' + basename
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
-    def cvsAdd(self, filename):
-        dirname = os.path.dirname(filename)
-        if not os.path.isdir(dirname):
-            print('Cannot CVS add %s: invalid directory' % (filename))
-            return
-
-        basename = os.path.basename(filename)
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs add ' + basename
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
-    def cvsUpdateAll(self):
-        # Update the entire dna source directory.
-        dirname = dnaDirectory.toOsSpecific()
-        if not os.path.isdir(dirname):
-            print('Cannot CVS commit: invalid directory')
-            return
-
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs update -dP'
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
-    def cvsCommitAll(self):
-        # cvs commit always commits the entire dna source directory.
-        dirname = dnaDirectory.toOsSpecific()
-        if not os.path.isdir(dirname):
-            print('Cannot CVS commit: invalid directory')
-            return
-
-        cwd = os.getcwd()
-        os.chdir(dirname)
-        cvsCommand = 'cvs commit -m "level editor"'
-        print(cvsCommand)
-        os.system(cvsCommand)
-        os.chdir(cwd)
-
     # STYLE/DNA FILE FUNCTIONS
     def loadSpecifiedDNAFile(self):
         path = dnaDirectory.toOsSpecific()
@@ -2954,8 +2898,6 @@ class LevelEditor(NodePath, DirectObject):
         self.reset(fDeleteToplevel = 1, fCreateToplevel = 0,
                    fUpdateExplorer = 0)
         # Now load in new file
-        if fUseCVS:
-            self.cvsUpdate(filename)
         try:
             self.notify.debug("Trying to load file")
             node = loadDNAFile(DNASTORE, Filename.fromOsSpecific(filename).cStr(), CSDefault, 1)
@@ -4379,7 +4321,42 @@ class LevelEditor(NodePath, DirectObject):
             else:
                 return self.findBldgEndPoint(bldgWidth, curve, currT, currPoint, startT = midT, endT = endT,
                                              rd = rd + 1)
-
+        
+    async def enterGlobalRadialMenu(self):
+        ''' Radial Menu with general commands '''
+        
+        # Load the gui model
+        gui = await loader.loadModel("resources/level_editor_gui.bam", blocking = False)
+        
+        # Create the menu with the items
+        rm = RadialMenu([
+            RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
+            RadialItem(gui.find("**/icon_save"), 'Save'),
+            RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
+            RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
+        ])
+        rm.activate()
+        
+        del gui
+        
+        # Wait for the user to release tab, simpler way of accept('tab-up', exitGlobalRadialMenu)
+        await messenger.future('tab-up')
+        
+        # Now that the user has released tab,
+        # Get the choice
+        result = rm.getChoice()
+        
+        # Destroy everything
+        rm.deactivate()
+        rm.destroy()
+        
+        # Do the selected action
+        if result == 1:
+            self.outputDNADefaultFile()
+        if result == 2:
+            self.toggleShowLandmarkBlock()
+        if result == 3:
+            self.toggleVisibleCollisions()
 
 class OldLevelEditor(NodePath, DirectObject):
     pass
@@ -4432,14 +4409,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Save DNA File',
                             label = 'Save DNA',
                             command = self.levelEditor.outputDNADefaultFile)
-        menuBar.addmenuitem('Level Editor', 'command',
-                            'CVS update directory',
-                            label = 'CVS update',
-                            command = self.levelEditor.cvsUpdateAll)
-        menuBar.addmenuitem('Level Editor', 'command',
-                            'CVS commit directory',
-                            label = 'CVS commit',
-                            command = self.levelEditor.cvsCommitAll)
         menuBar.addmenuitem('Level Editor', 'command',
                             'Edit Visibility Groups',
                             label = 'Edit Vis Groups',
@@ -4494,6 +4463,21 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Reload Building Style Palettes',
                             label = 'Reload Bldg Styles',
                             command = self.styleManager.createBuildingStyleAttributes)
+                            
+        menuBar.addmenu('Advanced', 'Level Editor Advanced Options')
+        menuBar.addmenuitem('Advanced', 'command',
+                        'Open Injector',
+                        label = 'Injector',
+                        command = self.showInjector)
+                        
+        self.injectorDialog = Pmw.Dialog(parent, title = 'Injector',
+                                         buttons = ('Run',),
+                                         command = self.runInject)
+        self.injectorDialog.withdraw()
+        #self.injectorTextBox = Pmw.EntryField (parent = self.injectorDialog.interior())
+        self.injectorTextBox = Text(self.injectorDialog.interior(), height=30)
+        self.injectorTextBox.pack(expand = 1, fill = BOTH)
+                                         
 
         menuBar.addmenu('Help', 'Level Editor Help Operations')
         self.toggleBalloonVar = IntVar()
@@ -4541,10 +4525,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         toonBuildingsPage = self.notebook.add('Toon Bldgs')
         landmarkBuildingsPage = self.notebook.add('Landmark Bldgs')
         # suitBuildingsPage = self.notebook.add('Suit Buildings')
-        animBuildingsPage = self.notebook.add('AnimBuildings')
+        animBuildingsPage = self.notebook.add('Anim Bldgs')
         propsPage = self.notebook.add('Props')
-        animPropsPage = self.notebook.add('AnimProps')
-        interactivePropsPage = self.notebook.add('InteractiveProps')
+        animPropsPage = self.notebook.add('Anim Props')
+        interactivePropsPage = self.notebook.add('Interactive Props')
         signPage = self.notebook.add('Signs')
         suitPathPage = self.notebook.add('Paths')
         battleCellPage = self.notebook.add('Cells')
@@ -5783,6 +5767,18 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def showControls(self):
         self.controlsDialog.show()
         self.controlsDialog.focus_set()
+        
+    def showInjector(self):
+        self.injectorDialog.show()
+        self.injectorDialog.focus_set()
+        
+        
+    def runInject(self, e):
+        if e == None:
+            self.injectorDialog.withdraw()
+        if e == 'Run':
+            exec(self.injectorTextBox.get('1.0', 'end'), globals())
+        pass
 
 
 class VisGroupsEditor(Pmw.MegaToplevel):

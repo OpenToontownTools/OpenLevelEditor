@@ -23,44 +23,50 @@ class ScrollMenu:
                                  frameSize = (-0.5, 0.2, -0.05, 0.59),
                                  frameColor = (0.737, 0.573, 0.345, 0.000))
 
-        numItemsVisible = 4
-        itemHeight = 0.08
+        numItemsVisible = 9
+        itemHeight = 0.05
+        
+        gui = loader.loadModel("resources/level_editor_gui.bam")
 
         myScrolledList = DirectScrolledList(
-                decButton_pos = (0.35, 0, 0.53),
-                decButton_text = "Dec",
-                decButton_text_font = ToontownGlobals.getSignFont(),
-                decButton_text_scale = 0.04,
-                decButton_borderWidth = (0.005, 0.005),
-                decButton_text0_fg = (0.152, 0.750, 0.258, 1),
-                decButton_text1_fg = (0.152, 0.750, 0.258, 1),
-                decButton_text2_fg = (0.977, 0.816, 0.133, 1),
-                decButton_text3_fg = (0.3, 0.3, 0.3, 1),
-
-                incButton_pos = (0.35, 0, -0.02),
-                incButton_text = "Inc",
-                incButton_text_font = ToontownGlobals.getSignFont(),
-                incButton_text_scale = 0.04,
-                incButton_borderWidth = (0.005, 0.005),
-                incButton_text0_fg = (0.152, 0.750, 0.258, 1),
-                incButton_text1_fg = (0.152, 0.750, 0.258, 1),
-                incButton_text2_fg = (0.977, 0.816, 0.133, 1),
-                incButton_text3_fg = (0.3, 0.3, 0.3, 1),
-
-                frameSize = (0.0, 0.8, -0.05, 0.59),
-                frameColor = (0, 0, 1, 0.5),
+                decButton_pos = (0.4, 0, 0.53),
+                decButton_scale = 0.1,
+                decButton_relief = None,
+                decButton_image = (
+                    gui.find("**/arrow_u_n"),
+                    gui.find("**/arrow_u_d"),
+                    gui.find("**/arrow_u_r"),
+                    gui.find("**/arrow_u_i")
+                ),
+                
+                incButton_pos = (0.4, 0, -0.02),
+                incButton_scale = 0.1,
+                incButton_relief = None,
+                incButton_image = (
+                    gui.find("**/arrow_d_n"),
+                    gui.find("**/arrow_d_d"),
+                    gui.find("**/arrow_d_r"),
+                    gui.find("**/arrow_d_i")
+                ),
+                    
+                
+                image = gui.find("**/editor_list_frame"),
+                image_pos = (.4, 0, 0.26),
+                image_scale = (1.4, 1, 0.7),
+                
+                frameSize = (-0.1, 0.9, -0.05, 0.59),
+                frameColor = (0, 0, 1, 0.0),
                 pos = (-0.5, 0, 0),
                 items = [],
                 numItemsVisible = numItemsVisible,
                 forceHeight = itemHeight,
-                itemFrame_frameSize = (-0.35, 0.35, -0.37, 0.11),
-                itemFrame_pos = (0.4, 0, 0.4),
+                itemFrame_pos = (0.4, 0, 0.45),
                 )
 
         for t in self.textList:
             myScrolledList.addItem(DirectButton(text = (t, t, t),
                                                 text_scale = 0.05, command = self.__selected,
-                                                extraArgs = [t], relief = None,
+                                                extraArgs = [t], relief = None, text_style = 3,
                                                 text_font = ToontownGlobals.getToonFont(),
                                                 text0_fg = (0.152, 0.750, 0.258, 1),
                                                 text1_fg = (0.152, 0.750, 0.258, 1),
