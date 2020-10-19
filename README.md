@@ -33,8 +33,15 @@
 
 * [*Please only contact me if you need assistance with the editor. No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
 
+## Major New Features
+* Fully Updated to Panda3D and Python 3
+* A ton of smaller debug features
+* Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
+* A lot of usability improvements
+* Modular zone system
+* And alot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
+
 ## Upcoming Features
-* Optional Auto PDNA compilation support for [libpandadna](https://github.com/loblao/libpandadna) and Corporate Clash's DNA reader.
 * Auto Saving
 * and much more!
 
