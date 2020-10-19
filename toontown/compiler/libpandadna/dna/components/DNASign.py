@@ -1,12 +1,13 @@
-from toontown.compiler.clashdna.dna.components.DNANode import DNANode
-from toontown.compiler.clashdna.dna.base.DNAPacker import *
+from toontown.compiler.libpandadna.dna.base.DNAPacker import *
+from toontown.compiler.libpandadna.dna.components.DNANode import DNANode
 
 
-class DNAProp(DNANode):
-    COMPONENT_CODE = 4
+class DNASign(DNANode):
+    COMPONENT_CODE = 5
 
-    def __init__(self, name):
-        DNANode.__init__(self, name)
+    def __init__(self):
+        DNANode.__init__(self, '')
+
         self.code = ''
         self.color = (1, 1, 1, 1)
 
@@ -18,9 +19,10 @@ class DNAProp(DNANode):
 
     def traverse(self, recursive=True, verbose=False):
         packer = DNANode.traverse(self, recursive=False, verbose=verbose)
-        packer.name = 'DNAProp'  # Override the name for debugging.
+        packer.name = 'DNASign'  # Override the name for debugging.
         packer.pack('code', self.code, STRING)
         packer.packColor('color', *self.color)
+
         if recursive:
             packer += self.traverseChildren(verbose=verbose)
         return packer

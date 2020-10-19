@@ -1,5 +1,5 @@
-from .DNANode import DNANode
-from toontown.compiler.clashdna.dna.base.DNAPacker import *
+from toontown.compiler.libpandadna.dna.components.DNANode import DNANode
+from toontown.compiler.libpandadna.dna.base.DNAPacker import *
 
 
 class DNASignGraphic(DNANode):

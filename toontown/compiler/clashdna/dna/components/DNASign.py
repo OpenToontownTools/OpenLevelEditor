@@ -1,5 +1,5 @@
-from dna.base.DNAPacker import *
-from DNANode import DNANode
+from toontown.compiler.clashdna.dna.base.DNAPacker import *
+from .DNANode import DNANode
 
 
 class DNASign(DNANode):

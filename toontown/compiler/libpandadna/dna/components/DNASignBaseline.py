@@ -1,7 +1,7 @@
 import math
 import sys
-from toontown.compiler.clashdna.dna.base.DNAPacker import *
-from .DNANode import DNANode
+from toontown.compiler.libpandadna.dna.base.DNAPacker import *
+from toontown.compiler.libpandadna.dna.components.DNANode import DNANode
 
 
 class DNASignBaseline(DNANode):
@@ -56,16 +56,11 @@ class DNASignBaseline(DNANode):
         packer.name = 'DNASignBaseline'  # Override the name for debugging.
 
         traversed_data = DNAPacker()
-        text = ''
 
         for child in self.children:
-            if child.__class__.__name__ == 'DNASignText':
-                text += child.letters
-            else:
-                if recursive:
-                    traversed_data += child.traverse(recursive=recursive, verbose=verbose)
+            if recursive:
+                traversed_data += child.traverse(recursive=recursive, verbose=verbose)
 
-        packer.pack('sign node text', text, STRING)
         packer.pack('sign node code', self.code, STRING)
         packer.packColor('sign node color', *self.color)
         packer.pack('sign node flags', self.flags, STRING)

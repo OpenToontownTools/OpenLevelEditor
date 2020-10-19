@@ -1,5 +1,5 @@
-from .DNAGroup import DNAGroup
-from toontown.compiler.clashdna.dna.base.DNAPacker import *
+from toontown.compiler.libpandadna.dna.components.DNAGroup import DNAGroup
+from toontown.compiler.libpandadna.dna.base.DNAPacker import *
 
 
 class DNAWindows(DNAGroup):

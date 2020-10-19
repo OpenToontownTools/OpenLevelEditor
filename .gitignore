@@ -119,6 +119,7 @@ notice.txt
 
 # UGC
 *.dna
+*.pdna
 screenshots/
 maps/
 phase_*/

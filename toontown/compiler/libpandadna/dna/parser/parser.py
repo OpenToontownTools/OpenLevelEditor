@@ -1,25 +1,25 @@
 import os
-from toontown.compiler.clashdna.dna.components.DNAAnimBuilding import DNAAnimBuilding
-from toontown.compiler.clashdna.dna.components.DNAAnimProp import DNAAnimProp
-from toontown.compiler.clashdna.dna.components.DNABattleCell import DNABattleCell
-from toontown.compiler.clashdna.dna.components.DNACornice import DNACornice
-from toontown.compiler.clashdna.dna.components.DNADoor import DNADoor
-from toontown.compiler.clashdna.dna.components.DNAFlatBuilding import DNAFlatBuilding
-from toontown.compiler.clashdna.dna.components.DNAFlatDoor import DNAFlatDoor
-from toontown.compiler.clashdna.dna.components.DNAGroup import DNAGroup
-from toontown.compiler.clashdna.dna.components.DNAInteractiveProp import DNAInteractiveProp
-from toontown.compiler.clashdna.dna.components.DNALandmarkBuilding import DNALandmarkBuilding
-from toontown.compiler.clashdna.dna.components.DNANode import DNANode
-from toontown.compiler.clashdna.dna.components.DNAProp import DNAProp
-from toontown.compiler.clashdna.dna.components.DNASign import DNASign
-from toontown.compiler.clashdna.dna.components.DNASignBaseline import DNASignBaseline
-from toontown.compiler.clashdna.dna.components.DNASignGraphic import DNASignGraphic
-from toontown.compiler.clashdna.dna.components.DNASignText import DNASignText
-from toontown.compiler.clashdna.dna.components.DNAStreet import DNAStreet
-from toontown.compiler.clashdna.dna.components.DNASuitPoint import DNASuitPoint
-from toontown.compiler.clashdna.dna.components.DNAVisGroup import DNAVisGroup
-from toontown.compiler.clashdna.dna.components.DNAWall import DNAWall
-from toontown.compiler.clashdna.dna.components.DNAWindows import DNAWindows
+from toontown.compiler.libpandadna.dna.components.DNAAnimBuilding import DNAAnimBuilding
+from toontown.compiler.libpandadna.dna.components.DNAAnimProp import DNAAnimProp
+from toontown.compiler.libpandadna.dna.components.DNABattleCell import DNABattleCell
+from toontown.compiler.libpandadna.dna.components.DNACornice import DNACornice
+from toontown.compiler.libpandadna.dna.components.DNADoor import DNADoor
+from toontown.compiler.libpandadna.dna.components.DNAFlatBuilding import DNAFlatBuilding
+from toontown.compiler.libpandadna.dna.components.DNAFlatDoor import DNAFlatDoor
+from toontown.compiler.libpandadna.dna.components.DNAGroup import DNAGroup
+from toontown.compiler.libpandadna.dna.components.DNAInteractiveProp import DNAInteractiveProp
+from toontown.compiler.libpandadna.dna.components.DNALandmarkBuilding import DNALandmarkBuilding
+from toontown.compiler.libpandadna.dna.components.DNANode import DNANode
+from toontown.compiler.libpandadna.dna.components.DNAProp import DNAProp
+from toontown.compiler.libpandadna.dna.components.DNASign import DNASign
+from toontown.compiler.libpandadna.dna.components.DNASignBaseline import DNASignBaseline
+from toontown.compiler.libpandadna.dna.components.DNASignGraphic import DNASignGraphic
+from toontown.compiler.libpandadna.dna.components.DNASignText import DNASignText
+from toontown.compiler.libpandadna.dna.components.DNAStreet import DNAStreet
+from toontown.compiler.libpandadna.dna.components.DNASuitPoint import DNASuitPoint
+from toontown.compiler.libpandadna.dna.components.DNAVisGroup import DNAVisGroup
+from toontown.compiler.libpandadna.dna.components.DNAWall import DNAWall
+from toontown.compiler.libpandadna.dna.components.DNAWindows import DNAWindows
 
 
 def p_dna(p):
@@ -657,6 +657,7 @@ texture : TEXTURE "[" string "]"'''
 
 def p_title(p):
     title = p[3]
+    p.parser.parentGroup.setTitle(title)
     parentName = p.parser.parentGroup.name
     blockNumber = int(p.parser.dnaStore.getBlock(parentName))
     p.parser.dnaStore.storeBlockTitle(blockNumber, title)
@@ -666,6 +667,7 @@ title : TITLE "[" string "]"'''
 
 def p_article(p):
     article = p[3]
+    p.parser.parentGroup.setArticle(article)
     parentName = p.parser.parentGroup.name
     blockNumber = int(p.parser.dnaStore.getBlock(parentName))
     p.parser.dnaStore.storeBlockArticle(blockNumber, article)
@@ -675,6 +677,7 @@ article : ARTICLE "[" string "]"'''
 
 def p_building_type(p):
     buildingType = p[3]
+    p.parser.parentGroup.setBuildingType(buildingType)
     parentName = p.parser.parentGroup.name
     blockNumber = int(p.parser.dnaStore.getBlock(parentName))
     p.parser.dnaStore.storeBlockBuildingType(blockNumber, buildingType)

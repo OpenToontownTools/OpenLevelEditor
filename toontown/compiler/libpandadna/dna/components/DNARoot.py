@@ -1,6 +1,6 @@
-from toontown.compiler.clashdna.dna.components.DNAGroup import DNAGroup
-from toontown.compiler.clashdna.dna.parser.parser import *
-from toontown.compiler.clashdna.dna.parser.tokens import *
+from toontown.compiler.libpandadna.dna.components.DNAGroup import DNAGroup
+from toontown.compiler.libpandadna.dna.parser.parser import *
+from toontown.compiler.libpandadna.dna.parser.tokens import *
 from ply import yacc
 
 
