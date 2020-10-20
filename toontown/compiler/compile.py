@@ -17,6 +17,12 @@ from ply import lex
 
 lexer = lex.lex(optimize=0)
 
+class DNAError(Exception):
+    pass
+    
+import builtins
+builtins.DNAError = DNAError
+
 def loadDNAFile(dnaStore, filename):
     root = DNARoot.DNARoot(name='root', dnaStore=dnaStore)
     with open(filename, 'r') as f:
