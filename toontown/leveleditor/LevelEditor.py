@@ -2188,7 +2188,7 @@ class LevelEditor(NodePath, DirectObject):
             # MRM: Need to disable dna store warning
             self.replaceSelected()
             # Re-add replication hooks so we get right kind of copy
-            self.addReplicationHooks(self.DNATarget)
+            # self.addReplicationHooks(self.DNATarget) This is called initially now.
 
     def setBuildingType(self, type):
         print('setBuildingType: ', repr(type))
