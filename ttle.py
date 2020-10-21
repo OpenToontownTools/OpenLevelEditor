@@ -44,6 +44,11 @@ class ToontownLevelEditor(ShowBase):
         parser.add_argument("--experimental", action='store_true', help="Enables experimental features")
         parser.add_argument("--debug", action='store_true', help="Enables debugging features")
         parser.add_argument("--noupdate", action='store_true', help="Disables Auto Updating")
+        parser.add_argument("--compiler", nargs = "*", help="Specify which compiler to use (Only useful if your game uses a form of "
+                                                            "libpandadna.) Valid options are 'libpandadna', for games which use the "
+                                                            "modern c++ version of libpandadna (like Toontown Offline), and 'clash', "
+                                                            "for games that use the legacy python version of libpandadna, mainly Corporate Clash")
+
         parser.add_argument("--server", nargs="*", help="Enables features exclusive to various Toontown projects", default='online')
         parser.add_argument("--hoods", nargs="*", help="Only loads the storage files of the specified hoods",
                             default=['TT', 'DD', 'BR', 'DG',
@@ -57,6 +62,8 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", "want-experimental true")
         if args.debug:
             loadPrcFileData("", "want-debug true")
+        if args.compiler:
+            loadPrcFileData("", f"compiler {args.compiler[0]}")
 
 
         server = SERVER_TO_ID.get(args.server[0].lower(), TOONTOWN_ONLINE)
