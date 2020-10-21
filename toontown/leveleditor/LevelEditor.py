@@ -1,51 +1,45 @@
-from pandac.PandaModules import *
-from direct.showbase.DirectObject import DirectObject
-from .PieMenu import *
-from .RadialMenu import RadialMenu, RadialItem
-import direct.gui.DirectGuiGlobals as DGG
-from direct.gui import DirectGui
-from direct.showbase.TkGlobal import *
-from direct.directtools.DirectUtil import *
-from direct.directtools.DirectGeometry import *
-from direct.interval.IntervalGlobal import *
-from .LESceneGraphExplorer import *
-from direct.directnotify import DirectNotifyGlobal
-from tkinter.messagebox import showinfo
-from tkinter.filedialog import *
-from tkinter import *
-# from whrandom import *
-# from random import *
-from direct.tkwidgets import Floater
-from toontown.fixes import VectorWidgets
-import string
-import os
-import glob
-import getopt
-import json
-import sys
-# import whrandom
-import random
-import types
-from direct.task import Task
-import Pmw
 import builtins
+import getopt
+import glob
+import json
+import os
+import random
+import string
+import sys
+import types
 from locale import atof
+from tkinter import *
+from tkinter.filedialog import *
+from tkinter.messagebox import showinfo
 
+import Pmw
+import direct.gui.DirectGuiGlobals as DGG
 # [gjeon] to control avatar movement in drive mode
 from direct.controls import ControlManager
 from direct.controls import GravityWalker
 from direct.controls import NonPhysicsWalker
+from direct.directnotify import DirectNotifyGlobal
+from direct.directtools.DirectGeometry import *
+from direct.directtools.DirectUtil import *
+from direct.gui import DirectGui
+from direct.interval.IntervalGlobal import *
 from direct.interval.LerpInterval import LerpFunctionInterval
+from direct.showbase.DirectObject import DirectObject
+from direct.showbase.TkGlobal import *
+from direct.task import Task
+from direct.tkwidgets import Floater
+from pandac.PandaModules import *
 
 from otp.avatar import LocalAvatar
-
-from toontown.toon import RobotToon
-from toontown.hood.GenericAnimatedProp import *
-
 from otp.otpbase import OTPGlobals
-
-from .LevelStyleManager import *
+from toontown.fixes import VectorWidgets
+from toontown.hood.GenericAnimatedProp import *
+from toontown.toon import RobotToon
 from . import LevelEditorGlobals
+from .LESceneGraphExplorer import *
+from .LevelStyleManager import *
+from .PieMenu import *
+from .RadialMenu import RadialMenu, RadialItem
 
 # Force direct and tk to be on
 base.startDirect(fWantDirect = 1, fWantTk = 1)
@@ -55,13 +49,12 @@ dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "level
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
 
+
 # NEIGHBORHOOD DATA
 # If you run this from the command line you can pass in the hood codes
 # you want to load. For example:
 #    ppython LevelEditor.py DD TT BR
 #
-
-
 
 
 # To safely load the storage files
@@ -170,7 +163,7 @@ class LevelEditor(NodePath, DirectObject):
 
         self.collisionsToggled = False
 
-    def startUp(self, dnaPath=None):
+    def startUp(self, dnaPath = None):
         # Initialize LevelEditor variables DNAData, DNAToplevel, NPToplevel
         # DNAParent, NPParent, groupNum, lastAngle
         # Pass in the new toplevel group and don't clear out the old
@@ -2956,7 +2949,7 @@ class LevelEditor(NodePath, DirectObject):
         if ConfigVariableString("compiler") in ['libpandadna', 'clash']:
             print(f"Compiling PDNA for {ConfigVariableString('compiler')}")
             self.compileDNA(binaryFilename)
-        
+
     def compileDNA(self, filename):
         from toontown.compiler.compile import process_single_file
         process_single_file(filename)
@@ -4328,35 +4321,35 @@ class LevelEditor(NodePath, DirectObject):
             else:
                 return self.findBldgEndPoint(bldgWidth, curve, currT, currPoint, startT = midT, endT = endT,
                                              rd = rd + 1)
-        
+
     async def enterGlobalRadialMenu(self):
         ''' Radial Menu with general commands '''
-        
+
         # Load the gui model
         gui = await loader.loadModel("resources/level_editor_gui.bam", blocking = False)
-        
+
         # Create the menu with the items
         rm = RadialMenu([
             RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
             RadialItem(gui.find("**/icon_save"), 'Save'),
             RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
             RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
-        ])
+            ])
         rm.activate()
-        
+
         del gui
-        
+
         # Wait for the user to release tab, simpler way of accept('tab-up', exitGlobalRadialMenu)
         await messenger.future('tab-up')
-        
+
         # Now that the user has released tab,
         # Get the choice
         result = rm.getChoice()
-        
+
         # Destroy everything
         rm.deactivate()
         rm.destroy()
-        
+
         # Do the selected action
         if result == 1:
             self.outputDNADefaultFile()
@@ -4364,6 +4357,7 @@ class LevelEditor(NodePath, DirectObject):
             self.toggleShowLandmarkBlock()
         if result == 3:
             self.toggleVisibleCollisions()
+
 
 class OldLevelEditor(NodePath, DirectObject):
     pass
@@ -4373,6 +4367,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     """
     Class used to initialize the Tkinter GUI.
     """
+
     def __init__(self, levelEditor, parent = None, **kw):
 
         INITOPT = Pmw.INITOPT
@@ -4470,21 +4465,20 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Reload Building Style Palettes',
                             label = 'Reload Bldg Styles',
                             command = self.styleManager.createBuildingStyleAttributes)
-                            
+
         menuBar.addmenu('Advanced', 'Level Editor Advanced Options')
         menuBar.addmenuitem('Advanced', 'command',
-                        'Open Injector',
-                        label = 'Injector',
-                        command = self.showInjector)
-                        
+                            'Open Injector',
+                            label = 'Injector',
+                            command = self.showInjector)
+
         self.injectorDialog = Pmw.Dialog(parent, title = 'Injector',
                                          buttons = ('Run',),
                                          command = self.runInject)
         self.injectorDialog.withdraw()
-        #self.injectorTextBox = Pmw.EntryField (parent = self.injectorDialog.interior())
-        self.injectorTextBox = Text(self.injectorDialog.interior(), height=30)
+        # self.injectorTextBox = Pmw.EntryField (parent = self.injectorDialog.interior())
+        self.injectorTextBox = Text(self.injectorDialog.interior(), height = 30)
         self.injectorTextBox.pack(expand = 1, fill = BOTH)
-                                         
 
         menuBar.addmenu('Help', 'Level Editor Help Operations')
         self.toggleBalloonVar = IntVar()
@@ -4506,15 +4500,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         Pmw.aboutcontact(
                 'For more information, check out the repo: http://github.com/OpenToontownTools/ToontownLevelEditor')
         self.aboutDialog = Pmw.AboutDialog(hull,
-                                     applicationname = "OpenLevelEditor")
+                                           applicationname = "OpenLevelEditor")
 
         self.aboutDialog.withdraw()
 
         # Create the CONTROLS dialog
         self.controlsDialog = Pmw.MessageDialog(parent,
-            title = 'Controls',
-            defaultbutton = 0,
-            message_text = LevelEditorGlobals.CONTROLS)
+                                                title = 'Controls',
+                                                defaultbutton = 0,
+                                                message_text = LevelEditorGlobals.CONTROLS)
         self.controlsDialog.withdraw()
 
         self.editMenu = Pmw.ComboBox(
@@ -4646,7 +4640,8 @@ class LevelEditorPanel(Pmw.MegaToplevel):
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
         # Don't try to load this stuff if there is none
         if self.styleManager.getCatalogCode('toon_landmark', 0) == "":
-            Label(landmarkBuildingsPage, text = 'There are no landmark buildings in any of your loaded storages.').pack(expand = 0)
+            Label(landmarkBuildingsPage, text = 'There are no landmark buildings in any of your loaded storages.').pack(
+                    expand = 0)
         else:
 
             """
@@ -4702,13 +4697,14 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.landmarkBuildingSpecialSelector.selectitem(
                     LANDMARK_SPECIAL_TYPES[0])
             self.landmarkBuildingSpecialSelector.pack(expand = 0)
-        
+
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
         # Don't try to load this stuff if there is none
         if self.styleManager.getCatalogCode('anim_building', 0) == "":
-            Label(animBuildingsPage, text = 'There are no animated buildings in any of your loaded storages.').pack(expand = 0)
+            Label(animBuildingsPage, text = 'There are no animated buildings in any of your loaded storages.').pack(
+                    expand = 0)
         else:
             self.addAnimBuildingsButton = Button(
                     animBuildingsPage,
@@ -4965,7 +4961,8 @@ class LevelEditorPanel(Pmw.MegaToplevel):
               font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
         # Don't try to load this stuff if there is none
         if self.styleManager.getCatalogCode('interactive_prop', 0) == "":
-            Label(interactivePropsPage, text = 'There are no interactive props in any of your loaded storages.').pack(expand = 0)
+            Label(interactivePropsPage, text = 'There are no interactive props in any of your loaded storages.').pack(
+                    expand = 0)
         else:
             self.addInteractivePropsButton = Button(
                     interactivePropsPage,
@@ -5774,12 +5771,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def showControls(self):
         self.controlsDialog.show()
         self.controlsDialog.focus_set()
-        
+
     def showInjector(self):
         self.injectorDialog.show()
         self.injectorDialog.focus_set()
-        
-        
+
     def runInject(self, e):
         if e == None:
             self.injectorDialog.withdraw()

@@ -1,13 +1,10 @@
-import sys, string, math, types
-import direct.gui.DirectGuiGlobals as DGG
-from direct.gui.DirectGui import *
-
-from .PieMenu import *
-from .ScrollMenu import *
-
-from .LevelEditorGlobals import *
+import sys
 from functools import reduce
 from locale import atof
+
+from .LevelEditorGlobals import *
+from .PieMenu import *
+from .ScrollMenu import *
 
 
 class LevelStyleManager:
