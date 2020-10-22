@@ -242,6 +242,8 @@ Place Battle Cell: Shift + C
 Toggle Collision Boundaries: Control + C
 Save: Control + S
 Screenshot: F12
+Toggle Ortho Camera: Shift + O
+Take Map Screenshot: Shift + F12 (USE ORTHO CAM TO ENSURE ACCURACY!)
 '''
 
 

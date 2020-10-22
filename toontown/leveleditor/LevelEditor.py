@@ -162,6 +162,7 @@ class LevelEditor(NodePath, DirectObject):
         self.animPropDict = {}
 
         self.collisionsToggled = False
+        self.orthCam = False
 
     def startUp(self, dnaPath = None):
         # Initialize LevelEditor variables DNAData, DNAToplevel, NPToplevel
@@ -170,6 +171,8 @@ class LevelEditor(NodePath, DirectObject):
         # toplevel group (since it doesn't exist yet)
         self.reset(fDeleteToplevel = 0, fCreateToplevel = 1)
 
+        self.orthLens = OrthographicLens()
+        self.orthLens.setFilmSize(1024, 1024)
         # The list of events the level editor responds to
         self.actionEvents = [
             # Node path events
@@ -252,6 +255,7 @@ class LevelEditor(NodePath, DirectObject):
             ('page_down', self.pageDown),
             ('shift-o', self.toggleOrth),
             ('f12', self.screenshot),
+            ('shift-f12', self.renderMap),
             ('control-c', self.toggleVisibleCollisions),
             ('control-s', self.outputDNADefaultFile),
             ('tab', self.enterGlobalRadialMenu)
@@ -3448,12 +3452,134 @@ class LevelEditor(NodePath, DirectObject):
         return None
 
     def screenshot(self):
+        """
+        Generic screenshots. Hides insertion markers, keeps dropshadows.
+        """
+
+        # Make a Screenshots directory if we don't have one
+        if not os.path.isdir("screenshots"):
+            os.mkdir("screenshots")
+
+        # Hide insertion markers and ui
+        markers = render.findAllMatches('**/*insertionMarker')
+        for marker in markers:
+            marker.hide()
+
+        aspect2d.hide()
+        render2d.hide()
+
+        # Render a frame
+        base.graphicsEngine.renderFrame()
+
+        # Screenshot the frame rendered above
         base.screenshot("screenshots/screenshot")
 
+        # Unhide markers and ui
+        for marker in markers:
+            marker.show()
+
+        aspect2d.show()
+        render2d.hide()
+
+    async def renderMap(self):
+        """
+        Screenshot for making maps. Hides drop shadows and markers
+        
+        Steps to making a screenshot:
+        1. Shift + O to toggle ORTHO camera
+        2. press '5' to position camera directly overhead
+        3. Position the camera to contain the entire street
+        4. Press Shift + F12 to save a map render
+        """
+
+        hasMeter = True if base.frameRateMeter else False
+        # Hide the fps meter
+        base.setFrameRateMeter(0)
+
+        # Make a maps directory if we don't have one
+        if not os.path.isdir("maps"):
+            os.mkdir("maps")
+
+        # Save the users window size so we can set it back after
+        normX = base.win.getXSize()
+        normY = base.win.getYSize()
+
+        # Set the window to 2048 x 2048
+        props = WindowProperties()
+        props.setSize(2048, 2048)
+        base.win.requestProperties(props)
+
+        # Hide insertion marker, dropshadows, and the ui
+        markers = render.findAllMatches('**/*insertionMarker')
+        for marker in markers:
+            marker.hide()
+        shadows = render.findAllMatches('**/*shadow*')
+        for shadow in shadows:
+            shadow.hide()
+
+        aspect2d.hide()
+        render2d.hide()
+
+        # Unfortunately, if we only render once, it doesnt end up working properly
+        # So we render again to ensure the engine caught up with us resizing the window
+        base.graphicsEngine.renderFrame()
+        base.graphicsEngine.renderFrame()
+
+        # We can't resize the window if the user has it maximized
+        # We abort the process and show a message letting the user know
+        if base.win.getProperties().getSize() != (2048, 2048):
+            # Unhide the marker, dropshadows, and ui
+            for marker in markers:
+                marker.show()
+            for shadow in shadows:
+                shadow.show()
+
+            aspect2d.show()
+            render2d.show()
+
+            # Show the fps meter
+            base.setFrameRateMeter(hasMeter)
+
+            # Show a warning
+            txt = OnscreenText(parent = aspect2d, pos = (0, 0), style = 3,
+                               font = ToontownGlobals.getSignFont(),
+                               wordwrap = 36,
+                               text = "Unable to resize screen. Render aborted.\nEnsure engine window is not maximized, as that prevents resizing\n\nPress SPACE to acknowledge.",
+                               scale = 0.1, bg = (0, 0, 0, .4), fg = (1, 0, 0, 1))
+
+            # Destroy the message when the user hits space
+            await messenger.future("space")
+            txt.destroy()
+            del txt
+
+            return
+
+        # Save the above frame to the maps folder
+        # Saves as maprender-DAY-MM-DD-HH-MM-SS-YYYY-SOMETHING.png
+        base.screenshot(f"maps/maprender")
+
+        # Unhide the marker and dropshadows
+        for marker in markers:
+            marker.show()
+        for shadow in shadows:
+            shadow.show()
+
+        aspect2d.show()
+        render2d.show()
+
+        # Show the fps meter
+        base.setFrameRateMeter(hasMeter)
+
+        # Set the window back to its normal size
+        props.setSize(normX, normY)
+        base.win.requestProperties(props)
+
     def toggleOrth(self):
-        lens = OrthographicLens()
-        lens.setFilmSize(1024, 1024)
-        base.cam.node().setLens(lens)
+        if not self.orthCam:
+            base.cam.node().setLens(self.orthLens)
+        else:
+            base.cam.node().setLens(base.camLens)
+        self.orthCam = not self.orthCam
 
     def resetPathMarkers(self):
         for edge, edgeLine in list(self.edgeDict.items()):
