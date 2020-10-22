@@ -1,3 +1,4 @@
+import string
 from pandac.PandaModules import *
 
 # Valid Toontown projects
@@ -6,15 +7,15 @@ TOONTOWN_REWRITTEN = 1
 TOONTOWN_CORPORATE_CLASH = 2
 TOONTOWN_OFFLINE = 3
 
-SERVER_TO_ID = {'online':    TOONTOWN_ONLINE,
+SERVER_TO_ID = {'online': TOONTOWN_ONLINE,
                 'rewritten': TOONTOWN_REWRITTEN,
-                'clash':     TOONTOWN_CORPORATE_CLASH,
-                'offline':   TOONTOWN_OFFLINE
-                }
+                'clash': TOONTOWN_CORPORATE_CLASH,
+                'offline': TOONTOWN_OFFLINE}
 
 HOOD_NAME_SHORTHAND = 'name_shorthand'
 HOOD_NAME_LONGHAND = 'name_longhand'
 HOOD_PATH = 'storage_files'
+
 
 # Colors used by all color menus
 DEFAULT_COLORS = [
@@ -43,117 +44,117 @@ if base.server == TOONTOWN_CORPORATE_CLASH:
     LANDMARK_SPECIAL_TYPES.append('uncapturable')
 
 OBJECT_SNAP_POINTS = {
-    'street_5x20':                  [(Vec3(5.0, 0, 0), Vec3(0)),
+    'street_5x20'                 : [(Vec3(5.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_10x20':                 [(Vec3(10.0, 0, 0), Vec3(0)),
+    'street_10x20'                : [(Vec3(10.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_20x20':                 [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_20x20'                : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_30x20':                 [(Vec3(30.0, 0, 0), Vec3(0)),
+    'street_30x20'                : [(Vec3(30.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_40x20':                 [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_40x20'                : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_80x20':                 [(Vec3(80.0, 0, 0), Vec3(0)),
+    'street_80x20'                : [(Vec3(80.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_5x40':                  [(Vec3(5.0, 0, 0), Vec3(0)),
+    'street_5x40'                 : [(Vec3(5.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_10x40':                 [(Vec3(10.0, 0, 0), Vec3(0)),
+    'street_10x40'                : [(Vec3(10.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_20x40':                 [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_20x40'                : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_20x40_15':              [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_20x40_15'             : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_30x40':                 [(Vec3(30.0, 0, 0), Vec3(0)),
+    'street_30x40'                : [(Vec3(30.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_40x40':                 [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_40x40'                : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_20x60':                 [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_20x60'                : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_40x60':                 [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_40x60'                : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_40x40_15':              [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_40x40_15'             : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_80x40':                 [(Vec3(80.0, 0, 0), Vec3(0)),
+    'street_80x40'                : [(Vec3(80.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_angle_30':              [(Vec3(0), Vec3(-30, 0, 0)),
+    'street_angle_30'             : [(Vec3(0), Vec3(-30, 0, 0)),
                                      (Vec3(0), Vec3(0))],
-    'street_angle_45':              [(Vec3(0), Vec3(-45, 0, 0)),
+    'street_angle_45'             : [(Vec3(0), Vec3(-45, 0, 0)),
                                      (Vec3(0), Vec3(0))],
-    'street_angle_60':              [(Vec3(0), Vec3(-60, 0, 0)),
+    'street_angle_60'             : [(Vec3(0), Vec3(-60, 0, 0)),
                                      (Vec3(0), Vec3(0))],
-    'street_inner_corner':          [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_inner_corner'         : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_outer_corner':          [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_outer_corner'         : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_full_corner':           [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_full_corner'          : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_tight_corner':          [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_tight_corner'         : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_tight_corner_mirror':   [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_tight_corner_mirror'  : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_double_corner':         [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_double_corner'        : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_curved_corner':         [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_curved_corner'        : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_curved_corner_15':      [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_curved_corner_15'     : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_t_intersection':        [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_t_intersection'       : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_y_intersection':        [(Vec3(30.0, 0, 0), Vec3(0)),
+    'street_y_intersection'       : [(Vec3(30.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_street_20x20':          [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_street_20x20'         : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_street_40x40':          [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_street_40x40'         : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_sidewalk_20x20':        [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_sidewalk_20x20'       : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_sidewalk_40x40':        [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_sidewalk_40x40'       : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_divided_transition':    [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_divided_transition'   : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_divided_40x70':         [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_divided_40x70'        : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
     'street_divided_transition_15': [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_divided_40x70_15':      [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_divided_40x70_15'     : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_stairs_40x10x5':        [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_stairs_40x10x5'       : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_4way_intersection':     [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_4way_intersection'    : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_incline_40x40x5':       [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_incline_40x40x5'      : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_square_courtyard':      [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_square_courtyard'     : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_70':          [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_70'         : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_70_exit':     [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_70_exit'    : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_90':          [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_90'         : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_90_exit':     [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_90_exit'    : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_70_15':       [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_70_15'      : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_70_15_exit':  [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_70_15_exit' : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_90_15':       [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_90_15'      : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_courtyard_90_15_exit':  [(Vec3(0.0, 0, 0), Vec3(0)),
+    'street_courtyard_90_15_exit' : [(Vec3(0.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_50_transition':         [(Vec3(10.0, 0, 0), Vec3(0)),
+    'street_50_transition'        : [(Vec3(10.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_20x50':                 [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_20x50'                : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_40x50':                 [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_40x50'                : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_keyboard_10x40':        [(Vec3(10.0, 0, 0), Vec3(0)),
+    'street_keyboard_10x40'       : [(Vec3(10.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_keyboard_20x40':        [(Vec3(20.0, 0, 0), Vec3(0)),
+    'street_keyboard_20x40'       : [(Vec3(20.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_keyboard_40x40':        [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_keyboard_40x40'       : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
-    'street_sunken_40x40':          [(Vec3(40.0, 0, 0), Vec3(0)),
+    'street_sunken_40x40'         : [(Vec3(40.0, 0, 0), Vec3(0)),
                                      (Vec3(0), Vec3(0))],
     }
 
@@ -189,6 +190,8 @@ SUB_DNAS = [DNA_CORNICE,
             DNA_WALL,
             DNA_WINDOWS]
 
+
+
 CONTROLS = '''
 --Camera--
 Note: All camera transformations orbit the currently selected object
@@ -199,6 +202,7 @@ Zoom Camera: Alt + Right Click and Drag
 --Object Insertion--
 Move insertion point to currently selected object's origin: A
 Move object back to insertion point: J
+Duplicate selected node at position of mouse cursor: Spacebar or Insert
 
 --Transform--
 Translate X/Y by 5 units: [Up, Down, Left, or Right]
@@ -217,7 +221,7 @@ Change wall section texture: Shift + Hold Right Click on wall section
 Change knock-knock door: Hold Right Click near bottom center of wall piece
 Change windows: Hold Right Click near center of wall piece
 Change number of windows: Shift + Hold right click near center of wall piece
-Change cornice: Hold Right Rlick at top of wall piece
+Change cornice: Hold Right Click at top of wall piece
 Change color of part: Control + Hold right click in the same area you would to change the texture
 Change Width of wall: Shift + Hold Right click anywhere BUT the wall.
 Change direction of wall part: Alt + Hold Right Click on part (MayaCam MUST be disabled)
