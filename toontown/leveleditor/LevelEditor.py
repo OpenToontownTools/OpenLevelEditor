@@ -1362,7 +1362,7 @@ class LevelEditor(NodePath, DirectObject):
         except AssertionError as error:
             self.notify.debug("Error loading %s" % dnaNode)
         # And add hooks to insert copies of dnaNode
-        self.addReplicationHooks(dnaNode)
+        # self.addReplicationHooks(dnaNode)
 
         ## Move selected objects
         # for selectedNode in base.direct.selected:
@@ -1375,7 +1375,7 @@ class LevelEditor(NodePath, DirectObject):
 
     def addReplicationHooks(self, dnaNode):
         # Now add hook to allow placement of a new dna Node of this type
-        # by simply hitting the space bar or insert key.  Note, extra paramater
+        # by simply hitting the space bar or insert key.  Note, extra paramter
         # indicates new dnaNode should be a copy
         self.accept('space', self.initNodePath, [dnaNode, 'space'])
         self.accept('insert', self.initNodePath, [dnaNode, 'insert'])
@@ -2970,7 +2970,7 @@ class LevelEditor(NodePath, DirectObject):
         if ConfigVariableString("compiler") in ['libpandadna', 'clash']:
             print(f"Compiling PDNA for {ConfigVariableString('compiler')}")
             self.compileDNA(binaryFilename)
-
+        
     def compileDNA(self, filename):
         from toontown.compiler.compile import process_single_file
         process_single_file(filename)
@@ -4342,13 +4342,13 @@ class LevelEditor(NodePath, DirectObject):
             else:
                 return self.findBldgEndPoint(bldgWidth, curve, currT, currPoint, startT = midT, endT = endT,
                                              rd = rd + 1)
-
+        
     async def enterGlobalRadialMenu(self):
         ''' Radial Menu with general commands '''
-
+        
         # Load the gui model
         gui = await loader.loadModel("resources/level_editor_gui.bam", blocking = False)
-
+        
         # Create the menu with the items
         rm = RadialMenu([
             RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
@@ -4357,20 +4357,20 @@ class LevelEditor(NodePath, DirectObject):
             RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
         ])
         rm.activate()
-
+        
         del gui
-
+        
         # Wait for the user to release tab, simpler way of accept('tab-up', exitGlobalRadialMenu)
         await messenger.future('tab-up')
-
+        
         # Now that the user has released tab,
         # Get the choice
         result = rm.getChoice()
-
+        
         # Destroy everything
         rm.deactivate()
         rm.destroy()
-
+        
         # Do the selected action
         if result == 1:
             self.outputDNADefaultFile()
