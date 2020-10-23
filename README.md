@@ -39,7 +39,10 @@
 * Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
 * A lot of usability improvements
 * Modular zone system
-* And alot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
+* And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
+* Automatic map creation 
+    * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
+    * All done with one press (Shift + F12)
 
 ## Upcoming Features
 * Auto Saving
