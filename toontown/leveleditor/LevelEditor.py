@@ -3632,7 +3632,7 @@ class LevelEditor(NodePath, DirectObject):
             data += f"Fishing Pond Position:\n    {pond.getPos()}"
 
         # Write the data to a txt file
-        file = open(f"maps/map_{self.neighborhood}_data_{datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')}.txt", 'w')
+        file = open(f"maps/map_{self.neighborhood}_{datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')}_data.txt", 'w')
         file.write(data)
         file.close()
 
