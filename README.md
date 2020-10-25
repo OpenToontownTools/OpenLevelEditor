@@ -8,6 +8,23 @@
 ![overviewimage](https://i.imgur.com/4f7v8Ak.png)
 
 
+## Major New Features
+* Fully Updated to Panda3D and Python 3
+* A ton of smaller debug features
+* Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
+* A lot of usability improvements
+* Modular zone system
+   * Makes adding support for new zones INCREDIBLY easy
+* Automatic map creation 
+   * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
+   * All done with one press (Shift + F12)
+* Server Specific Support
+   * Currently includes specific options for Corporate Clash, with features for more servers coming
+* And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
+
+## Upcoming Features
+* Auto Saving
+* and much more!
 
 ## Requirements
 ### ***IMPORTANT***
@@ -32,25 +49,6 @@
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
 
 * [*Please only contact me if you need assistance with the editor. No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
-
-## Major New Features
-* Fully Updated to Panda3D and Python 3
-* A ton of smaller debug features
-* Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
-* A lot of usability improvements
-* Modular zone system
-   * Makes adding support for new zones INCREDIBLY easy
-* Automatic map creation 
-   * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
-   * All done with one press (Shift + F12)
-* Server Specific Support
-   * Currently includes specific options for Corporate Clash, with features for more servers coming
-* And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
-
-
-## Upcoming Features
-* Auto Saving
-* and much more!
 
 ## Known Incompatibilities
 * Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
