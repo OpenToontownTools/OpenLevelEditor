@@ -39,10 +39,14 @@
 * Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
 * A lot of usability improvements
 * Modular zone system
-* And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
+   * Makes adding support for new zones INCREDIBLY easy
 * Automatic map creation 
-    * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
-    * All done with one press (Shift + F12)
+   * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
+   * All done with one press (Shift + F12)
+* Server Specific Support
+   * Currently includes specific options for Corporate Clash, with features for more servers coming
+* And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
+
 
 ## Upcoming Features
 * Auto Saving
@@ -50,7 +54,7 @@
 
 ## Known Incompatibilities
 * Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
-    * This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.
+   * This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.
 
 # FAQ
 ### Why can't I load a street from X playground?
