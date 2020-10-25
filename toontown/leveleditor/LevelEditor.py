@@ -517,10 +517,10 @@ class LevelEditor(NodePath, DirectObject):
         base.direct.enable()
 
         # [gjeon]  disable avatar and controlManager
-        if (self.avatar):
+        if self.avatar:
             self.avatar.reparentTo(hidden)
             self.avatar.stopUpdateSmartCamera()
-        if (self.controlManager):
+        if self.controlManager:
             self.controlManager.disable()
 
         self.fDrive = False
@@ -579,7 +579,7 @@ class LevelEditor(NodePath, DirectObject):
     def useDriveMode(self):
         """ Lerp down to eye level then switch to Drive mode """
         # create avatar and set it's location to the camera
-        if (self.avatar == None):
+        if self.avatar == None:
             # self.avatar = RobotToon.RobotToon()
             self.avatar = LEAvatar(None, None, None)
             base.localAvatar = self.avatar
@@ -647,7 +647,7 @@ class LevelEditor(NodePath, DirectObject):
         if self.panel.fColl.get() or self.panel.fVis.get():
             self.traversalOn()
 
-        if (self.controlManager == None):
+        if self.controlManager == None:
             # create player movement controls,camera controls, and avatar
             self.controlManager = ControlManager.ControlManager()
             avatarRadius = 1.4
@@ -685,7 +685,7 @@ class LevelEditor(NodePath, DirectObject):
     # Returns:
     # --------------------------------------------------------------------------
     def avatarAnimate(self, task = None):
-        if (self.controlManager):
+        if self.controlManager:
             moving = self.controlManager.currentControls.speed or self.controlManager.currentControls.slideSpeed or self.controlManager.currentControls.rotationSpeed
             if (moving and
                     self.avatarMoving == 0):
@@ -785,7 +785,7 @@ class LevelEditor(NodePath, DirectObject):
             self.traversalOn()
         else:
             self.collisionsOff()
-            if (not (self.panel.fColl.get() or self.panel.fVis.get())):
+            if not (self.panel.fColl.get() or self.panel.fVis.get()):
                 self.traversalOff()
 
     def toggleVisibleCollisions(self):
@@ -839,7 +839,7 @@ class LevelEditor(NodePath, DirectObject):
         # "345:safe_zone:exit_zone"... These are hypotheticals. The main
         # idea is that there are colon separated flags after the initial
         # zone name.
-        return (groupFullName.split(':', 1)[0])
+        return groupFullName.split(':', 1)[0]
 
     def renameFloorPolys(self, nodeList):
         for i in nodeList:
@@ -887,7 +887,7 @@ class LevelEditor(NodePath, DirectObject):
             self.traversalOn()
         else:
             self.visibilityOff()
-            if (not (self.panel.fColl.get() or self.panel.fVis.get())):
+            if not (self.panel.fColl.get() or self.panel.fVis.get()):
                 self.traversalOff()
 
     def enterZone(self, newZone):
@@ -1024,7 +1024,7 @@ class LevelEditor(NodePath, DirectObject):
         else:
             pointOrCell, type = self.findPointOrCell(nodePath)
             if pointOrCell and type:
-                if (type == 'suitPointMarker'):
+                if type == 'suitPointMarker':
                     print('Suit Point:', pointOrCell)
                     if DNASTORE.removeSuitPoint(pointOrCell):
                         print("Removed from DNASTORE")
@@ -1056,7 +1056,7 @@ class LevelEditor(NodePath, DirectObject):
                             self.visitedEdges.remove(edge)
                     # Now delete point2edgeDict entry for this point
                     del (self.point2edgeDict[pointOrCell])
-                elif (type == 'battleCellMarker'):
+                elif type == 'battleCellMarker':
                     # Get parent vis group
                     visGroupNP, visGroupDNA = self.findParentVisGroup(
                             nodePath)
@@ -1177,7 +1177,7 @@ class LevelEditor(NodePath, DirectObject):
                     newPos = selectedNode.getPos(self.NPToplevel)
                     # Update DNA
                     pointOrCell.setPos(newPos)
-                    if (type == 'suitPointMarker'):
+                    if type == 'suitPointMarker':
                         print("Found suit point!", pointOrCell)
                         # Ok, now update all the lines into that node
                         for edge in self.point2edgeDict[pointOrCell]:
@@ -1191,7 +1191,7 @@ class LevelEditor(NodePath, DirectObject):
                                 newEdgeLine = self.drawSuitEdge(
                                         edge, self.NPParent)
                                 self.edgeDict[edge] = newEdgeLine
-                    elif (type == 'battleCellMarker'):
+                    elif type == 'battleCellMarker':
                         print("Found battle cell!", pointOrCell)
 
     def updatePose(self, dnaObject, nodePath):
@@ -1494,17 +1494,17 @@ class LevelEditor(NodePath, DirectObject):
             # Yes, make a new copy of the dnaNode
             dnaNode = dnaNode.__class__(dnaNode)
             # And determine dnaNode type and perform any type specific updates
-            if nodeClass == (DNA_PROP):
+            if nodeClass == DNA_PROP:
                 dnaNode.setCode(self.getCurrent('prop_texture'))
-            elif nodeClass == (DNA_ANIM_PROP):
+            elif nodeClass == DNA_ANIM_PROP:
                 dnaNode.setCode(self.getCurrent('anim_prop_texture'))
-            elif nodeClass == (DNA_INTERACTIVE_PROP):
+            elif nodeClass == DNA_INTERACTIVE_PROP:
                 dnaNode.setCode(self.getCurrent('interactive_prop_texture'))
-            elif nodeClass == (DNA_ANIM_BUILDING):
+            elif nodeClass == DNA_ANIM_BUILDING:
                 dnaNode.setCode(self.getCurrent('anim_building_texture'))
-            elif nodeClass == (DNA_STREET):
+            elif nodeClass == DNA_STREET:
                 dnaNode.setCode(self.getCurrent('street_texture'))
-            elif nodeClass == (DNA_FLAT_BUILDING):
+            elif nodeClass == DNA_FLAT_BUILDING:
                 # If insert, pick a new random style
                 if hotKey == 'insert':
                     self.setRandomBuildingStyle(dnaNode, dnaNode.getName())
@@ -1518,7 +1518,7 @@ class LevelEditor(NodePath, DirectObject):
         # destination (part of cleanup
         taskMgr.remove('autoPositionGrid')
         # Now find where to put node path
-        if (hotKey is not None) and (nodeClass == (DNA_PROP) or nodeClass == (DNA_ANIM_PROP)):
+        if (hotKey is not None) and (nodeClass == DNA_PROP or nodeClass == DNA_ANIM_PROP):
             # If its a prop and a copy, place it based upon current
             # mouse position
             hitPt = self.getGridIntersectionPoint()
@@ -1721,7 +1721,7 @@ class LevelEditor(NodePath, DirectObject):
         return newDNACornice
 
     def createDoor(self, type):
-        if (type == 'landmark_door'):
+        if type == 'landmark_door':
             newDNADoor = DNADoor('door')
             print("createDoor %s" % type)
             if not (self.getCurrent('door_double_texture')):
@@ -1731,7 +1731,7 @@ class LevelEditor(NodePath, DirectObject):
             newDNADoor.setCode(self.getCurrent('door_double_texture'))
             print("doorcolor = %s" % self.getCurrent('door_color'))
             newDNADoor.setColor(self.getCurrent('door_color'))
-        elif (type == 'door'):
+        elif type == 'door':
             newDNADoor = DNAFlatDoor('door')
             if not (self.getCurrent('door_single_texture')):
                 doorStyles = self.styleManager.attributeDictionary['door_single_texture'].getList()[1:]
@@ -2017,7 +2017,7 @@ class LevelEditor(NodePath, DirectObject):
             # Record current wall height
             self.setCurrent('wall_height', wallHeight)
             # Determine which zone you are pointing at
-            if (zPt > 0.8):
+            if zPt > 0.8:
                 # Do cornice operations
                 if base.direct.gotControl(modifiers):
                     menuMode = 'cornice_color'
@@ -2025,7 +2025,7 @@ class LevelEditor(NodePath, DirectObject):
                     menuMode = 'cornice_orientation'
                 else:
                     menuMode = 'cornice_texture'
-            elif ((xPt < 0.3) or (xPt > 0.7)):
+            elif (xPt < 0.3) or (xPt > 0.7):
                 # Do wall operations
                 if base.direct.gotControl(modifiers):
                     menuMode = 'wall_color'
@@ -2035,7 +2035,7 @@ class LevelEditor(NodePath, DirectObject):
                     menuMode = 'wall_texture'
                 else:
                     menuMode = 'wall_style'
-            elif (zPt < 0.4):
+            elif zPt < 0.4:
                 # Do door operations
                 if base.direct.gotControl(modifiers):
                     menuMode = 'door_color'
@@ -2061,12 +2061,12 @@ class LevelEditor(NodePath, DirectObject):
         # Update panel color if appropriate
         if self.DNATarget:
             objClass = DNAGetClassType(self.DNATarget)
-            if ((objClass == (DNA_WALL)) or
-                    (objClass == (DNA_WINDOWS)) or
-                    (objClass == (DNA_DOOR)) or
-                    (objClass == (DNA_FLAT_DOOR)) or
-                    (objClass == (DNA_CORNICE)) or
-                    (objClass == (DNA_PROP))
+            if ((objClass == DNA_WALL) or
+                    (objClass == DNA_WINDOWS) or
+                    (objClass == DNA_DOOR) or
+                    (objClass == DNA_FLAT_DOOR) or
+                    (objClass == DNA_CORNICE) or
+                    (objClass == DNA_PROP)
             ):
                 self.panel.setCurrentColor(self.DNATarget.getColor())
 
@@ -2141,29 +2141,29 @@ class LevelEditor(NodePath, DirectObject):
             # Delete object, record pertinant properties before
             # you delete the object so you can restore them later
             # Remove object
-            if (type == 'cornice'):
+            if type == 'cornice':
                 self.removeCornice(self.DNATarget, self.DNATargetParent)
-            elif (type == 'sign'):
+            elif type == 'sign':
                 self.removeSign(self.DNATarget, self.DNATargetParent)
-            elif (type == 'landmark_door'):
+            elif type == 'landmark_door':
                 self.removeLandmarkDoor(self.DNATarget, self.DNATargetParent)
-            elif (type == 'door'):
+            elif type == 'door':
                 self.removeDoor(self.DNATarget, self.DNATargetParent)
-            elif (type == 'windows'):
+            elif type == 'windows':
                 self.removeWindows(self.DNATarget, self.DNATargetParent)
             # Clear out DNATarget
             self.DNATarget = None
         elif (self.DNATarget == None) and (code != None):
             # Add new object
-            if (type == 'cornice'):
+            if type == 'cornice':
                 self.DNATarget = self.createCornice()
-            elif (type == 'sign'):
+            elif type == 'sign':
                 self.DNATarget = self.createSign()
-            elif (type == 'landmark_door'):
+            elif type == 'landmark_door':
                 self.DNATarget = self.createDoor('landmark_door')
-            elif (type == 'door'):
+            elif type == 'door':
                 self.DNATarget = self.createDoor('door')
-            elif (type == 'windows'):
+            elif type == 'windows':
                 # Make sure window_count n.e. 0
                 if self.getCurrent('window_count') == 0:
                     self.setCurrent(
@@ -2228,16 +2228,16 @@ class LevelEditor(NodePath, DirectObject):
         dnaNode = self.findDNANode(nodePath)
         if dnaNode:
             objClass = DNAGetClassType(dnaNode)
-            if ((objClass == (DNA_WALL)) or
-                    (objClass == (DNA_WINDOWS)) or
-                    (objClass == (DNA_DOOR)) or
-                    (objClass == (DNA_FLAT_DOOR)) or
-                    (objClass == (DNA_CORNICE)) or
-                    (objClass == (DNA_PROP)) or
-                    (objClass == (DNA_SIGN)) or
-                    (objClass == (DNA_SIGN_BASELINE)) or
-                    (objClass == (DNA_SIGN_TEXT)) or
-                    (objClass == (DNA_SIGN_GRAPHIC))
+            if ((objClass == DNA_WALL) or
+                    (objClass == DNA_WINDOWS) or
+                    (objClass == DNA_DOOR) or
+                    (objClass == DNA_FLAT_DOOR) or
+                    (objClass == DNA_CORNICE) or
+                    (objClass == DNA_PROP) or
+                    (objClass == DNA_SIGN) or
+                    (objClass == DNA_SIGN_BASELINE) or
+                    (objClass == DNA_SIGN_TEXT) or
+                    (objClass == DNA_SIGN_GRAPHIC)
             ):
                 # Update dna information
                 dnaNode.setColor(VBase4(r / 255.0, g / 255.0, b / 255.0, a / 255.0))
@@ -2337,7 +2337,7 @@ class LevelEditor(NodePath, DirectObject):
     def findDNARoot(self, nodePath):
         """ Walk up a node path's ancestry looking for its DNA Root """
         # Check current node's name for root marker
-        if (nodePath.getName()[-8:] == '_DNARoot'):
+        if nodePath.getName()[-8:] == '_DNARoot':
             # Its a root!
             return nodePath
         else:
@@ -2351,7 +2351,7 @@ class LevelEditor(NodePath, DirectObject):
     def findSuitEdge(self, nodePath):
         """ Walk up a node path's ancestry looking for a suit edge """
         # Check current node's name for suitEdge marker
-        if (nodePath.getName() == 'suitEdge'):
+        if nodePath.getName() == 'suitEdge':
             # Its a suitEdge
             return nodePath
         else:
@@ -2368,12 +2368,12 @@ class LevelEditor(NodePath, DirectObject):
         or a battle cell marker
         """
         # Check current node's name for root marker
-        if (nodePath.getName() == 'suitPointMarker'):
+        if nodePath.getName() == 'suitPointMarker':
             # Its a suit point marker!
             # See if point is in pointDict
             point = self.getSuitPointFromNodePath(nodePath)
             return point, 'suitPointMarker'
-        elif (nodePath.getName() == 'battleCellMarker'):
+        elif nodePath.getName() == 'battleCellMarker':
             # Its a battle cell marker
             # See if cell is in cell Dict
             cell = self.getBattleCellFromNodePath(nodePath)
@@ -2456,25 +2456,25 @@ class LevelEditor(NodePath, DirectObject):
         # base.direct.grid.setSnapAngle(1.0)
         # snapAngle = base.direct.grid.snapAngle
         # Get current snap angle
-        if ((arrowDirection == 'up') or (arrowDirection == 'down')):
+        if (arrowDirection == 'up') or (arrowDirection == 'down'):
             oldSnapAngle = base.direct.grid.snapAngle
             base.direct.grid.setSnapAngle(1.0)
         snapAngle = base.direct.grid.snapAngle
         # Compute new Snap Angle
-        if (arrowDirection == 'left'):
+        if arrowDirection == 'left':
             self.setLastAngle(self.getLastAngle() + snapAngle)
-        if (arrowDirection == 'right'):
+        if arrowDirection == 'right':
             self.setLastAngle(self.getLastAngle() - snapAngle)
-        if (arrowDirection == 'up'):
+        if arrowDirection == 'up':
             self.setLastAngle(self.getLastAngle() + snapAngle)
-        if (arrowDirection == 'down'):
+        if arrowDirection == 'down':
             self.setLastAngle(self.getLastAngle() - snapAngle)
         # else:
         # self.setLastAngle(self.getLastAngle() - snapAngle)
 
-        if (self.getLastAngle() < -180.0):
+        if self.getLastAngle() < -180.0:
             self.setLastAngle(self.getLastAngle() + 360.0)
-        elif (self.getLastAngle() > 180.0):
+        elif self.getLastAngle() > 180.0:
             self.setLastAngle(self.getLastAngle() - 360.0)
         # Move selected objects
         for selectedNode in base.direct.selected:
@@ -2483,7 +2483,7 @@ class LevelEditor(NodePath, DirectObject):
         self.updateSelectedPose(base.direct.selected.getSelectedAsList())
         # if base.direct.fShift:
         # base.direct.grid.setSnapAngle(oldSnapAngle)
-        if ((arrowDirection == 'up') or (arrowDirection == 'down')):
+        if (arrowDirection == 'up') or (arrowDirection == 'down'):
             base.direct.grid.setSnapAngle(oldSnapAngle)
 
     def keyboardZTranslateSelected(self, arrowDirection):
@@ -2493,7 +2493,7 @@ class LevelEditor(NodePath, DirectObject):
         xzDot = camXAxis.dot(Z_AXIS)
 
         # what is the current grid spacing?
-        if ((arrowDirection == 'left') or (arrowDirection == 'right')):
+        if (arrowDirection == 'left') or (arrowDirection == 'right'):
             # If shift, divide grid spacing by 10.0
             oldGridSpacing = base.direct.grid.gridSpacing
             # Use back door to set grid spacing to avoid grid update
@@ -2502,25 +2502,25 @@ class LevelEditor(NodePath, DirectObject):
 
         # Compute the specified delta
         deltaPos = Vec3(0)
-        if (abs(xxDot) > abs(xzDot)):
-            if (xxDot < 0.0):
+        if abs(xxDot) > abs(xzDot):
+            if xxDot < 0.0:
                 deltaMove = -deltaMove
 
             # Define a deltaMove so that it moves in proper Panda units.
             # deltaMove = 10
 
             # Compute delta
-            if ((arrowDirection == 'up') or (arrowDirection == 'left')):
+            if (arrowDirection == 'up') or (arrowDirection == 'left'):
                 deltaPos.setZ(deltaPos[2] + deltaMove)
-            elif ((arrowDirection == 'down') or (arrowDirection == 'right')):
+            elif (arrowDirection == 'down') or (arrowDirection == 'right'):
                 deltaPos.setZ(deltaPos[2] - deltaMove)
         else:
-            if (xzDot < 0.0):
+            if xzDot < 0.0:
                 deltaMove = -deltaMove
             # Compute delta
-            if ((arrowDirection == 'down') or (arrowDirection == 'right')):
+            if (arrowDirection == 'down') or (arrowDirection == 'right'):
                 deltaPos.setZ(deltaPos[2] + deltaMove)
-            elif ((arrowDirection == 'up') or (arrowDirection == 'left')):
+            elif (arrowDirection == 'up') or (arrowDirection == 'left'):
                 deltaPos.setZ(deltaPos[2] - deltaMove)
 
         # Move selected objects
@@ -2530,7 +2530,7 @@ class LevelEditor(NodePath, DirectObject):
         # Snap objects to grid and update DNA if necessary
         self.updateSelectedPose(base.direct.selected.getSelectedAsList())
         # Restore grid spacing
-        if ((arrowDirection == 'left') or (arrowDirection == 'right')):
+        if (arrowDirection == 'left') or (arrowDirection == 'right'):
             # Use back door to set grid spacing to avoid grid update
             base.direct.grid.gridSpacing = oldGridSpacing
 
@@ -2550,29 +2550,29 @@ class LevelEditor(NodePath, DirectObject):
 
         # Compute the specified delta
         deltaPos = Vec3(0)
-        if (abs(xxDot) > abs(xzDot)):
-            if (xxDot < 0.0):
+        if abs(xxDot) > abs(xzDot):
+            if xxDot < 0.0:
                 deltaMove = -deltaMove
             # Compute delta
-            if (arrowDirection == 'right'):
+            if arrowDirection == 'right':
                 deltaPos.setX(deltaPos[0] + deltaMove)
-            elif (arrowDirection == 'left'):
+            elif arrowDirection == 'left':
                 deltaPos.setX(deltaPos[0] - deltaMove)
-            elif (arrowDirection == 'up'):
+            elif arrowDirection == 'up':
                 deltaPos.setY(deltaPos[1] + deltaMove)
-            elif (arrowDirection == 'down'):
+            elif arrowDirection == 'down':
                 deltaPos.setY(deltaPos[1] - deltaMove)
         else:
-            if (xzDot < 0.0):
+            if xzDot < 0.0:
                 deltaMove = -deltaMove
             # Compute delta
-            if (arrowDirection == 'right'):
+            if arrowDirection == 'right':
                 deltaPos.setY(deltaPos[1] - deltaMove)
-            elif (arrowDirection == 'left'):
+            elif arrowDirection == 'left':
                 deltaPos.setY(deltaPos[1] + deltaMove)
-            elif (arrowDirection == 'up'):
+            elif arrowDirection == 'up':
                 deltaPos.setX(deltaPos[0] - deltaMove)
-            elif (arrowDirection == 'down'):
+            elif arrowDirection == 'down':
                 deltaPos.setX(deltaPos[0] + deltaMove)
 
         # Move selected objects
@@ -2703,7 +2703,7 @@ class LevelEditor(NodePath, DirectObject):
             return None
 
     def getRandomWindowCount(self):
-        if ((self.lastWall != None) and (self.lastBuilding != None)):
+        if (self.lastWall != None) and (self.lastBuilding != None):
             h = ROUND_INT(self.lastWall.getHeight())
             w = ROUND_INT(self.lastBuilding.getWidth())
             # Otherwise....
@@ -2730,14 +2730,14 @@ class LevelEditor(NodePath, DirectObject):
             nodeClass = DNAGetClassType(dnaNode)
             deltaPos = Point3(20, 0, 0)
             deltaHpr = VBase3(0)
-            if nodeClass == (DNA_FLAT_BUILDING):
+            if nodeClass == DNA_FLAT_BUILDING:
                 deltaPos.setX(dnaNode.getWidth())
-            elif nodeClass == (DNA_STREET):
+            elif nodeClass == DNA_STREET:
                 objectCode = dnaNode.getCode()
                 deltas = self.getNextSnapPoint()
                 deltaPos.assign(deltas[0])
                 deltaHpr.assign(deltas[1])
-            elif nodeClass == (DNA_LANDMARK_BUILDING):
+            elif nodeClass == DNA_LANDMARK_BUILDING:
                 objectCode = dnaNode.getCode()
                 if objectCode[-2:-1] == 'A':
                     deltaPos.setX(25.0)
@@ -2787,7 +2787,7 @@ class LevelEditor(NodePath, DirectObject):
             self.snapList = self.snapList[1:] + self.snapList[:1]
             return deltas
         else:
-            return (ZERO_VEC, ZERO_VEC)
+            return ZERO_VEC, ZERO_VEC
 
     def getWallIntersectionPoint(self, selectedNode):
         """
@@ -3054,7 +3054,7 @@ class LevelEditor(NodePath, DirectObject):
         xPt = hitPt[0]
         zPt = hitPt[2]
         # Left or right of building
-        if ((xPt < 0) or (xPt > aDNAFlatBuilding.getWidth())):
+        if (xPt < 0) or (xPt > aDNAFlatBuilding.getWidth()):
             return -1
         # Below the building
         if zPt < 0:
@@ -3219,13 +3219,13 @@ class LevelEditor(NodePath, DirectObject):
         marker = self.suitPointMarker.copyTo(parent)
         marker.setName("suitPointMarker")
         marker.setPos(pos)
-        if (type == DNASuitPoint.STREETPOINT):
+        if type == DNASuitPoint.STREETPOINT:
             marker.setColor(0, 0, 0.6)
             marker.setScale(0.4)
-        elif (type == DNASuitPoint.FRONTDOORPOINT):
+        elif type == DNASuitPoint.FRONTDOORPOINT:
             marker.setColor(0, 0, 1)
             marker.setScale(0.5)
-        elif (type == DNASuitPoint.SIDEDOORPOINT):
+        elif type == DNASuitPoint.SIDEDOORPOINT:
             marker.setColor(0, 0.6, 0.2)
             marker.setScale(0.5)
         # Highlight if necessary
@@ -3351,11 +3351,11 @@ class LevelEditor(NodePath, DirectObject):
         for point in list(self.pointDict.keys()):
             type = point.getPointType()
             marker = self.pointDict[point]
-            if (type == DNASuitPoint.STREETPOINT):
+            if type == DNASuitPoint.STREETPOINT:
                 marker.setColor(0, 0, 0.6)
-            elif (type == DNASuitPoint.FRONTDOORPOINT):
+            elif type == DNASuitPoint.FRONTDOORPOINT:
                 marker.setColor(0, 0, 1)
-            elif (type == DNASuitPoint.SIDEDOORPOINT):
+            elif type == DNASuitPoint.SIDEDOORPOINT:
                 marker.setColor(0, 0.6, 0.2)
         for edge in list(self.edgeDict.values()):
             edge.clearColor()
@@ -3394,13 +3394,13 @@ class LevelEditor(NodePath, DirectObject):
         v = self.getGridSnapIntersectionPoint()
         mat = base.direct.grid.getMat(self.NPParent)
         absPos = Point3(mat.xformPoint(v))
-        if (self.currentBattleCellType == '20w 20l'):
+        if self.currentBattleCellType == '20w 20l':
             cell = DNABattleCell(20, 20, absPos)
-        elif (self.currentBattleCellType == '20w 30l'):
+        elif self.currentBattleCellType == '20w 30l':
             cell = DNABattleCell(20, 30, absPos)
-        elif (self.currentBattleCellType == '30w 20l'):
+        elif self.currentBattleCellType == '30w 20l':
             cell = DNABattleCell(30, 20, absPos)
-        elif (self.currentBattleCellType == '30w 30l'):
+        elif self.currentBattleCellType == '30w 30l':
             cell = DNABattleCell(30, 30, absPos)
         # Store the battle cell in the storage
         DNASTORE.storeBattleCell(cell)
@@ -3787,7 +3787,7 @@ class LevelEditor(NodePath, DirectObject):
             path = npc.getPath(i)
             block = path.getName()
             block = int(block[2:block.find(':')])
-            if (block > highest):
+            if block > highest:
                 highest = block
         # Make a list of flat building names, outside of the
         # recursive function:
@@ -3799,7 +3799,7 @@ class LevelEditor(NodePath, DirectObject):
         del self.flatNames
 
         needToTraverse = (highest != newHighest)
-        return (newHighest, needToTraverse)
+        return newHighest, needToTraverse
 
     def convertToLandmarkBlocks(self, block, dnaRoot):
         """
@@ -3817,7 +3817,7 @@ class LevelEditor(NodePath, DirectObject):
             elif DNAClassEqual(child, DNA_FLAT_BUILDING):
                 # Flat buildings:
                 name = child.getName()
-                if (name in self.flatNames):
+                if name in self.flatNames:
                     child.setName('tb0:' + name)
             else:
                 block = self.convertToLandmarkBlocks(block, child)
@@ -3879,11 +3879,11 @@ class LevelEditor(NodePath, DirectObject):
                     if ((point.getPointType() == DNASuitPoint.FRONTDOORPOINT)
                             or (point.getPointType() == DNASuitPoint.SIDEDOORPOINT)):
                         lbIndex = point.getLandmarkBuildingIndex()
-                        if (lbIndex == int(block)):
+                        if lbIndex == int(block):
                             marker.setColor(1, 0, 0, 1)
                             marker.setScale(1.0)
                             # There should only be one, so break now
-                        elif (lbIndex == -1):
+                        elif lbIndex == -1:
                             # This point belongs to no block
                             marker.setColor(0, 1, 0, 1)
 
@@ -3892,10 +3892,10 @@ class LevelEditor(NodePath, DirectObject):
                 for i in self.showLandmarkBlockToggleGroup:
                     i.clearColor()
                 for point, marker in list(self.pointDict.items()):
-                    if (point.getPointType() == DNASuitPoint.FRONTDOORPOINT):
+                    if point.getPointType() == DNASuitPoint.FRONTDOORPOINT:
                         marker.setColor(0, 0, 1, 1)
                         marker.setScale(0.5)
-                    elif (point.getPointType() == DNASuitPoint.SIDEDOORPOINT):
+                    elif point.getPointType() == DNASuitPoint.SIDEDOORPOINT:
                         marker.setColor(0, 0.6, 0.2, 1)
                         marker.setScale(0.5)
                 self.showLandmarkBlockToggleGroup = None
@@ -3993,7 +3993,7 @@ class LevelEditor(NodePath, DirectObject):
     def addStreetUnits(self, streetLength):
         base.direct.grid.setPosHpr(0, -40, 0, 0, 0, 0)
         currLength = 0
-        while (currLength < streetLength):
+        while currLength < streetLength:
             self.addStreet('street_80x40')
             currLength += 80
 
@@ -4106,7 +4106,7 @@ class LevelEditor(NodePath, DirectObject):
         print("c")
         self.DNAParent.add(dnaNode)
         # And create the geometry
-        print("d %s" % (oldDNANode))
+        print("d %s" % oldDNANode)
         newNodePath = dnaNode.traverse(self.NPParent, DNASTORE, 1)
         print("e")
         return newNodePath
@@ -4143,9 +4143,9 @@ class LevelEditor(NodePath, DirectObject):
 
     def updateBarricadeDict(self, side, barricadeOrigNum, curBldgGroupIndex):
         barricadeDict = None
-        if (side == 'outer'):
+        if side == 'outer':
             barricadeDict = self.outerBarricadeDict
-        elif (side == 'inner'):
+        elif side == 'inner':
             barricadeDict = self.innerBarricadeDict
         else:
             print(("unhandled side %s" % side))
@@ -4248,7 +4248,7 @@ class LevelEditor(NodePath, DirectObject):
                                               "prop_tree_large_ul"])
 
                         # use snow if necessary
-                        if (useSnowTree):
+                        if useSnowTree:
                             tree = random.choice(["prop_snow_tree_small_ul",
                                                   "prop_snow_tree_small_ur",
                                                   "prop_snow_tree_large_ur",
@@ -4286,7 +4286,7 @@ class LevelEditor(NodePath, DirectObject):
                         print("barricade width = %f" % barricadeWidth)
 
                         simple = 1
-                        if (simple):
+                        if simple:
                             curGroupWidth += barricadeWidth
                             # force move to next curve
                             currT = endT + 1
@@ -4409,7 +4409,7 @@ class LevelEditor(NodePath, DirectObject):
                                               "prop_tree_large_ul"])
 
                         # use snow tree if necessary
-                        if (useSnowTree):
+                        if useSnowTree:
                             tree = random.choice(["prop_snow_tree_small_ul",
                                                   "prop_snow_tree_small_ur",
                                                   "prop_snow_tree_large_ur",
@@ -4447,7 +4447,7 @@ class LevelEditor(NodePath, DirectObject):
                         print("barricade width = %f" % barricadeWidth)
 
                         simple = 1
-                        if (simple):
+                        if simple:
                             curGroupWidth += barricadeWidth
                             # force move to next curve
                             currT = endT + 1
@@ -4659,6 +4659,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Open Injector',
                             label = 'Injector',
                             command = self.showInjector)
+        # Corporate Clash Old Toontown-esque Filter
+        if base.server == TOONTOWN_CORPORATE_CLASH:
+            self.toggleOTVar = IntVar()
+            self.toggleOTVar.set(0)
+            menuBar.addmenuitem('Advanced', 'checkbutton',
+                                'Enable Old Toontown filter preview',
+                                label = 'Old Toontown Filter',
+                                variable = self.toggleOTVar,
+                                command = self.toggleOT)
 
         self.injectorDialog = Pmw.Dialog(parent, title = 'Injector',
                                          buttons = ('Run',),
@@ -5526,10 +5535,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.selectSignBaseline(0)
 
     def updateSignPage(self):
-        if (self.notebook.getcurselection() == 'Signs'):
+        if self.notebook.getcurselection() == 'Signs':
             sign = self.findSignFromDNARoot()
             # Only update if it's not the current sign:
-            if (self.currentSignDNA != sign):
+            if self.currentSignDNA != sign:
                 self.currentSignDNA = sign
                 self.signPanelSync()
 
@@ -5555,7 +5564,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.currentBaselineDNA = None
         target = None
         index = self.currentBaselineIndex = int((self.baselineMenu.curselection())[0])
-        if (index == 0):
+        if index == 0:
             target = self.currentSignDNA
             # Unset some ui elements:
             self.baselineString.set('')
@@ -5604,7 +5613,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
     def deleteSignItem(self):
         """Delete the selected sign or sign baseline"""
-        if (self.currentBaselineDNA):
+        if self.currentBaselineDNA:
             # Remove the baseline:
             assert int((self.baselineMenu.curselection())[0]) == self.currentBaselineIndex
             DNARemoveChildOfClass(self.currentSignDNA, DNA_SIGN_BASELINE,
@@ -5615,7 +5624,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.currentBaselineDNA = None
             self.selectSignBaseline(0)
             self.levelEditor.replaceSelected()
-        elif (self.currentSignDNA):
+        elif self.currentSignDNA:
             # Remove the sign:
             assert int((self.baselineMenu.curselection())[0]) == 0
             le = self.levelEditor
@@ -5909,11 +5918,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
              255])
 
     def setSuitPointType(self, name):
-        if (name == "street"):
+        if name == "street":
             self.levelEditor.currentSuitPointType = DNASuitPoint.STREETPOINT
-        elif (name == "front door"):
+        elif name == "front door":
             self.levelEditor.currentSuitPointType = DNASuitPoint.FRONTDOORPOINT
-        elif (name == "side door"):
+        elif name == "side door":
             self.levelEditor.currentSuitPointType = DNASuitPoint.SIDEDOORPOINT
         print(self.levelEditor.currentSuitPointType)
 
@@ -5971,6 +5980,14 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             exec(self.injectorTextBox.get('1.0', 'end'), globals())
         pass
 
+    def toggleOT(self):
+        if self.toggleOTVar.get():
+            self.levelEditor.getNPToplevel().setShader(
+                    Shader.load(Shader.SL_GLSL,
+                                vertex = 'resources/shaders/tt_sha_render_bandw.vert',
+                                fragment = 'resources/shaders/tt_sha_render_bandw.frag'))
+        else:
+            self.levelEditor.getNPToplevel().clearShader()
 
 class VisGroupsEditor(Pmw.MegaToplevel):
     def __init__(self, levelEditor, visGroups = ['None'],
