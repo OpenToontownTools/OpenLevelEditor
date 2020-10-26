@@ -4599,13 +4599,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Save DNA File',
                             label = 'Save DNA',
                             command = self.levelEditor.outputDNADefaultFile)
+        menuBar.addmenuitem('Level Editor', 'separator')
         menuBar.addmenuitem('Level Editor', 'command',
                             'Edit Visibility Groups',
                             label = 'Edit Vis Groups',
                             command = self.levelEditor.editDNAVisGroups)
+        menuBar.addmenuitem('Level Editor', 'separator')
         menuBar.addmenuitem('Level Editor', 'command',
                             'Reset level',
-                            label = 'Reset level',
+                            label = 'Clear level',
                             command = self.levelEditor.reset)
         menuBar.addmenuitem('Level Editor', 'command',
                             'Make Long Street',
@@ -4615,6 +4617,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Make Street Along Curve',
                             label = 'Make Street Along Curve',
                             command = self.levelEditor.makeStreetAlongCurve)
+        menuBar.addmenuitem('Level Editor', 'separator')
         menuBar.addmenuitem('Level Editor', 'command',
                             'Exit Level Editor Panel',
                             label = 'Exit',
@@ -4637,6 +4640,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             "Save Selected Buildings's Style",
                             label = 'Save Bldg Style',
                             command = self.levelEditor.saveBuildingStyle)
+        menuBar.addmenuitem('Style', 'separator')
         menuBar.addmenuitem('Style', 'command',
                             'Reload Color Palettes',
                             label = 'Reload Colors',
