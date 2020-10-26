@@ -8,6 +8,23 @@
 ![overviewimage](https://i.imgur.com/4f7v8Ak.png)
 
 
+## Major New Features
+* Fully Updated to Panda3D and Python 3
+* A ton of smaller debug features
+* Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
+* A lot of usability improvements
+* Modular zone system
+   * Makes adding support for new zones INCREDIBLY easy
+* Automatic map creation 
+   * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
+   * All done with one press (Shift + F12)
+* Server Specific Support
+   * Currently includes specific options for Corporate Clash, with features for more servers coming
+* And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
+
+## Upcoming Features
+* Auto Saving
+* and much more!
 
 ## Requirements
 ### ***IMPORTANT***
@@ -16,7 +33,7 @@
 * Basic knowledge on how streets are setup
 * Here you have two options:
     * The advanced option
-        * Build yourself a copy of [Disyer's libtoontown](https://github.com/darktohka/libtoontown), and drop the .pyd files in the root directory.
+        * Build yourself a copy of [libtoontown](https://github.com/OpenToontownTools/libtoontown), and drop the .pyd files in the root directory.
         * Recent Panda3D build (1.10.7 or later) running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
     * **OR** the easy option:
         * you can download [my copy](https://drive.google.com/file/d/1EbfuG4AaPpeaDKWWeZIxUckFTvYfRQbL/view?usp=sharing) of panda with the compatible libtoontown files in there. Just drag Panda3D-1.11.0-Py37-x64 to your C drive root directory and the libotp.pyd and libtoontown.pyd files to the root level editor directory. Note that the PYD files in here are ONLY compatible with MY copy of panda, so if you are using any other build you have to rebuild them yourself.
@@ -33,21 +50,9 @@
 
 * [*Please only contact me if you need assistance with the editor. No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
 
-## Major New Features
-* Fully Updated to Panda3D and Python 3
-* A ton of smaller debug features
-* Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
-* A lot of usability improvements
-* Modular zone system
-* And alot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
-
-## Upcoming Features
-* Auto Saving
-* and much more!
-
 ## Known Incompatibilities
 * Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
-    * This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.
+   * This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.
 
 # FAQ
 ### Why can't I load a street from X playground?

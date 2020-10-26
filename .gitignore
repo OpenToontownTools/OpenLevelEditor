@@ -3,6 +3,10 @@
 # leveleditor/hoods/FF.json
 # leveleditor/stylefiles/funny_farm/*
 
+# Sketched Central ( a test for modular zones i made )
+leveleditor/hoods/SC.json
+leveleditor/stylefiles/sketched_central/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
