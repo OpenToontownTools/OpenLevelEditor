@@ -15,7 +15,7 @@
 * A lot of usability improvements
 * Modular zone system
    * Makes adding support for new zones INCREDIBLY easy
-* Automatic map creation 
+* [Automatic map creation](https://www.youtube.com/watch?v=B9HAfcF4_bE)
    * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
    * All done with one press (Shift + F12)
 * Server Specific Support
