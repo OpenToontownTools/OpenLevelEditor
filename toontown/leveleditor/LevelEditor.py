@@ -5322,7 +5322,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fMapVis.set(0)
         self.mapSnapButton = ttk.Checkbutton(buttonFrame,
                                          text = 'Map Vis',
-                                         width = 6,
+                                         width = 12,
                                          variable = self.fMapVis,
                                          command = self.toggleMapVis)
         # self.mapSnapButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5331,7 +5331,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fXyzSnap.set(0)
         self.xyzSnapButton = ttk.Checkbutton(buttonFrame,
                                          text = 'XyzSnap',
-                                         width = 6,
+                                         width = 12,
                                          variable = self.fXyzSnap,
                                          command = self.toggleXyzSnap)
         self.xyzSnapButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5340,7 +5340,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fHprSnap.set(0)
         self.hprSnapButton = ttk.Checkbutton(buttonFrame,
                                          text = 'HprSnap',
-                                         width = 6,
+                                         width = 12,
                                          variable = self.fHprSnap,
                                          command = self.toggleHprSnap)
         self.hprSnapButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5357,7 +5357,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fPlaneSnap.set(0)
         self.planeSnapButton = ttk.Checkbutton(buttonFrame,
                                            text = 'PlaneSnap',
-                                           width = 6,
+                                           width = 12,
                                            variable = self.fPlaneSnap,
                                            command = toggleWidgetHandles)
         self.planeSnapButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5366,7 +5366,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fGrid.set(0)
         base.direct.gridButton = ttk.Checkbutton(buttonFrame,
                                              text = 'Show Grid',
-                                             width = 6,
+                                             width = 12,
                                              variable = self.fGrid,
                                              command = self.toggleGrid)
         base.direct.gridButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5375,7 +5375,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fMaya.set(1)
         self.mayaButton = ttk.Checkbutton(buttonFrame,
                                       text = 'Maya Cam',
-                                      width = 6,
+                                      width = 12,
                                       variable = self.fMaya,
                                       command = self.toggleMaya)
         self.mayaButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5389,14 +5389,14 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.driveMode = IntVar()
         self.driveMode.set(1)
         if ConfigVariableBool("want-experimental", False):
-            self.directModeButton = Radiobutton(
+            self.directModeButton = ttk.Radiobutton(
                     buttonFrame4,
                     text = 'DIRECT Fly',
                     value = 1,
                     variable = self.driveMode,
                     command = self.levelEditor.useDirectFly)
             self.directModeButton.pack(side = LEFT, fill = X, expand = 1)
-            self.driveModeButton = Radiobutton(
+            self.driveModeButton = ttk.Radiobutton(
                     buttonFrame4,
                     text = 'Drive',
                     value = 0,
@@ -5438,7 +5438,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fLabel.set(0)
         self.labelButton = ttk.Checkbutton(buttonFrame,
                                        text = 'Show Zone Labels',
-                                       width = 6,
+                                       width = 16,
                                        variable = self.fLabel,
                                        command = self.toggleZoneLabels)
         self.labelButton.pack(side = LEFT, expand = 1, fill = X)
