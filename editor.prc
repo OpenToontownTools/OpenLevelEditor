@@ -28,6 +28,7 @@ model-path    $MAIN_DIR
 
 # Enable/disable performance profiling tool and frame-rate meter
 want-pstats            #f
+show-scene-graph-analyzer-meter #f
 show-frame-rate-meter  #t
 frame-rate-meter-update-interval 0.1
 
