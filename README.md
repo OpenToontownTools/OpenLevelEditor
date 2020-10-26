@@ -5,7 +5,7 @@
 # [***READ THE FAQ BEFORE ASKING QUESTIONS***](#faq)
 ### [Check the WIKI for help and showcases of what the community has made with this tool!](https://github.com/OpenToontownTools/TTOpenLevelEditor/wiki)
 
-![overviewimage](https://i.imgur.com/z9rI6t3.png)
+![overviewimage](https://i.imgur.com/lZ9jtOy.png)
 
 
 ## Major New Features
