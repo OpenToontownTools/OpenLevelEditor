@@ -1347,7 +1347,7 @@ class LevelEditor(NodePath, DirectObject):
         except AssertionError as error:
             self.notify.debug("Error loading %s" % dnaNode)
         # And add hooks to insert copies of dnaNode
-        # self.addReplicationHooks(dnaNode)
+        self.addReplicationHooks(dnaNode)
 
         ## Move selected objects
         # for selectedNode in base.direct.selected:
@@ -2194,7 +2194,7 @@ class LevelEditor(NodePath, DirectObject):
             # MRM: Need to disable dna store warning
             self.replaceSelected()
             # Re-add replication hooks so we get right kind of copy
-            self.addReplicationHooks(self.DNATarget)
+            # self.addReplicationHooks(self.DNATarget)
 
     def setBuildingType(self, type):
         print('setBuildingType: ', repr(type))
