@@ -95,6 +95,16 @@ except NameError:
             NEIGHBORHOOD_CODES[hoodName] = hood
             NEIGHBORHOODS.append(hoodName)
             storages = data.get(LevelEditorGlobals.HOOD_PATH)
+            # Holidays
+            if LevelEditorGlobals.HOOD_HOLIDAY_PATH in data:
+                # Halloween
+                if ConfigVariableString("holiday") == 'halloween':
+                    if LevelEditorGlobals.HOOD_HALLOWEEN_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
+                        storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_HALLOWEEN_PATH]
+                # Winter
+                if ConfigVariableString("holiday") == 'winter':
+                    if LevelEditorGlobals.HOOD_WINTER_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
+                        storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_WINTER_PATH]
             for storage in storages:
                 loadDNAFile(DNASTORE, storage, CSDefault, 1)
 

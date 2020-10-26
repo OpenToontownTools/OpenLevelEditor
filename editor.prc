@@ -21,7 +21,7 @@ hardware-animated-vertices true
 # We only want warning info, except for DNA which we spam
 notify-level warning
 default-directnotify-level warning
-notify-level-dna spam
+notify-level-dna info
 
 # Model Path
 model-path    $MAIN_DIR

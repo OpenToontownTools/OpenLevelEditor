@@ -4,5 +4,10 @@
 		"phase_6/dna/storage_OZ.dna", 
 		"phase_6/dna/storage_OZ_sz.dna", 
 		"phase_6/dna/storage_OZ_town.dna"
-	]
+	],
+	"holiday_storage_files": {
+	    "halloween": [
+			"phase_6/dna/halloween_props_storage_OZ.dna"
+		]
+	}
 }
