@@ -44,6 +44,7 @@ dna-built-directory $TTMODELS/built # Currently unused
 
 # Enable loading holiday storage files.
 want-halloween-props #f
+want-winter-props #f
 
 # Default Extensions
 default-model-extension .bam

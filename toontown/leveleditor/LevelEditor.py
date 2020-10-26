@@ -55,6 +55,12 @@ dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "level
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
 wantHalloweenStorage = base.config.GetBool("want-halloween-props", 0)
+wantWinterStorage = base.config.GetBool("want-winter-props", 0)
+
+WANT_HOLIDAY_STORAGE = wantHalloweenStorage or wantWinterStorage
+if wantHalloweenStorage and wantWinterStorage:
+    print("You can only have one holiday storage enabled!")
+    sys.exit()
 
 # NEIGHBORHOOD DATA
 # If you run this from the command line you can pass in the hood codes
@@ -95,8 +101,6 @@ except NameError:
     # loadDNAFile(DNASTORE, 'phase_5.5/dna/storage_house_interior.dna', CSDefault, 1)
     NEIGHBORHOODS = []
     NEIGHBORHOOD_CODES = {}
-    HOLIDAYS = []
-    HOLIDAY_CODES= {}
 
     for hood in base.hoods:
         with open(f'./leveleditor/hoods/{hood}.json') as info:
@@ -112,12 +116,15 @@ except NameError:
     DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())
     DNASTORE.storeFont('suit', ToontownGlobals.getSuitFont())
 
-    if wantHalloweenStorage:
-        with open(f'./leveleditor/holidays/halloween.json') as info:
+    if WANT_HOLIDAY_STORAGE:
+        with open(f'./leveleditor/holidays/holidays.json') as info:
             data = json.load(info)
-            hoodName = data.get(LevelEditorGlobals.HOOD_NAME_LONGHAND) # Same value as hood
-            HOLIDAYS.append(hoodName)
-            storages = data.get(LevelEditorGlobals.HOOD_PATH)
+            data = data.get("holiday_storage_files")
+            if wantHalloweenStorage:
+                storages = data.get(LevelEditorGlobals.STORAGE_HOLIDAY_HALLOWEEN)
+            else:
+                storages = data.get(LevelEditorGlobals.STORAGE_HOLIDAY_WINTER)
+
             for storage in storages:
                 loadDNAFile(DNASTORE, storage, CSDefault, 1)
 

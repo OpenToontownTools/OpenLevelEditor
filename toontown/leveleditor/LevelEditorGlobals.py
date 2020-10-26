@@ -15,6 +15,8 @@ SERVER_TO_ID = {'online':    TOONTOWN_ONLINE,
 HOOD_NAME_SHORTHAND = 'name_shorthand'
 HOOD_NAME_LONGHAND = 'name_longhand'
 HOOD_PATH = 'storage_files'
+STORAGE_HOLIDAY_HALLOWEEN = 'halloween'
+STORAGE_HOLIDAY_WINTER = 'winter'
 
 # Colors used by all color menus
 DEFAULT_COLORS = [

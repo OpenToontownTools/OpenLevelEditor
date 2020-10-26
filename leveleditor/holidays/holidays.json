@@ -1,0 +1,28 @@
+{
+    "holiday_storage_files": {
+        "halloween": [
+            "phase_4/dna/halloween_props_storage_TT.dna",
+            "phase_4/dna/halloween_props_storage_TT_sz",
+            "phase_5.5/dna/halloween_props_storage_estate.dna",
+            "phase_6/dna/halloween_props_storage_DD.dna",
+            "phase_6/dna/halloween_props_storage_GS.dna",
+            "phase_6/dna/halloween_props_storage_MM.dna",
+            "phase_6/dna/halloween_props_storage_OZ.dna",
+            "phase_8/dna/halloween_props_storage_BR.dna",
+            "phase_8/dna/halloween_props_storage_DG.dna",
+            "phase_8/dna/halloween_props_storage_DL.dna"
+        ],
+        "winter": [
+            "phase_4/dna/winter_storage_TT.dna",
+            "phase_4/dna/winter_storage_TT_sz",
+            "phase_5.5/dna/winter_storage_estate.dna",
+            "phase_6/dna/winter_storage_DD.dna",
+            "phase_6/dna/winter_storage_GS.dna",
+            "phase_6/dna/winter_storage_MM.dna",
+            "phase_6/dna/winter_storage_OZ.dna",
+            "phase_8/dna/winter_storage_BR.dna",
+            "phase_8/dna/winter_storage_DG.dna",
+            "phase_8/dna/winter_storage_DL.dna"
+        ]
+    }
+}
