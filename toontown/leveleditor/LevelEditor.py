@@ -4740,7 +4740,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # STREETS
         Label(streetsPage, text = 'Streets',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         self.addStreetButton = ttk.Button(
                 streetsPage,
                 text = 'ADD STREET',
@@ -4767,7 +4767,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # TOON BUILDINGS
         Label(toonBuildingsPage, text = 'Toon Buildings',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         self.addToonBuildingButton = ttk.Button(
                 toonBuildingsPage,
                 text = 'ADD TOON BUILDING',
@@ -4839,7 +4839,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # LANDMARK BUILDINGS
         Label(landmarkBuildingsPage, text = 'Landmark Buildings',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         # Don't try to load this stuff if there is none
         if self.styleManager.getCatalogCode('toon_landmark', 0) == "":
             Label(landmarkBuildingsPage, text = 'There are no landmark buildings in any of your loaded storages.').pack(
@@ -4902,7 +4902,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         # Don't try to load this stuff if there is none
         if self.styleManager.getCatalogCode('anim_building', 0) == "":
             Label(animBuildingsPage, text = 'There are no animated buildings in any of your loaded storages.').pack(
@@ -4934,7 +4934,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # SIGNS
         Label(signPage, text = 'Signs',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         self.currentSignDNA = None
         self.currentBaselineDNA = None
         self.levelEditor.selectedNodePathHookHooks.append(self.updateSignPage)
@@ -5101,7 +5101,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # PROPS
         Label(propsPage, text = 'Props',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         self.addPropsButton = ttk.Button(
                 propsPage,
                 text = 'ADD PROP',
@@ -5129,7 +5129,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # ANIMATED PROPS
         Label(animPropsPage, text = 'Animated Props',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         # Don't try to load this stuff if there is none
         if self.styleManager.getCatalogCode('anim_prop', 0) == "":
             Label(animPropsPage, text = 'There are no animated props in any of your loaded storages.').pack(expand = 0)
@@ -5160,7 +5160,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # ITERACTIVE PROPS
         Label(interactivePropsPage, text = 'Interactive Props',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         # Don't try to load this stuff if there is none
         if self.styleManager.getCatalogCode('interactive_prop', 0) == "":
             Label(interactivePropsPage, text = 'There are no interactive props in any of your loaded storages.').pack(
@@ -5192,7 +5192,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # SUIT PATHS
         Label(suitPathPage, text = 'Suit Paths',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
 
         spButtons = Frame(suitPathPage)
         self.fPaths = IntVar()
@@ -5255,7 +5255,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # BATTLE CELLS
         Label(battleCellPage, text = 'Battle Cells',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         bcButtons = Frame(battleCellPage)
         self.fCells = IntVar()
         self.fCells.set(0)
@@ -5300,7 +5300,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         # SCENE GRAPH EXPLORER
         Label(sceneGraphPage, text = 'Level Scene Graph',
-              font = ('MSSansSerif', 14, 'bold')).pack(expand = 0)
+              font = ('Calibri', 14, 'bold')).pack(expand = 0)
         self.sceneGraphExplorer = SceneGraphExplorer(
                 parent = sceneGraphPage,
                 nodePath = self.levelEditor,
@@ -5310,37 +5310,34 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Compact down notebook
         self.notebook.setnaturalsize()
 
-        self.colorEntry = VectorWidgets.ColorEntry(
-                hull, text = 'Select Color', value = (0, 0, 0, 255),
-                command = self.updateSelectedObjColor)
-        self.colorEntry.menu.add_command(
-                label = 'Save Color', command = self.levelEditor.saveColor)
-        self.colorEntry.pack(fill = X)
-
-        buttonFrame = Frame(hull)
+        # Snapping Options
+        snapFrame = Frame(hull)
         self.fMapVis = IntVar()
         self.fMapVis.set(0)
-        self.mapSnapButton = ttk.Checkbutton(buttonFrame,
-                                         text = 'Map Vis',
-                                         width = 12,
-                                         variable = self.fMapVis,
-                                         command = self.toggleMapVis)
+        #self.mapSnapButton = ttk.Checkbutton(snapFrame,
+                                         #text = 'Map Vis',
+                                         #width = 12,
+                                         #variable = self.fMapVis,
+                                         #command = self.toggleMapVis)
         # self.mapSnapButton.pack(side = LEFT, expand = 1, fill = X)
-
+        
+        Label(snapFrame, text = 'Snapping', width = 8, anchor = 'nw',
+            font = ('Calibri', 10, 'bold')).pack(padx = 5, side = LEFT, expand = 1, fill = X)
+              
         self.fXyzSnap = IntVar()
         self.fXyzSnap.set(0)
-        self.xyzSnapButton = ttk.Checkbutton(buttonFrame,
-                                         text = 'XyzSnap',
-                                         width = 12,
+        self.xyzSnapButton = ttk.Checkbutton(snapFrame,
+                                         text = 'Position Snapping',
+                                         width = 18,
                                          variable = self.fXyzSnap,
                                          command = self.toggleXyzSnap)
         self.xyzSnapButton.pack(side = LEFT, expand = 1, fill = X)
 
         self.fHprSnap = IntVar()
         self.fHprSnap.set(0)
-        self.hprSnapButton = ttk.Checkbutton(buttonFrame,
-                                         text = 'HprSnap',
-                                         width = 12,
+        self.hprSnapButton = ttk.Checkbutton(snapFrame,
+                                         text = 'Rotation Snapping',
+                                         width = 18,
                                          variable = self.fHprSnap,
                                          command = self.toggleHprSnap)
         self.hprSnapButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5355,27 +5352,44 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         self.fPlaneSnap = IntVar()
         self.fPlaneSnap.set(0)
-        self.planeSnapButton = ttk.Checkbutton(buttonFrame,
-                                           text = 'PlaneSnap',
-                                           width = 12,
+        self.planeSnapButton = ttk.Checkbutton(snapFrame,
+                                           text = 'Plane Snapping',
+                                           width = 18,
                                            variable = self.fPlaneSnap,
                                            command = toggleWidgetHandles)
         self.planeSnapButton.pack(side = LEFT, expand = 1, fill = X)
 
+        snapFrame.pack(fill = X)
+        
+        
+        # Visual Options
+        visualFrame = Frame(hull)
+        Label(visualFrame, text = 'Visual', width = 8,anchor = 'nw',
+            font = ('Calibri', 10, 'bold')).pack(padx = 5, side = LEFT, expand = 1, fill = X)
+
+        self.fLabel = IntVar()
+        self.fLabel.set(0)
+        self.labelButton = ttk.Checkbutton(visualFrame,
+                                       text = 'Show Zone Labels',
+                                       width = 18,
+                                       variable = self.fLabel,
+                                       command = self.toggleZoneLabels)
+        self.labelButton.pack(side = LEFT, expand = 1, fill = X)
+        
         self.fGrid = IntVar()
         self.fGrid.set(0)
-        base.direct.gridButton = ttk.Checkbutton(buttonFrame,
+        base.direct.gridButton = ttk.Checkbutton(visualFrame,
                                              text = 'Show Grid',
-                                             width = 12,
+                                             width = 18,
                                              variable = self.fGrid,
                                              command = self.toggleGrid)
         base.direct.gridButton.pack(side = LEFT, expand = 1, fill = X)
 
         self.fMaya = IntVar()
         self.fMaya.set(1)
-        self.mayaButton = ttk.Checkbutton(buttonFrame,
+        self.mayaButton = ttk.Checkbutton(visualFrame,
                                       text = 'Maya Cam',
-                                      width = 12,
+                                      width = 18,
                                       variable = self.fMaya,
                                       command = self.toggleMaya)
         self.mayaButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5383,8 +5397,9 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Make maya mode on by default
         self.toggleMaya()
 
-        buttonFrame.pack(fill = X)
+        visualFrame.pack(fill = X)
 
+        # experimental stuff
         buttonFrame4 = Frame(hull)
         self.driveMode = IntVar()
         self.driveMode.set(1)
@@ -5421,35 +5436,29 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 text = 'Visibility',
                 variable = self.fVis,
                 command = self.levelEditor.toggleVisibility)
-        base.direct.visButton.pack(side = LEFT, expand = 1, fill = X)
-
-        self.fVisZones = IntVar()
-        self.fVisZones.set(visualizeZones)
-        base.direct.visZonesButton = ttk.Checkbutton(
-                buttonFrame4,
-                text = 'Show Zones',
-                variable = self.fVisZones)
-        base.direct.visZonesButton.pack(side = LEFT, expand = 1, fill = X)
+        #base.direct.visButton.pack(side = LEFT, expand = 1, fill = X)
 
         buttonFrame4.pack(fill = X, padx = 5)
 
-        buttonFrame = Frame(hull)
-        self.fLabel = IntVar()
-        self.fLabel.set(0)
-        self.labelButton = ttk.Checkbutton(buttonFrame,
-                                       text = 'Show Zone Labels',
-                                       width = 16,
-                                       variable = self.fLabel,
-                                       command = self.toggleZoneLabels)
-        self.labelButton.pack(side = LEFT, expand = 1, fill = X)
+        # Object Functions
+        objectFrame = Frame(hull)
+        ttk.Label(objectFrame, text = 'Object', width = 8, anchor = 'nw',
+            font = ('Calibri', 10, 'bold')).pack(padx = 5, side = LEFT, expand = 1, fill = X)
 
-        self.selectButton = ttk.Button(buttonFrame,
+        self.colorEntry = VectorWidgets.ColorEntry(
+                objectFrame, text = 'Select Color', value = (0, 0, 0, 255),
+                command = self.updateSelectedObjColor)
+        self.colorEntry.menu.add_command(
+                label = 'Save Color', command = self.levelEditor.saveColor)
+        self.colorEntry.pack(side = LEFT, expand = 1, fill = X)
+        
+        self.selectButton = ttk.Button(objectFrame,
                                    text = 'Place Selected',
-                                   width = 6,
+                                   width = 18,
                                    command = lambda: last.place()
                                    )
         self.selectButton.pack(side = LEFT, expand = 1, fill = X)
-        buttonFrame.pack(fill = X)
+        objectFrame.pack(fill = X)
 
         # Make sure input variables processed
         self.initialiseoptions(LevelEditorPanel)
