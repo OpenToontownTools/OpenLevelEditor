@@ -3011,7 +3011,7 @@ class LevelEditor(NodePath, DirectObject):
         fname = Filename(dnaDirectory.getFullpath() +
                          '/stylefiles/' + filename)
         # We use binary mode to avoid Windows' end-of-line convention
-        f = open(fname.toOsSpecific(), 'ab')
+        f = open(fname.toOsSpecific(), 'a')
         # Add a blank line
         f.write('\n')
         # Now output style details to file
@@ -3022,14 +3022,14 @@ class LevelEditor(NodePath, DirectObject):
     def saveBaselineStyle(self):
         if self.panel.currentBaselineDNA:
             # Valid baseline, add style to file
-            filename = self.neighborhood + '_baseline_styles.txt'
+            filename = self.neighborhood + '/baseline_styles.txt'
             style = DNABaselineStyle(self.panel.currentBaselineDNA)
             self.saveStyle(filename, style)
 
     def saveWallStyle(self):
         if self.lastWall:
             # Valid wall, add style to file
-            filename = self.neighborhood + '_wall_styles.txt'
+            filename = self.neighborhood + '/wall_styles.txt'
             style = DNAWallStyle(self.lastWall)
             self.saveStyle(filename, style)
 
@@ -3038,7 +3038,7 @@ class LevelEditor(NodePath, DirectObject):
         if dnaObject:
             if DNAClassEqual(dnaObject, DNA_FLAT_BUILDING):
                 # Valid wall, add style to file
-                filename = self.neighborhood + '_building_styles.txt'
+                filename = self.neighborhood + '/building_styles.txt'
                 style = DNAFlatBuildingStyle(dnaObject)
                 self.saveStyle(filename, style)
                 return
@@ -5457,7 +5457,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
         self.colorEntry = VectorWidgets.ColorEntry(
                 objectFrame, text = 'Select Color', value = (0, 0, 0, 255),
-                command = self.updateSelectedObjColor)
+                relief = FLAT, command = self.updateSelectedObjColor)
         self.colorEntry.menu.add_command(
                 label = 'Save Color', command = self.levelEditor.saveColor)
         self.colorEntry.pack(side = LEFT, expand = 1, fill = X)
