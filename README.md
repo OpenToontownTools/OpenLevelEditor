@@ -5,7 +5,7 @@
 # [***READ THE FAQ BEFORE ASKING QUESTIONS***](#faq)
 ### [Check the WIKI for help and showcases of what the community has made with this tool!](https://github.com/OpenToontownTools/TTOpenLevelEditor/wiki)
 
-![overviewimage](https://i.imgur.com/4f7v8Ak.png)
+![overviewimage](https://i.imgur.com/lZ9jtOy.png)
 
 
 ## Major New Features
@@ -15,7 +15,7 @@
 * A lot of usability improvements
 * Modular zone system
    * Makes adding support for new zones INCREDIBLY easy
-* Automatic map creation 
+* [Automatic map creation](https://www.youtube.com/watch?v=B9HAfcF4_bE)
    * Renders image and calculates all needed data for $TOONTOWN/src/quest/QuestMapGlobals
    * All done with one press (Shift + F12)
 * Server Specific Support

@@ -4,5 +4,15 @@
 		"phase_4/dna/storage_TT.dna", 
 		"phase_4/dna/storage_TT_sz.dna", 
 		"phase_5/dna/storage_TT_town.dna"
-	]
+	],
+	"holiday_storage_files": {
+	    "halloween": [
+			"phase_4/dna/halloween_props_storage_TT.dna",
+			"phase_4/dna/halloween_props_storage_TT_sz.dna"
+		],
+	    "winter": [
+			"phase_4/dna/winter_storage_TT.dna",
+			"phase_4/dna/winter_storage_TT_sz.dna"
+		]
+	}
 }

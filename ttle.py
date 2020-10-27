@@ -50,6 +50,7 @@ class ToontownLevelEditor(ShowBase):
                                                             "for games that use the legacy python version of libpandadna, mainly Corporate Clash")
 
         parser.add_argument("--server", nargs="*", help="Enables features exclusive to various Toontown projects", default='online')
+        parser.add_argument("--holiday", nargs="*", help="Enables holiday modes. [halloween or winter]")
         parser.add_argument("--hoods", nargs="*", help="Only loads the storage files of the specified hoods",
                             default=['TT', 'DD', 'BR', 'DG',
                                      'DL', 'MM', 'GS', 'GZ',
@@ -64,6 +65,8 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", "want-debug true")
         if args.compiler:
             loadPrcFileData("", f"compiler {args.compiler[0]}")
+        if args.holiday:
+            loadPrcFileData("", f"holiday {args.holiday[0]}")
 
 
         server = SERVER_TO_ID.get(args.server[0].lower(), TOONTOWN_ONLINE)
