@@ -5209,7 +5209,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fPaths.set(0)
         self.pathButton = ttk.Checkbutton(spButtons,
                                       text = 'Show Paths',
-                                      width = 6,
+                                      width = 12,
                                       variable = self.fPaths,
                                       command = self.toggleSuitPaths)
         self.pathButton.pack(side = LEFT, expand = 1, fill = X)
@@ -5218,7 +5218,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.zoneColor.set(0)
         self.colorZoneButton1 = ttk.Checkbutton(
                 spButtons,
-                text = 'Color Zones', width = 6,
+                text = 'Color Zones', width = 12,
                 variable = self.zoneColor,
                 command = self.levelEditor.toggleZoneColors)
         self.colorZoneButton1.pack(side = LEFT, expand = 1, fill = X)
@@ -5271,14 +5271,14 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fCells.set(0)
         self.cellButton = ttk.Checkbutton(bcButtons,
                                       text = 'Show Cells',
-                                      width = 6,
+                                      width = 12,
                                       variable = self.fCells,
                                       command = self.toggleBattleCells)
         self.cellButton.pack(side = LEFT, expand = 1, fill = X)
 
         self.colorZoneButton2 = ttk.Checkbutton(
                 bcButtons,
-                text = 'Color Zones', width = 6,
+                text = 'Color Zones', width = 12,
                 variable = self.zoneColor,
                 command = self.levelEditor.toggleZoneColors)
         self.colorZoneButton2.pack(side = LEFT, expand = 1, fill = X)
