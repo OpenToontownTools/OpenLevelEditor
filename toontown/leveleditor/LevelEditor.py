@@ -5410,45 +5410,40 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         visualFrame.pack(fill = X)
 
         # experimental stuff
-        buttonFrame4 = Frame(hull)
-        self.driveMode = IntVar()
-        self.driveMode.set(1)
+        
         if ConfigVariableBool("want-experimental", False):
-            self.directModeButton = ttk.Radiobutton(
-                    buttonFrame4,
-                    text = 'DIRECT Fly',
-                    value = 1,
-                    variable = self.driveMode,
-                    command = self.levelEditor.useDirectFly)
-            self.directModeButton.pack(side = LEFT, fill = X, expand = 1)
-            self.driveModeButton = ttk.Radiobutton(
+            buttonFrame4 = Frame(hull)
+            Label(buttonFrame4, text = 'Experimental', width = 8,anchor = 'nw',
+                font = ('Calibri', 10, 'bold')).pack(padx = 5, side = LEFT, expand = 1, fill = X)
+            self.driveMode = IntVar()
+            self.driveMode.set(0)
+            self.driveModeButton = ttk.Checkbutton(
                     buttonFrame4,
                     text = 'Drive',
-                    value = 0,
+                    width = 18,
                     variable = self.driveMode,
-                    command = self.levelEditor.useDriveMode)
+                    command = self.toggleDrive)
             self.driveModeButton.pack(side = LEFT, fill = X, expand = 1)
-
-        if ConfigVariableBool("want-experimental", False):
+            
             self.fColl = IntVar()
             self.fColl.set(1)
             base.direct.collButton = ttk.Checkbutton(
                     buttonFrame4,
                     text = 'Collide',
-                    variable = self.fColl,
+                    variable = self.fColl, width = 18,
                     command = self.levelEditor.toggleCollisions)
             base.direct.collButton.pack(side = LEFT, expand = 1, fill = X)
 
-        self.fVis = IntVar()
-        self.fVis.set(1)
-        base.direct.visButton = ttk.Checkbutton(
-                buttonFrame4,
-                text = 'Visibility',
-                variable = self.fVis,
-                command = self.levelEditor.toggleVisibility)
-        #base.direct.visButton.pack(side = LEFT, expand = 1, fill = X)
+            self.fVis = IntVar()
+            self.fVis.set(1)
+            base.direct.visButton = ttk.Checkbutton(
+                    buttonFrame4,
+                    text = 'Visibility',
+                    variable = self.fVis, width = 18,
+                    command = self.levelEditor.toggleVisibility)
+            base.direct.visButton.pack(side = LEFT, expand = 1, fill = X)
 
-        buttonFrame4.pack(fill = X, padx = 5)
+            buttonFrame4.pack(fill = X)
 
         # Object Functions
         objectFrame = Frame(hull)
@@ -6013,6 +6008,12 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         else:
             self.levelEditor.getNPToplevel().clearShader()
 
+    def toggleDrive(self):
+        if self.driveMode:
+            self.levelEditor.useDriveMode()
+        else:
+            self.levelEditor.useDirectFly()
+            
 class VisGroupsEditor(Pmw.MegaToplevel):
     def __init__(self, levelEditor, visGroups = ['None'],
                  parent = None, **kw):
