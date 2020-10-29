@@ -4528,12 +4528,12 @@ class LevelEditor(NodePath, DirectObject):
         gui = await loader.loadModel("resources/level_editor_gui.bam", blocking = False)
 
         # Create the menu with the items
-        rm = RadialMenu([
+        rm = RadialMenu(
             RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
             RadialItem(gui.find("**/icon_save"), 'Save'),
             RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
             RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
-            ])
+            )
         rm.activate()
 
         del gui

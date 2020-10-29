@@ -14,7 +14,7 @@ class RadialItem:
 
 
 class RadialMenu(DirectObject):
-    def __init__(self, items):
+    def __init__(self, *items):
         ''' 
             Initialize using the set of items specified
             Set of items should be passed as RadialItems
