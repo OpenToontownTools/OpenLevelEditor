@@ -87,3 +87,14 @@ wall_texture: wall_oz_2
 wall_color: Vec4(0.75, 0.75, 0.75, 1.0)
 endWallStyle
 endBuildingStyle
+
+buildingStyle: 10_10
+wallStyle
+wall_texture: wall_oz_2
+wall_color: Vec4(0.75, 0.75, 0.75, 1.0)
+endWallStyle
+wallStyle
+wall_texture: wall_oz_2
+wall_color: Vec4(1.00, 0.71, 0.27, 1.0)
+endWallStyle
+endBuildingStyle
