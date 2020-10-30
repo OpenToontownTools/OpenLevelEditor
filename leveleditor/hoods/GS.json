@@ -2,7 +2,7 @@
 	"name_longhand": "goofy_speedway",
 	"storage_files": [
 		"phase_6/dna/storage_GS.dna", 
-		"phase_6/dna/storage_GS_sz.dna", 
+		"phase_6/dna/storage_GS_sz.dna"
 	],
 	"holiday_storage_files": {
 	    "halloween": [
