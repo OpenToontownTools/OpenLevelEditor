@@ -190,8 +190,10 @@ class SceneGraphExplorerItem(TreeItem):
     def GetSubList(self):
         sublist = []
         for nodePath in self.nodePath.getChildren():
-            item = SceneGraphExplorerItem(nodePath, self.isItemEditable)
-            sublist.append(item)
+            # Don't add the labels
+            if not nodePath.getName().startswith('DirectLabel'):
+                item = SceneGraphExplorerItem(nodePath, self.isItemEditable)
+                sublist.append(item)
         return sublist
 
     def OnSelect(self):
