@@ -6171,6 +6171,8 @@ class VisGroupsEditor(Pmw.MegaToplevel):
                     if self.showMode.get() == 1:
                         groupNP.hide()
                     groupNP.clearColor()
+        # Update scene
+        self.refreshVisibility()
 
     def refreshVisibility(self):
         # Get current visibility list for target

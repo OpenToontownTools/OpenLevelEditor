@@ -32,6 +32,7 @@ main.build/
 lib/
 lib64/
 parts/
+pypperoni/
 sdist/
 var/
 wheels/
@@ -130,3 +131,4 @@ phase_*/
 
 # VS Code
 .history
+build.py
