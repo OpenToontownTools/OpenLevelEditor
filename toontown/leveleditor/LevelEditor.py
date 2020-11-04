@@ -304,6 +304,10 @@ class LevelEditor(NodePath, DirectObject):
         self.vgpanel = None
         # Start off enabled
         self.enable()
+        
+        base.direct.selectedNPReadout['font'] = ToontownGlobals.getToonFont()
+        base.direct.activeParentReadout['font'] = ToontownGlobals.getToonFont()
+        base.direct.directMessageReadout['font'] = ToontownGlobals.getToonFont()
 
         # SUIT POINTS
         # Create a sphere model to show suit points
@@ -803,8 +807,10 @@ class LevelEditor(NodePath, DirectObject):
         self.collisionsToggled = not self.collisionsToggled
         if self.collisionsToggled:
             render.findAllMatches('**/+CollisionNode').show()
+            self.popupNotification("Enabled Collision view")
         else:
             render.findAllMatches('**/+CollisionNode').hide()
+            self.popupNotification("Disabled Collision view")
 
     def initVisibilityData(self):
         # First make sure everything is shown
@@ -1016,6 +1022,7 @@ class LevelEditor(NodePath, DirectObject):
         if nodePath:
             # Next deselect nodePath to avoid having bad node paths in the dict
             base.direct.deselect(nodePath)
+            self.popupNotification(f"Removed {nodePath.getName()}")
             # Now you can get rid of the node path
             nodePath.removeNode()
 
@@ -1123,6 +1130,8 @@ class LevelEditor(NodePath, DirectObject):
                 # Update np2EdgeDict to reflect changes
                 self.np2EdgeDict[nodePath.id()] = [suitEdge, newVisGroupDNA]
 
+        self.popupNotification(f"{nodePath.getName()} reparented to {newParent.getName()}")
+        
     def setActiveParent(self, nodePath = None):
         """ Set NPParent and DNAParent to node path and its DNA """
         # If we've got a valid node path
@@ -2949,6 +2958,7 @@ class LevelEditor(NodePath, DirectObject):
         # to remember what file you are working on
         self.panel["title"] = 'Open Level Editor: ' + os.path.basename(filename)
         self.panel.sceneGraphExplorer.update()
+        self.popupNotification(f"Loaded {os.path.basename(filename)}")
 
     def outputDNADefaultFile(self):
         outputFile = self.outputFile
@@ -2963,6 +2973,7 @@ class LevelEditor(NodePath, DirectObject):
         binaryFilename = Filename(filename)
         binaryFilename.setBinary()
         self.DNAData.writeDna(binaryFilename, Notify.out(), DNASTORE)
+        self.popupNotification(f"Saved to {os.path.basename(binaryFilename)}")
         if ConfigVariableString("compiler") in ['libpandadna', 'clash']:
             print(f"Compiling PDNA for {ConfigVariableString('compiler')}")
             self.compileDNA(binaryFilename)
@@ -4556,6 +4567,35 @@ class LevelEditor(NodePath, DirectObject):
             self.toggleShowLandmarkBlock()
         if result == 3:
             self.toggleVisibleCollisions()
+
+    def popupNotification(self, string:str):
+        ''' Generic Popup notifications. These appear in the
+            top right for a couple of seconds '''
+        # These can be disabled
+        if base.config.GetBool('disable-notifications', False):
+            return
+        txt = OnscreenText(parent = base.a2dTopRight, pos = (0.1, 0, -0.2), style = 3,
+                           wordwrap = 36, align = TextNode.ARight,
+                           text = string, font = ToontownGlobals.getToonFont(),
+                           scale = 0.05, bg = (0, 0, 0, .4), fg = (1, 1, 1, 1))
+
+        # Temporary until I make this async
+        def destroyTxt(txt):
+            txt.destroy
+            del txt
+
+        Parallel(
+            LerpColorScaleInterval(txt, 0.3, (1, 1, 1, 1), (1, 1, 1, 0)),
+            Sequence(
+                txt.posInterval(0.3, Point3(-.15, 0, -0.2), Point3(.1, 0, -0.2),blendType = 'easeOut'),
+                txt.posInterval(2.7, Point3(-.15, 0, -0.1), blendType = 'easeOut')
+            ),
+            Sequence(
+                Wait(2),
+                LerpColorScaleInterval(txt, 1, (1, 1, 1, 0), (1, 1, 1, 1)),
+                Func(destroyTxt, txt)
+            )
+        ).start()
 
 
 class OldLevelEditor(NodePath, DirectObject):
