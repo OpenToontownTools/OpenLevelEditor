@@ -1038,6 +1038,7 @@ class LevelEditor(NodePath, DirectObject):
                 parentDNANode.remove(dnaNode)
             # Delete DNA and associated Node Relations from DNA Store
             DNASTORE.removeDNAGroup(dnaNode)
+            self.popupNotification(f"Removed {dnaNode.getName()}")
         else:
             pointOrCell, type = self.findPointOrCell(nodePath)
             if pointOrCell and type:
