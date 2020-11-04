@@ -149,8 +149,8 @@ class TextPieMenu(PieMenu):
                 tn = TextNode('TextItem')
                 tn.setFont(getDefaultFont())
                 tn.setTransform(Mat4.scaleMat(0.07, 0.07, 0.07 * aspectRatio))
-                tn.setTextColor(0, 0, 0, 1)
-                tn.setCardColor(1, 1, 1, 1)
+                tn.setTextColor(1, 1, 1, 1)
+                tn.setCardColor(0, 0, 0, 0.2)
                 tn.setCardAsMargin(0.1, 0.1, 0.1, 0.1)
                 tn.setText(str(textList[i]))
 

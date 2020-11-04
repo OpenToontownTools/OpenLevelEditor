@@ -1022,7 +1022,6 @@ class LevelEditor(NodePath, DirectObject):
         if nodePath:
             # Next deselect nodePath to avoid having bad node paths in the dict
             base.direct.deselect(nodePath)
-            self.popupNotification(f"Removed {nodePath.getName()}")
             # Now you can get rid of the node path
             nodePath.removeNode()
 
