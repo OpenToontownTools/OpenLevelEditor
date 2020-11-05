@@ -287,7 +287,7 @@ class LevelEditor(NodePath, DirectObject):
                                            'y-ring', 'y-disc',
                                            'z-disc', 'z-post'])
 
-        base.direct.grid.setXyzSnap(0)
+        base.direct.grid.setXyzSnap(1)
         base.direct.grid.setHprSnap(0)
         # Initialize camera
         base.camLens.setNear(1.0)
@@ -5375,7 +5375,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             font = ('Calibri', 10, 'bold')).pack(padx = 5, side = LEFT, expand = 1, fill = X)
               
         self.fXyzSnap = IntVar()
-        self.fXyzSnap.set(0)
+        self.fXyzSnap.set(1)
         self.xyzSnapButton = ttk.Checkbutton(snapFrame,
                                          text = 'Position Snapping',
                                          width = 18,
