@@ -51,8 +51,8 @@
 * [*Please only contact me if you need assistance with the editor. No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
 
 ## Known Incompatibilities
-* Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)
-   * This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.
+~~* Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)~~
+   ~~* This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.~~ This issue is fixed in [recent commits to libtoontown](https://github.com/OpenToontownTools/libtoontown)
 
 # FAQ
 ### Why can't I load a street from X playground?
