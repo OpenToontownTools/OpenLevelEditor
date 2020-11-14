@@ -36,7 +36,7 @@
         * Build yourself a copy of [libtoontown](https://github.com/OpenToontownTools/libtoontown), and drop the .pyd files in the root directory.
         * Recent Panda3D build (1.10.7 or later) running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
     * **OR** the easy option:
-        * you can download [my copy](https://drive.google.com/file/d/1EbfuG4AaPpeaDKWWeZIxUckFTvYfRQbL/view?usp=sharing) of panda with the compatible libtoontown files in there. Just drag Panda3D-1.11.0-Py37-x64 to your C drive root directory and the libotp.pyd and libtoontown.pyd files to the root level editor directory. Note that the PYD files in here are ONLY compatible with MY copy of panda, so if you are using any other build you have to rebuild them yourself.
+        * you can download [my copy](https://drive.google.com/file/d/1lJ-4Ce3qLvRnvZzHCPlXAM088pCK7qr2/view?usp=sharing) of panda with the compatible libtoontown files in there. Just drag Panda3D-1.11.0-Py39-x64 to your C drive root directory and the libotp.pyd and libtoontown.pyd files to the root level editor directory. Note that the PYD files in here are ONLY compatible with MY copy of panda, so if you are using any other build you have to rebuild them yourself.
 
 ~~### You can also pick up a pre-built build in the releases tab~~ *Coming Soon*
 
@@ -73,7 +73,7 @@
     * Edit the registry
         * Open RegEdit
         * Navigate to `Computer\HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\3.7\InstallPath`
-        * Change (Default)'s value to `C:\Panda3D-1.11.0-py37-x64\python`
-        * Change ExecutablePath's value to `C:\Panda3D-1.11.0-py37-x64\python\python.exe`
+        * Change (Default)'s value to `C:\Panda3D-1.11.0-py39-x64\python`
+        * Change ExecutablePath's value to `C:\Panda3D-1.11.0-py39-x64\python\python.exe`
         * Save, and if that does not work try restarting your PC, or doing option #2
     * Remove all other versions of Panda3D.
