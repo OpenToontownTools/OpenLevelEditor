@@ -72,7 +72,7 @@
 * If you are downloading my redistributed copy of Panda from above, this may be an issue of having multiple installations of panda, and an incorrect one being targeted. Try one or both of the following:
     * Edit the registry
         * Open RegEdit
-        * Navigate to `Computer\HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\3.7\InstallPath`
+        * Navigate to `Computer\HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\3.9\InstallPath`
         * Change (Default)'s value to `C:\Panda3D-1.11.0-py39-x64\python`
         * Change ExecutablePath's value to `C:\Panda3D-1.11.0-py39-x64\python\python.exe`
         * Save, and if that does not work try restarting your PC, or doing option #2
