@@ -128,7 +128,7 @@ class DNAStorage:
             packer.pack('index', point.index, UINT16)
             packer.pack('type', point.pointType, UINT8)
             for component in point.pos:
-                packer.pack('position', int(component * 100), INT32)
+                packer.pack('position', int(component * 100), FLOAT64)
             packer.pack('landmark building index',
                         point.landmarkBuildingIndex, INT16)
 

@@ -41,7 +41,7 @@ class DNAVisGroup(DNAGroup):
             packer.pack('width', cell.width, UINT8)
             packer.pack('height', cell.height, UINT8)
             for component in cell.pos:
-                packer.pack('position', int(component * 100), INT32)
+                packer.pack('position', int(component * 100), FLOAT64)
         if recursive:
             packer += self.traverseChildren(verbose=verbose)
         return packer
