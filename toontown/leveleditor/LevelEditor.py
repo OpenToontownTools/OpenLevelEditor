@@ -1819,6 +1819,7 @@ class LevelEditor(NodePath, DirectObject):
 
     def removeWindows(self, windows, parent):
         # And record number of windows
+        self.setCurrent('window_texture', windows.getCode())
         self.setCurrent('window_color', windows.getColor())
         self.setCurrent('window_count', windows.getWindowCount())
         DNARemoveChildOfClass(parent, DNA_WINDOWS)
