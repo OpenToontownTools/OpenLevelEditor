@@ -271,7 +271,8 @@ class LevelEditor(NodePath, DirectObject):
             ('alt-f12', self.renderMap), # doesnt do automatic stuff, likely wont get used, but just incase
             ('control-c', self.toggleVisibleCollisions),
             ('control-s', self.outputDNADefaultFile),
-            ('tab', self.enterGlobalRadialMenu)
+            ('tab', self.enterGlobalRadialMenu),
+            ('b', self.beginBoxSelection)
             ]
 
         self.overrideEvents = [
@@ -374,6 +375,11 @@ class LevelEditor(NodePath, DirectObject):
         if dnaPath:
             self.loadDNAFromFile(dnaPath)
             self.outputFile = dnaPath
+            
+        # box selection stuff
+        self.isSelecting = False
+        self.boxStartMouse = (0, 0)
+        self.boxEndMouse = (0, 0)
 
     # ENABLE/DISABLE
     def enable(self):
@@ -1860,6 +1866,7 @@ class LevelEditor(NodePath, DirectObject):
         else:
             self.mouseMayaCamera = False
 
+        if self.isSelecting: return
         # Initialize dna target
         self.DNATarget = None
 
@@ -4597,7 +4604,65 @@ class LevelEditor(NodePath, DirectObject):
                 Func(destroyTxt, txt)
             )
         ).start()
-
+        
+    async def beginBoxSelection(self):
+        self.popupNotification('entered selection mode')
+        
+        self.isSelecting = True
+        await messenger.future('mouse1')
+        self.popupNotification('start selection')
+        if not base.mouseWatcherNode.hasMouse():
+            return
+        self.boxStartMouse = (base.mouseWatcherNode.getMouseX(), base.mouseWatcherNode.getMouseY())
+        
+        self.boxLines = (LineNodePath(render2d), LineNodePath(render2d), LineNodePath(render2d), LineNodePath(render2d))
+        for line in self.boxLines:
+            line.setColor(VBase4(1))
+            line.setThickness(1)
+            line.reset()
+            line.moveTo(0, 0, 0)            
+            line.drawTo(0, 0, 0)            
+            line.create()            
+            
+        taskMgr.add(self.selectionBoxTask, 'boxselection')
+        
+        
+        await messenger.future('mouse1-up')
+        
+        self.popupNotification('stop selection')
+        taskMgr.remove('boxselection')
+        self.isSelecting = False
+        for line in self.boxLines:
+            line.removeNode()
+            del line
+        
+        
+    def selectionBoxTask(self, task):
+        ''' caalculate the selection box positions '''
+        if not base.mouseWatcherNode.hasMouse():
+            return task.again
+        self.boxEndMouse = (base.mouseWatcherNode.getMouseX(), base.mouseWatcherNode.getMouseY())
+        
+        # left side
+        self.boxLines[0].setVertex(0, self.boxStartMouse[0], 0, self.boxStartMouse[1])
+        self.boxLines[0].setVertex(1, self.boxStartMouse[0], 0, self.boxEndMouse[1])
+        
+        # right side
+        self.boxLines[1].setVertex(0, self.boxEndMouse[0], 0, self.boxStartMouse[1])
+        self.boxLines[1].setVertex(1, self.boxEndMouse[0], 0, self.boxEndMouse[1])
+        
+        # top side
+        self.boxLines[2].setVertex(0, self.boxStartMouse[0], 0, self.boxStartMouse[1])
+        self.boxLines[2].setVertex(1, self.boxEndMouse[0], 0, self.boxStartMouse[1])
+        
+        # bottom side
+        self.boxLines[3].setVertex(0, self.boxStartMouse[0], 0, self.boxEndMouse[1])
+        self.boxLines[3].setVertex(1, self.boxEndMouse[0], 0, self.boxEndMouse[1])
+        
+        return task.again
+        
+    def finishBoxSelection(self):
+        return
 
 class OldLevelEditor(NodePath, DirectObject):
     pass
