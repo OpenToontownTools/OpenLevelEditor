@@ -271,7 +271,8 @@ class LevelEditor(NodePath, DirectObject):
             ('alt-f12', self.renderMap), # doesnt do automatic stuff, likely wont get used, but just incase
             ('control-c', self.toggleVisibleCollisions),
             ('control-s', self.outputDNADefaultFile),
-            ('tab', self.enterGlobalRadialMenu)
+            ('tab', self.enterGlobalRadialMenu),
+            ('s', self.beginBoxSelection)
             ]
 
         self.overrideEvents = [
@@ -374,6 +375,11 @@ class LevelEditor(NodePath, DirectObject):
         if dnaPath:
             self.loadDNAFromFile(dnaPath)
             self.outputFile = dnaPath
+            
+        # box selection stuff
+        self.isSelecting = False
+        self.boxStartMouse = (0, 0)
+        self.boxEndMouse = (0, 0)
 
     # ENABLE/DISABLE
     def enable(self):
@@ -1860,6 +1866,7 @@ class LevelEditor(NodePath, DirectObject):
         else:
             self.mouseMayaCamera = False
 
+        if self.isSelecting: return
         # Initialize dna target
         self.DNATarget = None
 
@@ -4597,6 +4604,143 @@ class LevelEditor(NodePath, DirectObject):
                 Func(destroyTxt, txt)
             )
         ).start()
+        
+    async def beginBoxSelection(self):
+        self.popupNotification('entered selection mode')
+        
+        self.isSelecting = True
+        await messenger.future('mouse1')
+        if not base.mouseWatcherNode.hasMouse():
+            return
+        self.boxStartMouse = (base.mouseWatcherNode.getMouseX(), base.mouseWatcherNode.getMouseY())
+        
+        self.boxLines = (LineNodePath(render2d), LineNodePath(render2d), LineNodePath(render2d), LineNodePath(render2d))
+        for line in self.boxLines:
+            line.setColor(VBase4(1))
+            line.setThickness(1)
+            line.reset()
+            line.moveTo(0, 0, 0)            
+            line.drawTo(0, 0, 0)            
+            line.create()            
+            
+        taskMgr.add(self.selectionBoxTask, 'boxselection')
+        
+        
+        await messenger.future('mouse1-up')
+        
+        taskMgr.remove('boxselection')
+        self.isSelecting = False
+        
+        
+        for line in self.boxLines:
+            line.removeNode()
+            del line
+            
+        self.finishBoxSelection()
+        
+        self.popupNotification('exited selection mode')
+        
+        
+    def selectionBoxTask(self, task):
+        ''' caalculate the selection box positions '''
+        if not base.mouseWatcherNode.hasMouse():
+            return task.again
+        self.boxEndMouse = (base.mouseWatcherNode.getMouseX(), base.mouseWatcherNode.getMouseY())
+        
+        # left side
+        self.boxLines[0].setVertex(0, self.boxStartMouse[0], 0, self.boxStartMouse[1])
+        self.boxLines[0].setVertex(1, self.boxStartMouse[0], 0, self.boxEndMouse[1])
+        
+        # right side
+        self.boxLines[1].setVertex(0, self.boxEndMouse[0], 0, self.boxStartMouse[1])
+        self.boxLines[1].setVertex(1, self.boxEndMouse[0], 0, self.boxEndMouse[1])
+        
+        # top side
+        self.boxLines[2].setVertex(0, self.boxStartMouse[0], 0, self.boxStartMouse[1])
+        self.boxLines[2].setVertex(1, self.boxEndMouse[0], 0, self.boxStartMouse[1])
+        
+        # bottom side
+        self.boxLines[3].setVertex(0, self.boxStartMouse[0], 0, self.boxEndMouse[1])
+        self.boxLines[3].setVertex(1, self.boxEndMouse[0], 0, self.boxEndMouse[1])
+        
+        return task.again
+        
+    def finishBoxSelection(self):
+        ''' Calculates all the stuff in the selection '''
+        base.direct.deselectAll()
+
+        # The following is mostly from direct.directtools.DirectManipulation, but modified
+        # for dnanodes instead of geom nodes.
+        # TODO: Optimize as the first time u make a selection it takes a while.
+        startX = self.boxStartMouse[0]
+        startY = self.boxStartMouse[1]
+        endX = self.boxEndMouse[0]
+        endY = self.boxEndMouse[1]
+
+        fll = Point3(0, 0, 0)
+        flr = Point3(0, 0, 0)
+        fur = Point3(0, 0, 0)
+        ful = Point3(0, 0, 0)
+        nll = Point3(0, 0, 0)
+        nlr = Point3(0, 0, 0)
+        nur = Point3(0, 0, 0)
+        nul = Point3(0, 0, 0)
+
+        lens = base.cam.node().getLens()
+        lens.extrude((startX, startY), nul, ful)
+        lens.extrude((endX, startY), nur, fur)
+        lens.extrude((endX, endY), nlr, flr)
+        lens.extrude((startX, endY), nll, fll)
+        selFrustum = BoundingHexahedron(fll, flr, fur, ful, nll, nlr, nur, nul);
+        selFrustum.xform(base.cam.getNetTransform().getMat())
+        
+        selectionList = []
+        for geom in self.NPToplevel.findAllMatches("**/*_DNARoot"):
+
+            nodePath = geom
+            if nodePath in selectionList:
+                continue
+
+            bb = geom.getBounds()
+            bbc = bb.makeCopy()
+            bbc.xform(geom.getParent().getNetTransform().getMat())
+
+            boundingSphereTest = selFrustum.contains(bbc)
+            if boundingSphereTest > 1:
+                if boundingSphereTest == 7:
+                    if nodePath not in selectionList:
+                        selectionList.append(nodePath)
+                else:
+                    tMat = Mat4(geom.getMat())
+                    geom.clearMat()
+                    # Get bounds
+                    min = Point3(0)
+                    max = Point3(0)
+                    geom.calcTightBounds(min, max)
+                    # Restore transform
+                    geom.setMat(tMat)
+
+                    fll = Point3(min[0], max[1], min[2])
+                    flr = Point3(max[0], max[1], min[2])
+                    fur = max
+                    ful = Point3(min[0], max[1], max[2])
+                    nll = min
+                    nlr = Point3(max[0], min[1], min[2])
+                    nur = Point3(max[0], min[1], max[2])
+                    nul = Point3(min[0], min[1], max[2])
+
+                    tbb = BoundingHexahedron(fll, flr, fur, ful, nll, nlr, nur, nul)
+
+                    tbb.xform(geom.getNetTransform().getMat())
+
+                    tightBoundTest = selFrustum.contains(tbb)
+
+                    if tightBoundTest > 1:
+                        if nodePath not in selectionList:
+                            selectionList.append(nodePath)
+
+        for nodePath in selectionList:
+            base.direct.select(nodePath, 1)
 
 
 class OldLevelEditor(NodePath, DirectObject):
