@@ -12,7 +12,7 @@
 * This project is still being actively developed with new features and fixes. Feel free to contribute new features or fixes.
 
 ## Major New Features
-* Fully Updated to Panda3D and Python 3
+* Fully Updated to Panda3D 1.10.x+ and Python 3
 * A ton of smaller debug features
 * Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
 * A lot of usability improvements
@@ -23,6 +23,8 @@
    * All done with one press (Shift + F12)
 * Server Specific Support
    * Currently includes specific options for Corporate Clash, with features for more servers coming
+* UI improvements
+* Support for enabling halloween and winter modes
 * And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
 
 ## Upcoming Features
