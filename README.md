@@ -7,6 +7,9 @@
 
 ![overviewimage](https://i.imgur.com/i3RyBiu.png)
 
+## Development Progress
+* This project is considered **fully released** and is entirely usable with little crashes and bugs. If you discover a crash or bug please create an issue.
+* This project is still being actively developed with new features and fixes. Feel free to contribute new features or fixes.
 
 ## Major New Features
 * Fully Updated to Panda3D and Python 3
