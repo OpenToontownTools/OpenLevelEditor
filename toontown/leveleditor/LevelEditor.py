@@ -174,6 +174,7 @@ class LevelEditor(NodePath, DirectObject):
         self.animPropDict = {}
 
         self.collisionsToggled = False
+        self.suitPreviewsToggled = False
         self.orthCam = False
 
     def startUp(self, dnaPath = None):
@@ -272,7 +273,8 @@ class LevelEditor(NodePath, DirectObject):
             ('control-c', self.toggleVisibleCollisions),
             ('control-s', self.outputDNADefaultFile),
             ('tab', self.enterGlobalRadialMenu),
-            ('s', self.beginBoxSelection)
+            ('s', self.beginBoxSelection),
+            ('alt-s', self.toggleSuitBuildingPreviews)
             ]
 
         self.overrideEvents = [
@@ -817,6 +819,64 @@ class LevelEditor(NodePath, DirectObject):
         else:
             render.findAllMatches('**/+CollisionNode').hide()
             self.popupNotification("Disabled Collision view")
+            
+    def toggleSuitBuildingPreviews(self):
+        ''' 
+            Toggle Suit Building Previews
+            
+            This is used to show where a suit building is placed in relation
+            to a toon building. this ensures you line up your buildings and walls
+            properly to prevent walls clipping through elevators, or gaps in the wall
+        '''
+            
+        self.suitPreviewsToggled = not self.suitPreviewsToggled
+
+        if self.suitPreviewsToggled:
+            self.suitBuildings = []
+
+            # Load the lawbot lvl 1 model
+            suitBuilding = DNASTORE.findNode("suit_landmark_l1")
+
+            for bldg in self.NPToplevel.findAllMatches('**/*sb*:toon_landmark*'):
+                # We don't do this to HQs.
+                if 'hq' in bldg.getName():
+                    continue
+                    
+                # Attach the lawbot building model to the SB node
+                newsuit = suitBuilding.copyTo(bldg)
+
+                # Attach an elevator
+                elevator = loader.loadModel("phase_4/models/modules/elevator")
+                elevator.reparentTo(bldg.find("**/*_door_origin"))
+
+                # Elevators shouldn't get affected by the building scale
+                elevator.setScale(render, 1.0, 1.0, 1.0)
+
+                self.suitBuildings.append(newsuit)
+
+                # Hide the toon building
+                bldgnum = bldg.getName()[2:4].replace(':', '')
+                tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
+                tb.hide()
+
+            self.popupNotification("Enabled Suit Building View")
+            
+        else:
+            for bldg in self.suitBuildings:
+                # Incase an edit is made to the suit buildings position,
+                # apply it to the actual building
+                bldgnum = bldg.getParent().getName()[2:4].replace(':', '')
+                tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
+                tb.setPosHpr(bldg.getParent().getPos(), bldg.getParent().getHpr())
+                
+                # Unhide the toon building
+                tb.show()
+                
+                # Remove the suit building
+                bldg.removeNode()
+                del bldg
+            self.suitBuildings = []
+            self.popupNotification("Disabled Suit Building View")
 
     def initVisibilityData(self):
         # First make sure everything is shown
