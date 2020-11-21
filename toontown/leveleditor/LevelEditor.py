@@ -4611,6 +4611,7 @@ class LevelEditor(NodePath, DirectObject):
             RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
             RadialItem(gui.find("**/icon_save"), 'Save'),
             RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
+            RadialItem(gui.find("**/icon_suit"), 'Toggle Suit Building Previews'),
             RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
             )
         rm.activate()
@@ -4634,6 +4635,8 @@ class LevelEditor(NodePath, DirectObject):
         if result == 2:
             self.toggleShowLandmarkBlock()
         if result == 3:
+            self.toggleSuitBuildingPreviews()
+        if result == 4:
             self.toggleVisibleCollisions()
 
     def popupNotification(self, string:str):
