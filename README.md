@@ -13,9 +13,12 @@
 
 ## Major New Features
 * Fully Updated to Panda3D 1.10.x+ and Python 3
-* A ton of smaller debug features
-* Auto PDNA compiler support for libpandadna and corporate clash (legacy python libpandadna)
+* Auto PDNA compiler support for libpandadna and corporate clash
+* Support for enabling halloween and winter modes
 * A lot of usability improvements
+* [Suit Building Previews](https://twitter.com/ttccdrew/status/1329973906195812353?s=20)
+   * Shows how cog buildings will look in game (Only applies to the landmark building currently, not the walls)
+   * Useful for ensuring walls do not clip through elevators, and to ensure the building is properly against the wall
 * Modular zone system
    * Makes adding support for new zones INCREDIBLY easy
 * [Automatic map creation](https://www.youtube.com/watch?v=B9HAfcF4_bE)
@@ -24,7 +27,7 @@
 * Server Specific Support
    * Currently includes specific options for Corporate Clash, with features for more servers coming
 * UI improvements
-* Support for enabling halloween and winter modes
+* Debug features like the injector
 * And a lot more. You can check out a full list of every new feature by looking at the [changelogs](https://github.com/OpenToontownTools/TTOpenLevelEditor/releases)
 
 ## Upcoming Features
