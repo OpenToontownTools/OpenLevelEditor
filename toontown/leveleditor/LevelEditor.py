@@ -1724,6 +1724,15 @@ class LevelEditor(NodePath, DirectObject):
             newDNALandmarkBuilding.add(newDNADoor)
         # Now place new landmark building in the world
         self.initDNANode(newDNALandmarkBuilding)
+        
+    def renameLandmark(self, title = ''):
+        ''' Rename selected landmark building '''
+        selectedNode = base.direct.selected.last
+        if selectedNode:
+            dnaNode = self.findDNANode(selectedNode)
+            if DNAGetClassType(dnaNode) == DNA_LANDMARK_BUILDING:
+                dnaNode.setTitle(title)
+        
 
     def addAnimBuilding(self, animBuildingType):
         print("addAnimBuilding %s " % animBuildingType)
@@ -2369,6 +2378,7 @@ class LevelEditor(NodePath, DirectObject):
             # Reset last landmark
             if DNAClassEqual(dnaNode, DNA_LANDMARK_BUILDING):
                 self.lastLandmarkBuildingDNA = dnaNode
+                self.panel.landmarkBuildingNameString.set(dnaNode.getTitle())
                 if self.showLandmarkBlockToggleGroup:
                     # Toggle old highlighting off:
                     self.toggleShowLandmarkBlock()
@@ -5160,11 +5170,18 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.landmarkBuildingSpecialSelector.pack(expand = 0)
             
             Label(landmarkBuildingsPage, text = 'Building Title:').pack(side = LEFT, expand = 0)
+                        
+            self.renameSelectedLandmarkButton = ttk.Button(
+                    landmarkBuildingsPage,
+                    text = 'Rename Selected Bldg',
+                    command = self.renameLandmark)
+            self.renameSelectedLandmarkButton.pack(expand = 0, side = RIGHT)
             self.landmarkBuildingNameString = StringVar()
             self.landmarkBuildingNameBox = Entry(
                     landmarkBuildingsPage, width = 24,
                     textvariable = self.landmarkBuildingNameString)
             self.landmarkBuildingNameBox.pack(expand = 0, fill = X)
+
             
             
         # ANIMATED BUILDINGS
@@ -6147,6 +6164,9 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
     def addLandmark(self):
         self.levelEditor.addLandmark(self.landmarkType, self.landmarkSpecialType, self.landmarkBuildingNameString.get())
+
+    def renameLandmark(self):
+        self.levelEditor.renameLandmark(self.landmarkBuildingNameString.get())
 
     def addAnimBuilding(self):
         self.levelEditor.addAnimBuilding(self.animBuildingType)
