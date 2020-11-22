@@ -1705,7 +1705,7 @@ class LevelEditor(NodePath, DirectObject):
         self.landmarkBlock = self.landmarkBlock + 1
         return str(self.landmarkBlock)
 
-    def addLandmark(self, landmarkType, specialType):
+    def addLandmark(self, landmarkType, specialType, title = ''):
         # Record new landmark type
         self.setCurrent('toon_landmark_texture', landmarkType)
         # And create new landmark building
@@ -1714,6 +1714,7 @@ class LevelEditor(NodePath, DirectObject):
         newDNALandmarkBuilding = DNALandmarkBuilding(
                 'tb' + block + ':' + landmarkType + '_DNARoot')
         newDNALandmarkBuilding.setCode(landmarkType)
+        newDNALandmarkBuilding.setTitle(title)
         newDNALandmarkBuilding.setBuildingType(specialType)
         newDNALandmarkBuilding.setPos(VBase3(0))
         newDNALandmarkBuilding.setHpr(VBase3(0))
@@ -5157,7 +5158,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.landmarkBuildingSpecialSelector.selectitem(
                     LANDMARK_SPECIAL_TYPES[0])
             self.landmarkBuildingSpecialSelector.pack(expand = 0)
-
+            
+            Label(landmarkBuildingsPage, text = 'Building Title:').pack(side = LEFT, expand = 0)
+            self.landmarkBuildingNameString = StringVar()
+            self.landmarkBuildingNameBox = Entry(
+                    landmarkBuildingsPage, width = 24,
+                    textvariable = self.landmarkBuildingNameString)
+            self.landmarkBuildingNameBox.pack(expand = 0, fill = X)
+            
+            
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
               font = ('Calibri', 14, 'bold')).pack(expand = 0)
@@ -6137,7 +6146,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.replaceSelected()
 
     def addLandmark(self):
-        self.levelEditor.addLandmark(self.landmarkType, self.landmarkSpecialType)
+        self.levelEditor.addLandmark(self.landmarkType, self.landmarkSpecialType, self.landmarkBuildingNameString.get())
 
     def addAnimBuilding(self):
         self.levelEditor.addAnimBuilding(self.animBuildingType)
