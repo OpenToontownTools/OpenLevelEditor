@@ -943,7 +943,11 @@ class LevelEditor(NodePath, DirectObject):
                 # apply it to the actual building
                 bldgnum = bldg.getParent().getName()[2:4].replace(':', '')
                 tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
-                tb.setPosHpr(bldg.getParent().getPos(), bldg.getParent().getHpr())
+                
+                # This is prone to problems with the editor creating multiple 'sb_*' nodes
+                # todo: actually fix that issue
+                if ConfigVariableBool("want-experimental", False):
+                    tb.setPosHpr(bldg.getParent().getPos(), bldg.getParent().getHpr())
                 
                 # Unhide the toon building
                 tb.show()
