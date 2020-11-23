@@ -846,11 +846,26 @@ class LevelEditor(NodePath, DirectObject):
                 suitNames.append('Boardbot')
             
 
+            # temporary fix for duplicate sb's
+            sb= []
             for bldg in self.NPToplevel.findAllMatches('**/*sb*:toon_landmark*'):
                 # We don't do this to HQs.
                 if 'hq' in bldg.getName():
                     continue
-                    
+
+                bldgnum = bldg.getName()[2:4].replace(':', '')
+                
+                # If we have a duplicate SB, delete it
+                if bldgnum in sb:
+                    bldg.removeNode()
+                    del bldg
+                    continue
+                sb.append(bldgnum)
+                
+                tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
+                
+                bldg.setPosHpr(tb.getPos(), tb.getHpr())
+                
                 # clash has 5, the rest have 4
                 numCorps = 5 if base.server == TOONTOWN_CORPORATE_CLASH else 4
                 suitType = random.randint(0, numCorps-1)
@@ -871,8 +886,6 @@ class LevelEditor(NodePath, DirectObject):
                 self.suitBuildings.append(newsuit)
 
                 # Hide the toon building
-                bldgnum = bldg.getName()[2:4].replace(':', '')
-                tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
                 tb.hide()
                 
                 # Setup the sign:
@@ -944,10 +957,7 @@ class LevelEditor(NodePath, DirectObject):
                 bldgnum = bldg.getParent().getName()[2:4].replace(':', '')
                 tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
                 
-                # This is prone to problems with the editor creating multiple 'sb_*' nodes
-                # todo: actually fix that issue
-                if ConfigVariableBool("want-experimental", False):
-                    tb.setPosHpr(bldg.getParent().getPos(), bldg.getParent().getHpr())
+                tb.setPosHpr(bldg.getParent().getPos(), bldg.getParent().getHpr())
                 
                 # Unhide the toon building
                 tb.show()
