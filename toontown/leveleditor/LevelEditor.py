@@ -835,13 +835,29 @@ class LevelEditor(NodePath, DirectObject):
             self.suitBuildings = []
 
             # Load the lawbot lvl 1 model
-            suitBuilding = DNASTORE.findNode("suit_landmark_l1")
+            suitBuildings = [DNASTORE.findNode("suit_landmark_l1"),
+                             DNASTORE.findNode("suit_landmark_c1"),
+                             DNASTORE.findNode("suit_landmark_s1"),
+                             DNASTORE.findNode("suit_landmark_m1")]
+            suitNames = ['Lawbot', 'Bossbot', 'Sellbot', 'Cashbot']
+            
+            if base.server == TOONTOWN_CORPORATE_CLASH:
+                suitBuildings.append(DNASTORE.findNode("suit_landmark_g1"))
+                suitNames.append('Boardbot')
+            
 
             for bldg in self.NPToplevel.findAllMatches('**/*sb*:toon_landmark*'):
                 # We don't do this to HQs.
                 if 'hq' in bldg.getName():
                     continue
                     
+                # clash has 5, the rest have 4
+                numCorps = 5 if base.server == TOONTOWN_CORPORATE_CLASH else 4
+                suitType = random.randint(0, numCorps-1)
+                
+                # Randomize which building we load
+                suitBuilding = suitBuildings[suitType]
+                
                 # Attach the lawbot building model to the SB node
                 newsuit = suitBuilding.copyTo(bldg)
 
@@ -858,6 +874,66 @@ class LevelEditor(NodePath, DirectObject):
                 bldgnum = bldg.getName()[2:4].replace(':', '')
                 tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
                 tb.hide()
+                
+                # Setup the sign:
+                
+                tbDNA = self.findDNANode(tb)
+                buildingTitle = tbDNA.getTitle()
+                
+                # Clash uses unique extensions for different corps
+                suitExt = ['Assoc.', 
+                           'Corp.', 
+                           'Co.', 
+                           'C.U.', 
+                           'Inc.'][suitType] if base.server == TOONTOWN_CORPORATE_CLASH else 'Inc.'
+                
+                if not buildingTitle:
+                    buildingTitle = f'COGS, {suitExt}'
+                else:
+                    buildingTitle += f', {suitExt}'
+                buildingTitle += f"\n{suitNames[suitType]}"
+                
+                # Try to find this signText in the node map
+                textNode = TextNode("sign")
+                textNode.setTextColor(1.0, 1.0, 1.0, 1.0)
+                textNode.setFont(ToontownGlobals.getSuitFont())
+                textNode.setAlign(TextNode.ACenter)
+                textNode.setWordwrap(17.0)
+                textNode.setText(buildingTitle)
+
+                # Since the text is wordwrapped, it may flow over more
+                # than one line.  Try to adjust the scale and position of
+                # the sign accordingly.
+                textHeight = textNode.getHeight()
+                zScale = (textHeight + 2) / 3.0
+                
+                # Determine where the sign should go:
+                signOrigin = newsuit.find("**/sign_origin;+s")
+                assert(not signOrigin.isEmpty())
+                
+                # Get the background:
+                backgroundNP = loader.loadModel("phase_5/models/modules/suit_sign")
+                assert(not backgroundNP.isEmpty())
+                backgroundNP.reparentTo(signOrigin)
+                backgroundNP.setPosHprScale(0.0, 0.0, textHeight * 0.8 / zScale,
+                                            0.0, 0.0, 0.0,
+                                            8.0, 8.0, 8.0 * zScale)
+
+                # Get the text node path:
+                signTextNodePath = backgroundNP.attachNewNode(textNode.generate())
+                assert(not signTextNodePath.isEmpty())
+
+                # Scale the text:
+                signTextNodePath.setPosHprScale(0.0, -0.001, -0.21 + textHeight * 0.1 / zScale,
+                                                0.0, 0.0, 0.0,
+                                                0.1, 0.1, 0.1 / zScale)
+                # Clear parent color higher in the hierarchy
+                signTextNodePath.setColor(1.0, 1.0, 1.0, 1.0)
+                # Decal sign onto the front of the building:
+                frontNP = newsuit.find("**/*_front/+GeomNode;+s")
+                assert(not frontNP.isEmpty())
+                backgroundNP.wrtReparentTo(frontNP)
+                frontNP.node().setEffect(DecalEffect.make())
 
             self.popupNotification("Enabled Suit Building View")
             
