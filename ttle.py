@@ -108,15 +108,18 @@ class ToontownLevelEditor(ShowBase):
     async def checkUpdates(self):
         import aiohttp
         async with aiohttp.ClientSession() as session:
-            async with session.get("https://raw.githubusercontent.com/OpenToontownTools/TTOpenLevelEditor/master/ver") as resp:
-                ver = await resp.text()
-                ver = ver.splitlines()[0]
-                if ver != self.APP_VERSION:
-                    self.notify.info(f"Client is out of date! Latest: {ver} | Client: {self.APP_VERSION}")
-                    if messagebox.askokcancel("Error", f"Client is out of date!\nLatest: {ver} | Client: {self.APP_VERSION}. Press OK to be taken to the download page."):
-                        webbrowser.open("https://github.com/OpenToontownTools/TTOpenLevelEditor/releases/latest")
-                else:
-                    self.notify.info("Client is up to date!")
+            try:
+                async with session.get("https://raw.githubusercontent.com/OpenToontownTools/OpenLevelEditor/master/ver") as resp:
+                    ver = await resp.text()
+                    ver = ver.splitlines()[0]
+                    if ver != self.APP_VERSION:
+                        self.notify.info(f"Client is out of date! Latest: {ver} | Client: {self.APP_VERSION}")
+                        if messagebox.askokcancel("Error", f"Client is out of date!\nLatest: {ver} | Client: {self.APP_VERSION}. Press OK to be taken to the download page."):
+                            webbrowser.open("https://github.com/OpenToontownTools/OpenLevelEditor/releases/latest")
+                    else:
+                        self.notify.info("Client is up to date!")
+            except:
+                messagebox.showerror(message = "There was an error checking for updates! This is likely an issue with your connection. Press OK to continue using the application.")
 
 # Run it
 ToontownLevelEditor().run()
