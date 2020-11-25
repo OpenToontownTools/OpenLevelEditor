@@ -88,7 +88,7 @@ class ToontownLevelEditor(ShowBase):
 
         if not args.noupdate:
             loop = asyncio.get_event_loop()
-            loop.run_until_complete(self._checkUpdates())
+            loop.run_until_complete(self.__checkUpdates())
 
         self.__addCullBins()
 
