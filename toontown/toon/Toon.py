@@ -6,7 +6,7 @@ from direct.task.Task import Task
 from direct.actor import Actor
 import string
 from .ToonHead import *
-from pandac.PandaModules import *
+from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals

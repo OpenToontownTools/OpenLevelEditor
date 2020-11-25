@@ -30,7 +30,6 @@ from direct.showbase.DirectObject import DirectObject
 from direct.showbase.TkGlobal import *
 from direct.task import Task
 from direct.tkwidgets import Floater
-from pandac.PandaModules import *
 
 from otp.avatar import LocalAvatar
 from otp.otpbase import OTPGlobals
@@ -81,7 +80,6 @@ except NameError:
     builtins.DNASTORE = DNASTORE = DNAStorage()
 
     # Load the generic storage files
-    loadDNAFile(DNASTORE, 'dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)
 
@@ -97,13 +95,14 @@ except NameError:
             NEIGHBORHOODS.append(hoodName)
             storages = data.get(LevelEditorGlobals.HOOD_PATH)
             # Holidays
+            holiday = ConfigVariableString("holiday", "none")
             if LevelEditorGlobals.HOOD_HOLIDAY_PATH in data:
                 # Halloween
-                if ConfigVariableString("holiday") == 'halloween':
+                if holiday == 'halloween':
                     if LevelEditorGlobals.HOOD_HALLOWEEN_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
                         storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_HALLOWEEN_PATH]
                 # Winter
-                if ConfigVariableString("holiday") == 'winter':
+                if holiday == 'winter':
                     if LevelEditorGlobals.HOOD_WINTER_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
                         storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_WINTER_PATH]
             for storage in storages:
@@ -307,7 +306,7 @@ class LevelEditor(NodePath, DirectObject):
         self.vgpanel = None
         # Start off enabled
         self.enable()
-        
+
         base.direct.selectedNPReadout['font'] = ToontownGlobals.getToonFont()
         base.direct.activeParentReadout['font'] = ToontownGlobals.getToonFont()
         base.direct.directMessageReadout['font'] = ToontownGlobals.getToonFont()
@@ -377,7 +376,7 @@ class LevelEditor(NodePath, DirectObject):
         if dnaPath:
             self.loadDNAFromFile(dnaPath)
             self.outputFile = dnaPath
-            
+
         # box selection stuff
         self.isSelecting = False
         self.boxStartMouse = (0, 0)
@@ -819,16 +818,16 @@ class LevelEditor(NodePath, DirectObject):
         else:
             render.findAllMatches('**/+CollisionNode').hide()
             self.popupNotification("Disabled Collision view")
-            
+
     def toggleSuitBuildingPreviews(self):
-        ''' 
+        '''
             Toggle Suit Building Previews
-            
+
             This is used to show where a suit building is placed in relation
             to a toon building. this ensures you line up your buildings and walls
             properly to prevent walls clipping through elevators, or gaps in the wall
         '''
-            
+
         self.suitPreviewsToggled = not self.suitPreviewsToggled
 
         if self.suitPreviewsToggled:
@@ -840,11 +839,11 @@ class LevelEditor(NodePath, DirectObject):
                              DNASTORE.findNode("suit_landmark_s1"),
                              DNASTORE.findNode("suit_landmark_m1")]
             suitNames = ['Lawbot', 'Bossbot', 'Sellbot', 'Cashbot']
-            
+
             if base.server == TOONTOWN_CORPORATE_CLASH:
                 suitBuildings.append(DNASTORE.findNode("suit_landmark_g1"))
                 suitNames.append('Boardbot')
-            
+
 
             # temporary fix for duplicate sb's
             sb= []
@@ -854,25 +853,25 @@ class LevelEditor(NodePath, DirectObject):
                     continue
 
                 bldgnum = bldg.getName()[2:4].replace(':', '')
-                
+
                 # If we have a duplicate SB, delete it
                 if bldgnum in sb:
                     bldg.removeNode()
                     del bldg
                     continue
                 sb.append(bldgnum)
-                
+
                 tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
-                
+
                 bldg.setPosHpr(tb.getPos(), tb.getHpr())
-                
+
                 # clash has 5, the rest have 4
                 numCorps = 5 if base.server == TOONTOWN_CORPORATE_CLASH else 4
                 suitType = random.randint(0, numCorps-1)
-                
+
                 # Randomize which building we load
                 suitBuilding = suitBuildings[suitType]
-                
+
                 # Attach the lawbot building model to the SB node
                 newsuit = suitBuilding.copyTo(bldg)
 
@@ -887,25 +886,25 @@ class LevelEditor(NodePath, DirectObject):
 
                 # Hide the toon building
                 tb.hide()
-                
+
                 # Setup the sign:
-                
+
                 tbDNA = self.findDNANode(tb)
                 buildingTitle = tbDNA.getTitle()
-                
+
                 # Clash uses unique extensions for different corps
-                suitExt = ['Assoc.', 
-                           'Corp.', 
-                           'Co.', 
-                           'C.U.', 
+                suitExt = ['Assoc.',
+                           'Corp.',
+                           'Co.',
+                           'C.U.',
                            'Inc.'][suitType] if base.server == TOONTOWN_CORPORATE_CLASH else 'Inc.'
-                
+
                 if not buildingTitle:
                     buildingTitle = f'COGS, {suitExt}'
                 else:
                     buildingTitle += f', {suitExt}'
                 buildingTitle += f"\n{suitNames[suitType]}"
-                
+
                 # Try to find this signText in the node map
                 textNode = TextNode("sign")
                 textNode.setTextColor(1.0, 1.0, 1.0, 1.0)
@@ -919,11 +918,11 @@ class LevelEditor(NodePath, DirectObject):
                 # the sign accordingly.
                 textHeight = textNode.getHeight()
                 zScale = (textHeight + 2) / 3.0
-                
+
                 # Determine where the sign should go:
                 signOrigin = newsuit.find("**/sign_origin;+s")
                 assert(not signOrigin.isEmpty())
-                
+
                 # Get the background:
                 backgroundNP = loader.loadModel("phase_5/models/modules/suit_sign")
                 assert(not backgroundNP.isEmpty())
@@ -949,19 +948,19 @@ class LevelEditor(NodePath, DirectObject):
                 frontNP.node().setEffect(DecalEffect.make())
 
             self.popupNotification("Enabled Suit Building View")
-            
+
         else:
             for bldg in self.suitBuildings:
                 # Incase an edit is made to the suit buildings position,
                 # apply it to the actual building
                 bldgnum = bldg.getParent().getName()[2:4].replace(':', '')
                 tb = self.NPToplevel.find(f'**/*tb{bldgnum}:toon_landmark*')
-                
+
                 tb.setPosHpr(bldg.getParent().getPos(), bldg.getParent().getHpr())
-                
+
                 # Unhide the toon building
                 tb.show()
-                
+
                 # Remove the suit building
                 bldg.removeNode()
                 del bldg
@@ -1274,7 +1273,7 @@ class LevelEditor(NodePath, DirectObject):
                         self.updatePose(dnaNode, nodePath)
         elif newParent:
             # See if this node path is a suit edge
-            suitEdge, oldVisGroup = self.np2EdgeDict.get(nodePath.id(), (None, None))
+            suitEdge, oldVisGroup = self.np2EdgeDict.get(hash(nodePath), (None, None))
             # And see if the new parent is a vis group
             newVisGroupNP, newVisGroupDNA = self.findParentVisGroup(newParent)
             if suitEdge and DNAClassEqual(newVisGroupDNA, DNA_VIS_GROUP):
@@ -1284,10 +1283,10 @@ class LevelEditor(NodePath, DirectObject):
                 suitEdge.setZoneId(newVisGroupDNA.getName())
                 newVisGroupDNA.addSuitEdge(suitEdge)
                 # Update np2EdgeDict to reflect changes
-                self.np2EdgeDict[nodePath.id()] = [suitEdge, newVisGroupDNA]
+                self.np2EdgeDict[hash(nodePath)] = [suitEdge, newVisGroupDNA]
 
         self.popupNotification(f"{nodePath.getName()} reparented to {newParent.getName()}")
-        
+
     def setActiveParent(self, nodePath = None):
         """ Set NPParent and DNAParent to node path and its DNA """
         # If we've got a valid node path
@@ -1814,7 +1813,7 @@ class LevelEditor(NodePath, DirectObject):
             newDNALandmarkBuilding.add(newDNADoor)
         # Now place new landmark building in the world
         self.initDNANode(newDNALandmarkBuilding)
-        
+
     def renameLandmark(self, title = ''):
         ''' Rename selected landmark building '''
         selectedNode = base.direct.selected.last
@@ -1822,7 +1821,7 @@ class LevelEditor(NodePath, DirectObject):
             dnaNode = self.findDNANode(selectedNode)
             if DNAGetClassType(dnaNode) == DNA_LANDMARK_BUILDING:
                 dnaNode.setTitle(title)
-        
+
 
     def addAnimBuilding(self, animBuildingType):
         print("addAnimBuilding %s " % animBuildingType)
@@ -3459,7 +3458,7 @@ class LevelEditor(NodePath, DirectObject):
                 edgeLine = self.drawSuitEdge(suitEdge, self.NPParent)
                 # Store the line in a dict so we can hide/show them
                 self.edgeDict[suitEdge] = edgeLine
-                self.np2EdgeDict[edgeLine.id()] = [suitEdge, self.DNAParent]
+                self.np2EdgeDict[hash(edgeLine)] = [suitEdge, self.DNAParent]
                 # Store the edge on each point in case we move the point
                 # we can update the edge
                 for point in [self.startSuitPoint, self.endSuitPoint]:
@@ -3482,7 +3481,7 @@ class LevelEditor(NodePath, DirectObject):
                     edgeLine = self.drawSuitEdge(suitEdge, self.NPParent)
                     # Store the line in a dict so we can hide/show them
                     self.edgeDict[suitEdge] = edgeLine
-                    self.np2EdgeDict[edgeLine.id()] = [suitEdge, self.DNAParent]
+                    self.np2EdgeDict[hash(edgeLine)] = [suitEdge, self.DNAParent]
                     for point in [self.startSuitPoint, self.endSuitPoint]:
                         if point in self.point2edgeDict:
                             self.point2edgeDict[point].append(suitEdge)
@@ -3623,7 +3622,7 @@ class LevelEditor(NodePath, DirectObject):
                 edge = dnaVisGroup.getSuitEdge(i)
                 edgeLine = self.drawSuitEdge(edge, np)
                 self.edgeDict[edge] = edgeLine
-                self.np2EdgeDict[edgeLine.id()] = [edge, dnaVisGroup]
+                self.np2EdgeDict[hash(edgeLine)] = [edge, dnaVisGroup]
                 # Store the edge on each point in case we move the point
                 # we can update the edge
                 for point in [edge.getStartPoint(), edge.getEndPoint()]:
@@ -3677,7 +3676,7 @@ class LevelEditor(NodePath, DirectObject):
     async def renderMap(self):
         """
         Screenshot for making maps. Hides drop shadows and markers
-        
+
         Steps to making a screenshot:
         1. Shift + O to toggle ORTHO camera
         2. press '5' to position camera directly overhead
@@ -4768,67 +4767,67 @@ class LevelEditor(NodePath, DirectObject):
                 Func(destroyTxt, txt)
             )
         ).start()
-        
+
     async def beginBoxSelection(self):
         self.popupNotification('entered selection mode')
-        
+
         self.isSelecting = True
         await messenger.future('mouse1')
         if not base.mouseWatcherNode.hasMouse():
             return
         self.boxStartMouse = (base.mouseWatcherNode.getMouseX(), base.mouseWatcherNode.getMouseY())
-        
+
         self.boxLines = (LineNodePath(render2d), LineNodePath(render2d), LineNodePath(render2d), LineNodePath(render2d))
         for line in self.boxLines:
             line.setColor(VBase4(1))
             line.setThickness(1)
             line.reset()
-            line.moveTo(0, 0, 0)            
-            line.drawTo(0, 0, 0)            
-            line.create()            
-            
+            line.moveTo(0, 0, 0)
+            line.drawTo(0, 0, 0)
+            line.create()
+
         taskMgr.add(self.selectionBoxTask, 'boxselection')
-        
-        
+
+
         await messenger.future('mouse1-up')
-        
+
         taskMgr.remove('boxselection')
         self.isSelecting = False
-        
-        
+
+
         for line in self.boxLines:
             line.removeNode()
             del line
-            
+
         self.finishBoxSelection()
-        
+
         self.popupNotification('exited selection mode')
-        
-        
+
+
     def selectionBoxTask(self, task):
         ''' caalculate the selection box positions '''
         if not base.mouseWatcherNode.hasMouse():
             return task.again
         self.boxEndMouse = (base.mouseWatcherNode.getMouseX(), base.mouseWatcherNode.getMouseY())
-        
+
         # left side
         self.boxLines[0].setVertex(0, self.boxStartMouse[0], 0, self.boxStartMouse[1])
         self.boxLines[0].setVertex(1, self.boxStartMouse[0], 0, self.boxEndMouse[1])
-        
+
         # right side
         self.boxLines[1].setVertex(0, self.boxEndMouse[0], 0, self.boxStartMouse[1])
         self.boxLines[1].setVertex(1, self.boxEndMouse[0], 0, self.boxEndMouse[1])
-        
+
         # top side
         self.boxLines[2].setVertex(0, self.boxStartMouse[0], 0, self.boxStartMouse[1])
         self.boxLines[2].setVertex(1, self.boxEndMouse[0], 0, self.boxStartMouse[1])
-        
+
         # bottom side
         self.boxLines[3].setVertex(0, self.boxStartMouse[0], 0, self.boxEndMouse[1])
         self.boxLines[3].setVertex(1, self.boxEndMouse[0], 0, self.boxEndMouse[1])
-        
+
         return task.again
-        
+
     def finishBoxSelection(self):
         ''' Calculates all the stuff in the selection '''
         base.direct.deselectAll()
@@ -4857,7 +4856,7 @@ class LevelEditor(NodePath, DirectObject):
         lens.extrude((startX, endY), nll, fll)
         selFrustum = BoundingHexahedron(fll, flr, fur, ful, nll, nlr, nur, nul);
         selFrustum.xform(base.cam.getNetTransform().getMat())
-        
+
         selectionList = []
         for geom in self.NPToplevel.findAllMatches("**/*_DNARoot"):
 
@@ -5258,9 +5257,9 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.landmarkBuildingSpecialSelector.selectitem(
                     LANDMARK_SPECIAL_TYPES[0])
             self.landmarkBuildingSpecialSelector.pack(expand = 0)
-            
+
             Label(landmarkBuildingsPage, text = 'Building Title:').pack(side = LEFT, expand = 0)
-                        
+
             self.renameSelectedLandmarkButton = ttk.Button(
                     landmarkBuildingsPage,
                     text = 'Rename Selected Bldg',
@@ -5272,8 +5271,8 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                     textvariable = self.landmarkBuildingNameString)
             self.landmarkBuildingNameBox.pack(expand = 0, fill = X)
 
-            
-            
+
+
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
               font = ('Calibri', 14, 'bold')).pack(expand = 0)
@@ -5694,10 +5693,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                          #variable = self.fMapVis,
                                          #command = self.toggleMapVis)
         # self.mapSnapButton.pack(side = LEFT, expand = 1, fill = X)
-        
+
         Label(snapFrame, text = 'Snapping', width = 8, anchor = 'nw',
             font = ('Calibri', 10, 'bold')).pack(padx = 5, side = LEFT, expand = 1, fill = X)
-              
+
         self.fXyzSnap = IntVar()
         self.fXyzSnap.set(0)
         self.xyzSnapButton = ttk.Checkbutton(snapFrame,
@@ -5734,8 +5733,8 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.planeSnapButton.pack(side = LEFT, expand = 1, fill = X)
 
         snapFrame.pack(fill = X)
-        
-        
+
+
         # Visual Options
         visualFrame = Frame(hull)
         Label(visualFrame, text = 'Visual', width = 8,anchor = 'nw',
@@ -5749,7 +5748,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                        variable = self.fLabel,
                                        command = self.toggleZoneLabels)
         self.labelButton.pack(side = LEFT, expand = 1, fill = X)
-        
+
         self.fGrid = IntVar()
         self.fGrid.set(0)
         base.direct.gridButton = ttk.Checkbutton(visualFrame,
@@ -5774,7 +5773,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         visualFrame.pack(fill = X)
 
         # experimental stuff
-        
+
         if ConfigVariableBool("want-experimental", False):
             buttonFrame4 = Frame(hull)
             Label(buttonFrame4, text = 'Experimental', width = 8,anchor = 'nw',
@@ -5788,7 +5787,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                     variable = self.driveMode,
                     command = self.toggleDrive)
             self.driveModeButton.pack(side = LEFT, fill = X, expand = 1)
-            
+
             self.fColl = IntVar()
             self.fColl.set(1)
             base.direct.collButton = ttk.Checkbutton(
@@ -5820,7 +5819,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.colorEntry.menu.add_command(
                 label = 'Save Color', command = self.levelEditor.saveColor)
         self.colorEntry.pack(side = LEFT, expand = 1, fill = X)
-        
+
         self.selectButton = ttk.Button(objectFrame,
                                    text = 'Place Selected',
                                    width = 18,
@@ -6380,7 +6379,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.useDriveMode()
         else:
             self.levelEditor.useDirectFly()
-            
+
 class VisGroupsEditor(Pmw.MegaToplevel):
     def __init__(self, levelEditor, visGroups = ['None'],
                  parent = None, **kw):

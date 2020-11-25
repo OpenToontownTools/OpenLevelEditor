@@ -1,9 +1,9 @@
 
-#from pandac.PandaModules import BitMask32, Point3, TextNode
+#from panda3d.core import BitMask32, Point3, TextNode
 
 # Several other files that import this file assume we will import all
 # of PandaModules.
-from pandac.PandaModules import *
+from panda3d.core import *
 
 #### ZONE IDs ####
 # Quiet zone ... The zone you go to when you transition between neighborhoods

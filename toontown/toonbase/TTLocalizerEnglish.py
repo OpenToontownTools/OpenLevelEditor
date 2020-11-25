@@ -7374,7 +7374,7 @@ PetTutorialPage3 = "Purchase new Doodle tricks from Clarabelle's Cattlelog.  Bet
 
 
 def getPetGuiAlign():
-    from pandac.PandaModules import TextNode
+    from panda3d.core import TextNode
     return TextNode.ACenter
 
 

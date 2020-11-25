@@ -5,7 +5,7 @@ from toontown.toonbase import ToontownGlobals
 import math
 import types
 import builtins
-from pandac.PandaModules import *
+from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 from random import *
 from direct.distributed.PyDatagram import PyDatagram

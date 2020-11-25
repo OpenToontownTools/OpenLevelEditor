@@ -13,7 +13,7 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 import string
 import random
-from pandac.PandaModules import *
+from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm.ClassicFSM import ClassicFSM
 from direct.fsm.State import State
@@ -608,7 +608,7 @@ class ToonHead(Actor.Actor):
                 self.pumpkins = NodePathCollection()
 
             ppath = 'phase_4/models/estate/pumpkin_'
-            if(headStyle is 'l'):
+            if headStyle == 'l':
                 if copy:
                     pmodel = loader.loadModel(ppath + 'tall')
                 else:
@@ -646,7 +646,7 @@ class ToonHead(Actor.Actor):
                 self.snowMen = NodePathCollection()
 
             snowManPath = 'phase_4/models/props/tt_m_int_snowmanHead_'
-            if headStyle is 'l':
+            if headStyle == 'l':
                 snowManPath = snowManPath+'tall'
             else:
                 snowManPath = snowManPath + 'short'

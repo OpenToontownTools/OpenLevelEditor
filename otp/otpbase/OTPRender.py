@@ -1,5 +1,5 @@
 
-from pandac.PandaModules import *
+from panda3d.core import *
 
 # global bitmasks for cameras
 MainCameraBitmask = BitMask32.bit(0)
