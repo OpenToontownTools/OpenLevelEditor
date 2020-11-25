@@ -78,19 +78,19 @@ class ToontownLevelEditor(ShowBase):
                 break
 
         # Check for any files we need and such
-        self._checkForFiles()
+        self.__checkForFiles()
 
         # Import the main dlls so we don't have to repeatedly import them everywhere
-        self._importMainLibs()
+        self.__importMainLibs()
 
         # Setup the root for Tkinter!
-        self._createTk()
+        self.__createTk()
 
         if not args.noupdate:
             loop = asyncio.get_event_loop()
             loop.run_until_complete(self._checkUpdates())
 
-        self._addCullBins()
+        self.__addCullBins()
 
         # Now we actually start the editor
         ShowBase.__init__(self)
@@ -100,18 +100,18 @@ class ToontownLevelEditor(ShowBase):
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
 
-    def _checkForFiles(self):
+    def __checkForFiles(self):
         # Make custom hood directory if it doesn't exist
         if not os.path.exists('leveleditor/hoods/'):
             os.mkdir('leveleditor/hoods/')
 
-    def _importMainLibs(self):
+    def __importMainLibs(self):
         builtin_dict = builtins.__dict__
         builtin_dict.update(__import__('panda3d.core', fromlist=['*']).__dict__)
         builtin_dict.update(__import__('libotp', fromlist=['*']).__dict__)
         builtin_dict.update(__import__('libtoontown', fromlist=['*']).__dict__)
 
-    def _createTk(self):
+    def __createTk(self):
         tkroot = Tk()
         tkroot.withdraw()
         tkroot.title("Open Level Editor")
@@ -121,12 +121,12 @@ class ToontownLevelEditor(ShowBase):
 
         self.tkRoot = tkroot
 
-    def _addCullBins(self):
+    def __addCullBins(self):
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
 
-    async def _checkUpdates(self):
+    async def __checkUpdates(self):
         import aiohttp, webbrowser
         async with aiohttp.ClientSession() as session:
             try:
