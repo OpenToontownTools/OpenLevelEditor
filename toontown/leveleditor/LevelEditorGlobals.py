@@ -1,4 +1,4 @@
-from pandac.PandaModules import *
+from panda3d.core import *
 
 # Valid Toontown projects
 TOONTOWN_ONLINE = 0

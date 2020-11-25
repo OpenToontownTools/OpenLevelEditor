@@ -1,12 +1,12 @@
 """LocalAvatar module: contains the LocalAvatar class"""
 
-from pandac.PandaModules import *
+from panda3d.core import *
 from libotp import Nametag, WhisperPopup
 from direct.gui.DirectGui import *
 from direct.showbase.PythonUtil import *
 from direct.interval.IntervalGlobal import *
 from direct.showbase.InputStateGlobal import inputState
-from pandac.PandaModules import *
+from panda3d.core import *
 
 from otp.otpbase import OTPGlobals
 from . import Avatar

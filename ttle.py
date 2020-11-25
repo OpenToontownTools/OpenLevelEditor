@@ -1,4 +1,4 @@
-""" ToontownLevelEditor 2.0 Base Class  - Drewcification 091420 """
+""" OpenLevelEditor Base Class - Drewcification 091420 """
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.ShowBase import ShowBase
@@ -13,7 +13,6 @@ import builtins
 import json
 import os
 import sys
-import webbrowser
 
 TOONTOWN_ONLINE = 0
 TOONTOWN_REWRITTEN = 1
@@ -25,9 +24,7 @@ SERVER_TO_ID = {'online': TOONTOWN_ONLINE,
                 'clash': TOONTOWN_CORPORATE_CLASH,
                 'offline': TOONTOWN_OFFLINE}
 
-# Make custom hood directory if it doesn't exist
-if not os.path.exists('leveleditor/hoods/'):
-    os.mkdir('leveleditor/hoods/')
+DEFAULT_SERVER = TOONTOWN_ONLINE
 
 class ToontownLevelEditor(ShowBase):
     notify = directNotify.newCategory("Open Level Editor")
@@ -69,7 +66,7 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", f"holiday {args.holiday[0]}")
 
 
-        server = SERVER_TO_ID.get(args.server[0].lower(), TOONTOWN_ONLINE)
+        server = SERVER_TO_ID.get(args.server[0].lower(), DEFAULT_SERVER)
         self.server = server
 
         self.hoods = args.hoods
@@ -80,11 +77,41 @@ class ToontownLevelEditor(ShowBase):
                 args.hoods.remove(hood)
                 break
 
-        # Import the main dlls so we don't have to repeatedly import them everywhere
-        builtins.__dict__.update(__import__('panda3d.core', fromlist=['*']).__dict__)
-        builtins.__dict__.update(__import__('libotp', fromlist=['*']).__dict__)
-        builtins.__dict__.update(__import__('libtoontown', fromlist=['*']).__dict__)
+        # Check for any files we need and such
+        self._checkForFiles()
 
+        # Import the main dlls so we don't have to repeatedly import them everywhere
+        self._importMainLibs()
+
+        # Setup the root for Tkinter!
+        self._createTk()
+
+        if not args.noupdate:
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(self._checkUpdates())
+
+        self._addCullBins()
+
+        # Now we actually start the editor
+        ShowBase.__init__(self)
+        aspect2d.setAntialias(AntialiasAttrib.MAuto)
+
+        from toontown.leveleditor import LevelEditor
+        self.le = LevelEditor.LevelEditor()
+        self.le.startUp(args.dnaPath)
+
+    def _checkForFiles(self):
+        # Make custom hood directory if it doesn't exist
+        if not os.path.exists('leveleditor/hoods/'):
+            os.mkdir('leveleditor/hoods/')
+
+    def _importMainLibs(self):
+        builtin_dict = builtins.__dict__
+        builtin_dict.update(__import__('panda3d.core', fromlist=['*']).__dict__)
+        builtin_dict.update(__import__('libotp', fromlist=['*']).__dict__)
+        builtin_dict.update(__import__('libtoontown', fromlist=['*']).__dict__)
+
+    def _createTk(self):
         tkroot = Tk()
         tkroot.withdraw()
         tkroot.title("Open Level Editor")
@@ -94,19 +121,13 @@ class ToontownLevelEditor(ShowBase):
 
         self.tkRoot = tkroot
 
-        if not args.noupdate:
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(self.checkUpdates())
+    def _addCullBins(self):
+        cbm = CullBinManager.getGlobalPtr()
+        cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
+        cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
 
-        # Now we actually start the editor
-        ShowBase.__init__(self)
-        aspect2d.setAntialias(AntialiasAttrib.MAuto)
-        from toontown.leveleditor import LevelEditor
-        self.le = LevelEditor.LevelEditor()
-        self.le.startUp(args.dnaPath)
-
-    async def checkUpdates(self):
-        import aiohttp
+    async def _checkUpdates(self):
+        import aiohttp, webbrowser
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get("https://raw.githubusercontent.com/OpenToontownTools/OpenLevelEditor/master/ver") as resp:
