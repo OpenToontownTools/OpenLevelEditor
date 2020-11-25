@@ -131,4 +131,7 @@ phase_*/
 
 # VS Code
 .history
+
+# Misc.
 build.py
+*.bat
