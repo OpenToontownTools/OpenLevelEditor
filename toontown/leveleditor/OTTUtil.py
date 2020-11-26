@@ -13,10 +13,3 @@ def sleep(duration):
         return task.cont
 
    return taskMgr.add(__task)
-
-# To safely load the storage files
-def loadStorageFile(pandaPath):
-    path = Filename(pandaPath)
-    filePath = dnaBuiltDirectory.toOsSpecific() + '\\' + path.toOsSpecific()
-    if os.path.exists(filePath):
-        loadDNAFile(DNASTORE, pandaPath, CSDefault, 1)
