@@ -192,6 +192,14 @@ SUB_DNAS = [DNA_CORNICE,
             DNA_WALL,
             DNA_WINDOWS]
 
+DNA_PROP_SETS = {'tree': ["prop_tree_small_ul",
+                      "prop_tree_small_ur",
+                      "prop_tree_large_ur",
+                      "prop_tree_large_ul"],
+                 'snow_tree': ["prop_snow_tree_small_ul",
+                                       "prop_snow_tree_small_ur",
+                                       "prop_snow_tree_large_ur",
+                                       "prop_snow_tree_large_ul"]}
 CONTROLS = '''
 --Camera--
 Note: All camera transformations orbit the currently selected object
