@@ -1,5 +1,5 @@
 '''
-General Open Toontown Tools convenience library
+Helpers and such for Open Toontown Tools
 '''
 
 def sleep(duration):
@@ -12,4 +12,4 @@ def sleep(duration):
             return task.done
         return task.cont
 
-    return taskMgr.add(__task)
+   return taskMgr.add(__task)
