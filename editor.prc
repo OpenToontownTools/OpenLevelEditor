@@ -41,6 +41,7 @@ model-cache-textures #f
 # Directory for hoods & style files.
 dna-directory leveleditor
 dna-built-directory $TTMODELS/built # Currently unused
+userfiles-directory leveleditor
 
 # Default Extensions
 default-model-extension .bam

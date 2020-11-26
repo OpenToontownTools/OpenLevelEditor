@@ -36,6 +36,11 @@ class ToontownLevelEditor(ShowBase):
         # to have it affect window related stuff
         loadPrcFile('editor.prc')
 
+        builtins.userfiles = self.config.GetString('userfiles-directory')
+        
+        if not os.path.exists(userfiles):
+            pathlib.Path(userfiles).mkdir(parents = True, exist_ok = True)
+
         # Check for -e or -d launch options
         parser = argparse.ArgumentParser(description="Modes")
         parser.add_argument("--experimental", action='store_true', help="Enables experimental features")
@@ -102,8 +107,8 @@ class ToontownLevelEditor(ShowBase):
 
     def __checkForFiles(self):
         # Make custom hood directory if it doesn't exist
-        if not os.path.exists('leveleditor/hoods/'):
-            os.mkdir('leveleditor/hoods/')
+        if not os.path.exists(f'{userfiles}/hoods/'):
+            os.mkdir(f'{userfiles}/hoods/')
 
     def __importMainLibs(self):
         builtin_dict = builtins.__dict__

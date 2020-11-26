@@ -46,7 +46,7 @@ from .RadialMenu import RadialMenu, RadialItem
 base.startDirect(fWantDirect = 1, fWantTk = 1)
 
 visualizeZones = base.config.GetBool("visualize-zones", 0)
-dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "leveleditor"))
+dnaDirectory = Filename.expandFrom(userfiles)
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
 useSnowTree = base.config.GetBool("use-snow-tree", 0)
 
@@ -88,7 +88,7 @@ except NameError:
     NEIGHBORHOODS = []
     NEIGHBORHOOD_CODES = {}
     for hood in base.hoods:
-        with open(f'./leveleditor/hoods/{hood}.json') as info:
+        with open(f'{userfiles}/hoods/{hood}.json') as info:
             data = json.load(info)
             hoodName = data.get(LevelEditorGlobals.HOOD_NAME_LONGHAND)
             NEIGHBORHOOD_CODES[hoodName] = hood
