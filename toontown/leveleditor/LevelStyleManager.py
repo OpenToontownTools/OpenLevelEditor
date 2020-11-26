@@ -92,17 +92,7 @@ class LevelStyleManager:
                 if pair[0] in style.__dict__:
                     pair_0 = pair[0]
                     # Convert some numerical values
-                    if (pair_0 == 'color'
-                            or pair_0 == 'kern'
-                            or pair_0 == 'wiggle'
-                            or pair_0 == 'stumble'
-                            or pair_0 == 'stomp'
-                            or pair_0 == 'curve'
-                            or pair_0 == 'x'
-                            or pair_0 == 'z'
-                            or pair_0 == 'scaleX'
-                            or pair_0 == 'scaleZ'
-                            or pair_0 == 'roll'):
+                    if pair_0 in ['color', 'kern', 'wiggle', 'stumble', 'stomp', 'curve', 'x', 'z', 'scaleX', 'scaleZ', 'roll']:
                         style[pair_0] = eval(pair[1])
                     else:
                         style[pair_0] = pair[1]
@@ -592,7 +582,7 @@ class LevelStyleManager:
                 color = child.getColor()
                 print(('window_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
                        (color[0], color[1], color[2])))
-                # MRM: Check for awnings here
+                # TODO: Check for awnings here
             elif DNAClassEqual(child, DNA_DOOR):
                 print('door_texture: ' + child.getCode())
                 color = child.getColor()
@@ -853,7 +843,7 @@ class LevelStyleManager:
         self.createMiscAttribute('building_type', BUILDING_TYPES)
         # Building heights
         self.createMiscAttribute('building_height', [10, 14, 20, 24, 25, 30])
-        # MRM: Need offset on these menus
+        # TODO: Need offset on these menus
         # Wall orientation menu
         self.createMiscAttribute('wall_orientation', ['ur', 'ul', 'dl', 'dr'])
         # Wall height menu
@@ -1260,14 +1250,14 @@ class DNAWallStyle:
                 self.window_count = child.getWindowCount()
                 self.window_texture = child.getCode()
                 self.window_color = child.getColor()
-                # MRM: Check for awnings here
+                # TODO: Check for awnings here
             elif DNAClassEqual(child, DNA_DOOR):
                 self.door_texture = child.getCode()
                 self.door_color = child.getColor()
             elif DNAClassEqual(child, DNA_FLAT_DOOR):
                 self.door_texture = child.getCode()
                 self.door_color = child.getColor()
-                # MRM: Check for awnings here
+                # TODO: Check for awnings here
             elif DNAClassEqual(child, DNA_CORNICE):
                 self.cornice_texture = child.getCode()
                 self.cornice_color = child.getColor()
