@@ -1,5 +1,5 @@
 '''
-General Open Toontown Tools convenience library
+Helpers and such for Open Toontown Tools
 '''
 
 def sleep(duration):
