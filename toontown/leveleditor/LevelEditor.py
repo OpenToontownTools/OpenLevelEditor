@@ -3872,7 +3872,7 @@ class LevelEditor(NodePath, DirectObject):
     def resetBattleCellMarkers(self):
         for cell, marker in list(self.cellDict.items()):
             if not marker.isEmpty():
-                marker.remove()
+                marker.removeNode()
         self.cellDict = {}
 
     def hideBattleCells(self):
