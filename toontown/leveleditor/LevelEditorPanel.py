@@ -52,15 +52,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         menuBar.addmenuitem('Level Editor', 'command',
                             'Load DNA from specified file',
                             label = 'Load DNA...',
-                            command = self.levelEditor.loadSpecifiedDNAFile)
+                            command = self.levelEditor.serializer.loadSpecifiedDNAFile)
         menuBar.addmenuitem('Level Editor', 'command',
                             'Save DNA data to specified file',
                             label = 'Save DNA As...',
-                            command = self.levelEditor.saveToSpecifiedDNAFile)
+                            command = self.levelEditor.serializer.saveToSpecifiedDNAFile)
         menuBar.addmenuitem('Level Editor', 'command',
                             'Save DNA File',
                             label = 'Save DNA',
-                            command = self.levelEditor.outputDNADefaultFile)
+                            command = self.levelEditor.serializer.outputDNADefaultFile)
         menuBar.addmenuitem('Level Editor', 'separator')
         menuBar.addmenuitem('Level Editor', 'command',
                             'Edit Visibility Groups',
@@ -89,19 +89,19 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Object's Color",
                             label = 'Save Color',
-                            command = self.levelEditor.saveColor)
+                            command = self.levelEditor.serializer.saveColor)
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Baseline's Style",
                             label = 'Save Baseline Style',
-                            command = self.levelEditor.saveBaselineStyle)
+                            command = self.levelEditor.serializer.saveBaselineStyle)
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Wall's Style",
                             label = 'Save Wall Style',
-                            command = self.levelEditor.saveWallStyle)
+                            command = self.levelEditor.serializer.saveWallStyle)
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Buildings's Style",
                             label = 'Save Bldg Style',
-                            command = self.levelEditor.saveBuildingStyle)
+                            command = self.levelEditor.serializer.saveBuildingStyle)
         menuBar.addmenuitem('Style', 'separator')
         menuBar.addmenuitem('Style', 'command',
                             'Reload Color Palettes',
@@ -920,7 +920,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 objectFrame, text = 'Select Color', value = (0, 0, 0, 255),
                 relief = FLAT, command = self.updateSelectedObjColor)
         self.colorEntry.menu.add_command(
-                label = 'Save Color', command = self.levelEditor.saveColor)
+                label = 'Save Color', command = self.levelEditor.serializer.saveColor)
         self.colorEntry.pack(side = LEFT, expand = 1, fill = X)
 
         self.selectButton = ttk.Button(objectFrame,
