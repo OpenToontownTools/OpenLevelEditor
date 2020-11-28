@@ -7,6 +7,7 @@ from tkinter import ttk
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets import Floater
 
+from .DNASerializer import DNASerializer
 from .LevelStyleManager import *
 from .LevelEditorGlobals import *
 from .LESceneGraphExplorer import *
@@ -52,15 +53,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         menuBar.addmenuitem('Level Editor', 'command',
                             'Load DNA from specified file',
                             label = 'Load DNA...',
-                            command = self.levelEditor.serializer.loadSpecifiedDNAFile)
+                            command = DNASerializer.loadSpecifiedDNAFile)
         menuBar.addmenuitem('Level Editor', 'command',
                             'Save DNA data to specified file',
                             label = 'Save DNA As...',
-                            command = self.levelEditor.serializer.saveToSpecifiedDNAFile)
+                            command = DNASerializer.saveToSpecifiedDNAFile)
         menuBar.addmenuitem('Level Editor', 'command',
                             'Save DNA File',
                             label = 'Save DNA',
-                            command = self.levelEditor.serializer.outputDNADefaultFile)
+                            command = DNASerializer.outputDNADefaultFile)
         menuBar.addmenuitem('Level Editor', 'separator')
         menuBar.addmenuitem('Level Editor', 'command',
                             'Edit Visibility Groups',
@@ -89,19 +90,19 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Object's Color",
                             label = 'Save Color',
-                            command = self.levelEditor.serializer.saveColor)
+                            command = DNASerializer.saveColor)
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Baseline's Style",
                             label = 'Save Baseline Style',
-                            command = self.levelEditor.serializer.saveBaselineStyle)
+                            command = DNASerializer.saveBaselineStyle)
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Wall's Style",
                             label = 'Save Wall Style',
-                            command = self.levelEditor.serializer.saveWallStyle)
+                            command = DNASerializer.saveWallStyle)
         menuBar.addmenuitem('Style', 'command',
                             "Save Selected Buildings's Style",
                             label = 'Save Bldg Style',
-                            command = self.levelEditor.serializer.saveBuildingStyle)
+                            command = DNASerializer.saveBuildingStyle)
         menuBar.addmenuitem('Style', 'separator')
         menuBar.addmenuitem('Style', 'command',
                             'Reload Color Palettes',
@@ -920,7 +921,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 objectFrame, text = 'Select Color', value = (0, 0, 0, 255),
                 relief = FLAT, command = self.updateSelectedObjColor)
         self.colorEntry.menu.add_command(
-                label = 'Save Color', command = self.levelEditor.serializer.saveColor)
+                label = 'Save Color', command = DNASerializer.saveColor)
         self.colorEntry.pack(side = LEFT, expand = 1, fill = X)
 
         self.selectButton = ttk.Button(objectFrame,

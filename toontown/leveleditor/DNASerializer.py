@@ -8,9 +8,11 @@ dnaDirectory = Filename.expandFrom(userfiles)
 
 class DNASerializer:
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelEditor')
+    outputFile = None
 
     # STYLE/DNA FILE FUNCTIONS
-    def loadSpecifiedDNAFile(self):
+    @staticmethod
+    def loadSpecifiedDNAFile():
         path = dnaDirectory.toOsSpecific()
         if not os.path.isdir(path):
             print('LevelEditor Warning: Invalid default DNA directory!')
@@ -22,11 +24,12 @@ class DNASerializer:
                 title = 'Load DNA File',
                 parent = base.le.panel.component('hull'))
         if dnaFilename:
-            self.loadDNAFromFile(dnaFilename)
-            self.outputFile = dnaFilename
+            DNASerializer.loadDNAFromFile(dnaFilename)
+            DNASerializer.outputFile = dnaFilename
         print("Finished Load: ", dnaFilename)
 
-    def saveToSpecifiedDNAFile(self):
+    @staticmethod
+    def saveToSpecifiedDNAFile():
         path = dnaDirectory.toOsSpecific()
         if not os.path.isdir(path):
             print('LevelEditor Warning: Invalid DNA save directory!')
@@ -39,20 +42,21 @@ class DNASerializer:
                 title = 'Save DNA File as',
                 parent = base.le.panel.component('hull'))
         if dnaFilename:
-            self.outputDNA(dnaFilename)
-            self.outputFile = dnaFilename
-
-    def loadDNAFromFile(self, filename):
-        self.notify.debug("Filename: %s" % filename)
+            DNASerializer.outputDNA(dnaFilename)
+            DNASerializer.outputFile = dnaFilename
+    
+    @staticmethod
+    def loadDNAFromFile(filename):
+        DNASerializer.notify.debug("Filename: %s" % filename)
         # Reset level, destroying existing scene/DNA hierarcy
         base.le.reset(fDeleteToplevel = 1, fCreateToplevel = 0,
                    fUpdateExplorer = 0)
         # Now load in new file
         try:
-            self.notify.debug("Trying to load file")
+            DNASerializer.notify.debug("Trying to load file")
             node = loadDNAFile(DNASTORE, Filename.fromOsSpecific(filename).cStr(), CSDefault, 1)
         except Exception:
-            self.notify.debug("Couldn't load specified DNA file. Please make sure storage code has been specified in Config.prc file")
+            DNASerializer.notify.debug("Couldn't load specified DNA file. Please make sure storage code has been specified in Config.prc file")
             return
         if node.getNumParents() == 1:
             # If the node already has a parent arc when it's loaded, we must
@@ -67,7 +71,7 @@ class DNASerializer:
         newDNAToplevel = base.le.findDNANode(newNPToplevel)
 
         # reset the landmark block number:
-        (self.landmarkBlock, needTraverse) = base.le.findHighestLandmarkBlock(newDNAToplevel, newNPToplevel)
+        (base.le.landmarkBlock, needTraverse) = base.le.findHighestLandmarkBlock(newDNAToplevel, newNPToplevel)
 
         # Update toplevel variables
         if needTraverse:
@@ -88,15 +92,17 @@ class DNASerializer:
         base.le.panel.sceneGraphExplorer.update()
         base.le.popupNotification(f"Loaded {os.path.basename(filename)}")
 
-    def outputDNADefaultFile(self):
-        outputFile = self.outputFile
+    @staticmethod
+    def outputDNADefaultFile():
+        outputFile = DNASerializer.outputFile
         if outputFile == None:
-            self.saveToSpecifiedDNAFile()
+            DNASerializer.saveToSpecifiedDNAFile()
             return
         file = os.path.join(dnaDirectory.toOsSpecific(), outputFile)
-        self.outputDNA(file)
+        DNASerializer.outputDNA(file)
 
-    def outputDNA(self, filename):
+    @staticmethod
+    def outputDNA(filename):
         print('Saving DNA to: ', filename)
         binaryFilename = Filename(filename)
         binaryFilename.setBinary()
@@ -104,16 +110,19 @@ class DNASerializer:
         base.le.popupNotification(f"Saved to {os.path.basename(binaryFilename)}")
         if ConfigVariableString("compiler") in ['libpandadna', 'clash']:
             print(f"Compiling PDNA for {ConfigVariableString('compiler')}")
-            self.compileDNA(binaryFilename)
+            DNASerializer.compileDNA(binaryFilename)
 
-    def compileDNA(self, filename):
+    @staticmethod
+    def compileDNA(filename):
         from toontown.compiler.compile import process_single_file
         process_single_file(filename)
 
-    def saveColor(self):
-        self.appendColorToColorPaletteFile(base.le.panel.colorEntry.get())
+    @staticmethod
+    def saveColor():
+        DNASerializer.appendColorToColorPaletteFile(base.le.panel.colorEntry.get())
 
-    def appendColorToColorPaletteFile(self, color):
+    @staticmethod
+    def appendColorToColorPaletteFile(color):
         obj = base.le.DNATarget
         if obj:
             classType = DNAGetClassType(obj)
@@ -132,7 +141,7 @@ class DNASerializer:
             else:
                 return
             # Valid type, add color to file
-            filename = self.neighborhood + '_colors.txt'
+            filename = base.le.neighborhood + '_colors.txt'
             fname = Filename(dnaDirectory.getFullpath() +
                              '/stylefiles/' + filename)
             f = open(fname.toOsSpecific(), 'ab')
@@ -143,7 +152,8 @@ class DNASerializer:
                      color[2] / 255.0))
             f.close()
 
-    def saveStyle(self, filename, style):
+    @staticmethod
+    def saveStyle(filename, style):
         # A generic routine to append a new style definition to one of
         # the style files.
 
@@ -158,32 +168,36 @@ class DNASerializer:
         # Close the file
         f.close()
 
-    def saveBaselineStyle(self):
+    @staticmethod
+    def saveBaselineStyle():
         if base.le.panel.currentBaselineDNA:
             # Valid baseline, add style to file
-            filename = self.neighborhood + '/baseline_styles.txt'
+            filename = base.le.neighborhood + '/baseline_styles.txt'
             style = DNABaselineStyle(base.le.panel.currentBaselineDNA)
-            self.saveStyle(filename, style)
+            DNASerializer.saveStyle(filename, style)
 
-    def saveWallStyle(self):
-        if self.lastWall:
+    @staticmethod
+    def saveWallStyle():
+        if base.le.lastWall:
             # Valid wall, add style to file
-            filename = self.neighborhood + '/wall_styles.txt'
-            style = DNAWallStyle(self.lastWall)
-            self.saveStyle(filename, style)
+            filename = base.le.neighborhood + '/wall_styles.txt'
+            style = DNAWallStyle(base.le.lastWall)
+            DNASerializer.saveStyle(filename, style)
 
-    def saveBuildingStyle(self):
-        dnaObject = self.selectedDNARoot
+    @staticmethod
+    def saveBuildingStyle():
+        dnaObject = base.le.selectedDNARoot
         if dnaObject:
             if DNAClassEqual(dnaObject, DNA_FLAT_BUILDING):
                 # Valid wall, add style to file
-                filename = self.neighborhood + '/building_styles.txt'
+                filename = base.le.neighborhood + '/building_styles.txt'
                 style = DNAFlatBuildingStyle(dnaObject)
-                self.saveStyle(filename, style)
+                DNASerializer.saveStyle(filename, style)
                 return
         print('Must select building before saving building style')
 
-    def loadStreetCurve(self):
+    @staticmethod
+    def loadStreetCurve():
         path = '.'
         streetCurveFilename = askopenfilename(
                 defaultextension = '.egg',

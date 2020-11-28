@@ -29,7 +29,7 @@ from toontown.toon import RobotToon, LEAvatar
 from . import LevelEditorGlobals
 from . import LevelEditorPanel
 from . import VisGroupsEditor
-from . import DNASerializer
+from .DNASerializer import DNASerializer
 from .LevelStyleManager import *
 from .PieMenu import *
 from .RadialMenu import RadialMenu, RadialItem
@@ -99,8 +99,6 @@ class LevelEditor(NodePath, DirectObject):
         NodePath.__init__(self)
         # Become the new node path
         self.assign(hidden.attachNewNode('LevelEditor'))
-
-        self.serializer = DNASerializer.DNASerializer(self)
 
         # Enable replaceSelected by default:
         self.replaceSelectedEnabled = 1
@@ -232,7 +230,7 @@ class LevelEditor(NodePath, DirectObject):
             ('shift-f12', self.renderMapScaled),
             ('alt-f12', self.renderMap), # doesnt do automatic stuff, likely wont get used, but just incase
             ('control-c', self.toggleVisibleCollisions),
-            ('control-s', self.serializer.outputDNADefaultFile),
+            ('control-s', DNASerializer.outputDNADefaultFile),
             ('tab', self.enterGlobalRadialMenu),
             ('s', self.beginBoxSelection),
             ('alt-s', self.toggleSuitBuildingPreviews)
