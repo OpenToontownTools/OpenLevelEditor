@@ -9,9 +9,6 @@ dnaDirectory = Filename.expandFrom(userfiles)
 class DNASerializer:
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelEditor')
 
-    def __init__(self, editor):
-        self.editor = editor
-
     # STYLE/DNA FILE FUNCTIONS
     def loadSpecifiedDNAFile(self):
         path = dnaDirectory.toOsSpecific()
@@ -19,12 +16,11 @@ class DNASerializer:
             print('LevelEditor Warning: Invalid default DNA directory!')
             print('Using current directory')
             path = '.'
-        dnaFilename = askopenfilename(
-                defaultextension = '.dna',
+        dnaFilename = askopenfilename(defaultextension = '.dna',
                 filetypes = (('DNA Files', '*.dna'), ('All files', '*')),
                 initialdir = path,
                 title = 'Load DNA File',
-                parent = self.editor.panel.component('hull'))
+                parent = base.le.panel.component('hull'))
         if dnaFilename:
             self.loadDNAFromFile(dnaFilename)
             self.outputFile = dnaFilename
@@ -41,7 +37,7 @@ class DNASerializer:
                 filetypes = (('DNA Files', '*.dna'), ('All files', '*')),
                 initialdir = path,
                 title = 'Save DNA File as',
-                parent = self.editor.panel.component('hull'))
+                parent = base.le.panel.component('hull'))
         if dnaFilename:
             self.outputDNA(dnaFilename)
             self.outputFile = dnaFilename
@@ -49,15 +45,14 @@ class DNASerializer:
     def loadDNAFromFile(self, filename):
         self.notify.debug("Filename: %s" % filename)
         # Reset level, destroying existing scene/DNA hierarcy
-        self.editor.reset(fDeleteToplevel = 1, fCreateToplevel = 0,
+        base.le.reset(fDeleteToplevel = 1, fCreateToplevel = 0,
                    fUpdateExplorer = 0)
         # Now load in new file
         try:
             self.notify.debug("Trying to load file")
             node = loadDNAFile(DNASTORE, Filename.fromOsSpecific(filename).cStr(), CSDefault, 1)
         except Exception:
-            self.notify.debug(
-                    "Couldn't load specified DNA file. Please make sure storage code has been specified in Config.prc file")
+            self.notify.debug("Couldn't load specified DNA file. Please make sure storage code has been specified in Config.prc file")
             return
         if node.getNumParents() == 1:
             # If the node already has a parent arc when it's loaded, we must
@@ -69,29 +64,29 @@ class DNASerializer:
             newNPToplevel = hidden.attachNewNode(node)
 
         # Make sure the topmost file DNA object gets put under DNARoot
-        newDNAToplevel = self.editor.findDNANode(newNPToplevel)
+        newDNAToplevel = base.le.findDNANode(newNPToplevel)
 
         # reset the landmark block number:
-        (self.landmarkBlock, needTraverse) = self.editor.findHighestLandmarkBlock(newDNAToplevel, newNPToplevel)
+        (self.landmarkBlock, needTraverse) = base.le.findHighestLandmarkBlock(newDNAToplevel, newNPToplevel)
 
         # Update toplevel variables
         if needTraverse:
-            self.editor.createToplevel(newDNAToplevel)
+            base.le.createToplevel(newDNAToplevel)
         else:
-            self.editor.createToplevel(newDNAToplevel, newNPToplevel)
+            base.le.createToplevel(newDNAToplevel, newNPToplevel)
         # Create visible representations of all the paths and battle cells
-        self.editor.createSuitPaths()
-        self.editor.hideSuitPaths()
-        self.editor.createBattleCells()
-        self.editor.hideBattleCells()
+        base.le.createSuitPaths()
+        base.le.hideSuitPaths()
+        base.le.createBattleCells()
+        base.le.hideBattleCells()
 
-        self.editor.loadAnimatedProps(newNPToplevel)
+        base.le.loadAnimatedProps(newNPToplevel)
 
         # Set the title bar to have the filename to make it easier
         # to remember what file you are working on
-        self.editor.panel["title"] = 'Open Level Editor: ' + os.path.basename(filename)
-        self.editor.panel.sceneGraphExplorer.update()
-        self.editor.popupNotification(f"Loaded {os.path.basename(filename)}")
+        base.le.panel["title"] = 'Open Level Editor: ' + os.path.basename(filename)
+        base.le.panel.sceneGraphExplorer.update()
+        base.le.popupNotification(f"Loaded {os.path.basename(filename)}")
 
     def outputDNADefaultFile(self):
         outputFile = self.outputFile
@@ -105,8 +100,8 @@ class DNASerializer:
         print('Saving DNA to: ', filename)
         binaryFilename = Filename(filename)
         binaryFilename.setBinary()
-        self.editor.DNAData.writeDna(binaryFilename, Notify.out(), DNASTORE)
-        self.editor.popupNotification(f"Saved to {os.path.basename(binaryFilename)}")
+        base.le.DNAData.writeDna(binaryFilename, Notify.out(), DNASTORE)
+        base.le.popupNotification(f"Saved to {os.path.basename(binaryFilename)}")
         if ConfigVariableString("compiler") in ['libpandadna', 'clash']:
             print(f"Compiling PDNA for {ConfigVariableString('compiler')}")
             self.compileDNA(binaryFilename)
@@ -116,10 +111,10 @@ class DNASerializer:
         process_single_file(filename)
 
     def saveColor(self):
-        self.appendColorToColorPaletteFile(self.editor.panel.colorEntry.get())
+        self.appendColorToColorPaletteFile(base.le.panel.colorEntry.get())
 
     def appendColorToColorPaletteFile(self, color):
-        obj = self.DNATarget
+        obj = base.le.DNATarget
         if obj:
             classType = DNAGetClassType(obj)
             if classType == DNA_WALL:
@@ -164,10 +159,10 @@ class DNASerializer:
         f.close()
 
     def saveBaselineStyle(self):
-        if self.editor.panel.currentBaselineDNA:
+        if base.le.panel.currentBaselineDNA:
             # Valid baseline, add style to file
             filename = self.neighborhood + '/baseline_styles.txt'
-            style = DNABaselineStyle(self.editor.panel.currentBaselineDNA)
+            style = DNABaselineStyle(base.le.panel.currentBaselineDNA)
             self.saveStyle(filename, style)
 
     def saveWallStyle(self):
@@ -198,7 +193,7 @@ class DNASerializer:
                              ('All files', '*')),
                 initialdir = path,
                 title = 'Load Curve File',
-                parent = self.editor.panel.component('hull'))
+                parent = base.le.panel.component('hull'))
         if streetCurveFilename:
             modelFile = loader.loadModel(Filename.fromOsSpecific(streetCurveFilename))
             # curves = modelFile.findAllMatches('**/+ClassicNurbsCurve')
