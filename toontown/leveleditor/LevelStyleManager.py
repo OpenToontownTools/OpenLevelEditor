@@ -5,7 +5,7 @@ from locale import atof
 from .LevelEditorGlobals import *
 from .PieMenu import *
 from .ScrollMenu import *
-
+from .EditorUtil import *
 
 class LevelStyleManager:
     """Class which reads in style files and manages class variables"""
@@ -145,7 +145,6 @@ class LevelStyleManager:
         """
         baseline = DNASignBaseline()
         # Set some example text:
-        DNASetBaselineString(baseline, "Example Text")
         baselineStyle.copyTo(baseline)
         return baseline.traverse(hidden, DNASTORE, 1)
 

@@ -37,7 +37,7 @@ class ToontownLevelEditor(ShowBase):
         loadPrcFile('editor.prc')
 
         builtins.userfiles = self.config.GetString('userfiles-directory')
-        
+
         if not os.path.exists(userfiles):
             pathlib.Path(userfiles).mkdir(parents = True, exist_ok = True)
 
@@ -109,6 +109,12 @@ class ToontownLevelEditor(ShowBase):
         # Make custom hood directory if it doesn't exist
         if not os.path.exists(f'{userfiles}/hoods/'):
             os.mkdir(f'{userfiles}/hoods/')
+        # Make a maps directory if we don't have one
+        if not os.path.isdir("maps"):
+            os.mkdir("maps")
+        # Make a Screenshots directory if we don't have one
+        if not os.path.isdir("screenshots"):
+            os.mkdir("screenshots")
 
     def __importMainLibs(self):
         builtin_dict = builtins.__dict__
