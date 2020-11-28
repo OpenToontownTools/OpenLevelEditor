@@ -517,7 +517,7 @@ class LevelEditor(NodePath, DirectObject):
     def useDriveMode(self):
         """ Lerp down to eye level then switch to Drive mode """
         if self.avatar == None:
-            self.avatar = LEAvatar(None, None, None)
+            self.avatar = LEAvatar.LEAvatar(None, None, None)
             base.localAvatar = self.avatar
             self.avatar.doId = 0
             self.avatar.robot = RobotToon.RobotToon()

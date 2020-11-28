@@ -598,7 +598,7 @@ def loadDialog():
                          )
     # load the audio files and store into the dialogue array
     for file in DogDialogueFiles:
-        DogDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        DogDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
     # load the cat dialogue
     catDialogueFiles = ( "AV_cat_short",
@@ -610,7 +610,7 @@ def loadDialog():
                          )
     # load the audio files and store into the dialogue array
     for file in catDialogueFiles:
-        CatDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        CatDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
     # load the horse dialogue
     horseDialogueFiles = ( "AV_horse_short",
@@ -623,7 +623,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in horseDialogueFiles:
-        HorseDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        HorseDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
     # load the rabbit dialogue
     rabbitDialogueFiles = ( "AV_rabbit_short",
@@ -636,7 +636,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in rabbitDialogueFiles:
-        RabbitDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        RabbitDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
     # load the mouse dialogue
     # for now the mouse reuses the rabbit sounds
@@ -650,7 +650,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in mouseDialogueFiles:
-        MouseDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        MouseDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
     # load the duck dialogue array
     duckDialogueFiles = ( "AV_duck_short",
@@ -663,7 +663,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in duckDialogueFiles:
-        DuckDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        DuckDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
     # load the monkey dialogue array
     monkeyDialogueFiles = ( "AV_monkey_short",
@@ -676,7 +676,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in monkeyDialogueFiles:
-        MonkeyDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        MonkeyDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
 
     # load the bear dialogue array
@@ -690,7 +690,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in bearDialogueFiles:
-        BearDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        BearDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
 
     # load the pig dialogue array
@@ -704,7 +704,7 @@ def loadDialog():
 
     # load the audio files and store into the dialogue array
     for file in pigDialogueFiles:
-        PigDialogueArray.append(base.loadSfx(loadPath + file + ".ogg"))
+        PigDialogueArray.append(loader.loadSfx(loadPath + file + ".ogg"))
 
 def unloadDialog():
     global DogDialogueArray
@@ -841,7 +841,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.setFont(ToontownGlobals.getToonFont())
 
         # chat balloon sound
-        self.soundChatBubble = base.loadSfx("phase_3/audio/sfx/GUI_balloon_popup.ogg")
+        self.soundChatBubble = loader.loadSfx("phase_3/audio/sfx/GUI_balloon_popup.ogg")
 
         # The animFSM doesn't really have any restrictions on
         # transitions between states--we don't care which anim
@@ -2208,7 +2208,7 @@ class Toon(Avatar.Avatar, ToonHead):
         # This is loaded on demand so it does not need to be downloaded with the tutorial
         # which does not use it
         if not self.soundTeleport:
-            self.soundTeleport = base.loadSfx("phase_3.5/audio/sfx/AV_teleport.ogg")
+            self.soundTeleport = loader.loadSfx("phase_3.5/audio/sfx/AV_teleport.ogg")
         return self.soundTeleport
 
     def getTeleportOutTrack(self, autoFinishTrack = 1):
