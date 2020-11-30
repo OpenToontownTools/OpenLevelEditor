@@ -2880,7 +2880,8 @@ class LevelEditor(NodePath, DirectObject):
                         else:
                             self.point2edgeDict[point] = [suitEdge]
                 else: # If it's a door point, we don't set the last selected point
-                    self.startSuitPoint = suitPoint
+                    base.direct.select(self.pointDict.get(suitPoint, None).getChild(0))
+                    self.updateSelectedPose(base.direct.selected.getSelectedAsList())
 
                 print('Added dnaSuitEdge to zone: ' + zoneId)
             else:
