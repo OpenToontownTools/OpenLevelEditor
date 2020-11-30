@@ -330,8 +330,8 @@ class LevelEditor(NodePath, DirectObject):
 
         # Load the DNA file passed (normally through an argument)
         if dnaPath:
-            self.loadDNAFromFile(dnaPath)
-            self.outputFile = dnaPath
+            DNASerializer.loadDNAFromFile(dnaPath)
+            DNASerializer.outputFile = dnaPath
 
         # box selection stuff
         self.isSelecting = False
