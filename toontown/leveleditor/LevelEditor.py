@@ -2798,14 +2798,23 @@ class LevelEditor(NodePath, DirectObject):
         marker = self.suitPointMarker.copyTo(parent)
         marker.setName("suitPointMarker")
         marker.setPos(pos)
+        #label = DirectGui.DirectLabel(text = '%d' % suitPoint.getIndex(),
+        #                              text_font = ToontownGlobals.getSignFont(),
+        #                              parent = marker, relief = None, scale = 3)
+        #label.setBillboardPointEye(1)
+        #label.setScale(5)
+        #label.reparentTo(marker)
         if type == DNASuitPoint.STREETPOINT:
             marker.setColor(0, 0, 0.6)
+            #label['text_fg'] = Vec4(0.0, 0.0, 0.6, 1.0)
             marker.setScale(0.4)
         elif type == DNASuitPoint.FRONTDOORPOINT:
             marker.setColor(0, 0, 1)
+            #label['text_fg'] = Vec4(0.0, 0.0, 1.0, 1.0)
             marker.setScale(0.5)
         elif type == DNASuitPoint.SIDEDOORPOINT:
             marker.setColor(0, 0.6, 0.2)
+            #label['text_fg'] = Vec4(0.0, 0.6, 0.2, 1.0)
             marker.setScale(0.5)
         # Highlight if necessary
         if suitPoint in self.visitedPoints:
