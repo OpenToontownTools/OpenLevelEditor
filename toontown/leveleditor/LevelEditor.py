@@ -1155,6 +1155,7 @@ class LevelEditor(NodePath, DirectObject):
                     pointOrCell.setPos(newPos)
                     if type == 'suitPointMarker':
                         print("Found suit point!", pointOrCell)
+                        self.startSuitPoint = pointOrCell
                         # Ok, now update all the lines into that node
                         for edge in self.point2edgeDict[pointOrCell]:
                             oldEdgeLine = self.edgeDict.get(edge, None)
@@ -2829,7 +2830,6 @@ class LevelEditor(NodePath, DirectObject):
                                         self.suitPointToplevel)
             self.pointDict[suitPoint] = marker
         self.currentSuitPointIndex = suitPoint.getIndex()
-
         if self.startSuitPoint:
             self.endSuitPoint = suitPoint
             # Make a new dna edge
@@ -2855,8 +2855,8 @@ class LevelEditor(NodePath, DirectObject):
 
                 # If this is a building point, you need edges in both directions
                 # so just make the other edge automatically
-                if ((self.startSuitPoint.getPointType() == DNASuitPoint.FRONTDOORPOINT)
-                        or (self.startSuitPoint.getPointType() == DNASuitPoint.SIDEDOORPOINT)):
+                if ((self.endSuitPoint.getPointType() == DNASuitPoint.FRONTDOORPOINT)
+                        or (self.endSuitPoint.getPointType() == DNASuitPoint.SIDEDOORPOINT)):
 
                     suitEdge = DNASuitEdge(
                             self.endSuitPoint, self.startSuitPoint, zoneId)
@@ -2870,11 +2870,12 @@ class LevelEditor(NodePath, DirectObject):
                             self.point2edgeDict[point].append(suitEdge)
                         else:
                             self.point2edgeDict[point] = [suitEdge]
+                else: # If it's a door point, we don't set the last selected point
+                    self.startSuitPoint = suitPoint
 
                 print('Added dnaSuitEdge to zone: ' + zoneId)
             else:
                 print('Error: DNAParent is not a dnaVisGroup. Did not add edge')
-            self.startSuitPoint = None
             self.endSuitPoint = None
         else:
             self.startSuitPoint = suitPoint
