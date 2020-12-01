@@ -689,6 +689,16 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 variable = self.zoneColor,
                 command = self.levelEditor.toggleZoneColors)
         self.colorZoneButton1.pack(side = LEFT, expand = 1, fill = X)
+        
+        self.pathLabels = IntVar()
+        self.pathLabels.set(0)
+        self.pathLabelsButton = ttk.Checkbutton(
+                spButtons,
+                text = 'Show Point Labels', width = 20,
+                variable = self.pathLabels,
+                command = self.togglePathLabels)
+        self.pathLabelsButton.pack(side = LEFT, expand = 1, fill = X)
+        
         spButtons.pack(fill = X)
 
         spButtons = Frame(suitPathPage)
@@ -852,6 +862,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                        variable = self.fLabel,
                                        command = self.toggleZoneLabels)
         self.labelButton.pack(side = LEFT, expand = 1, fill = X)
+        
+        self.fLabelOnTop = IntVar()
+        self.fLabelOnTop.set(0)
+        self.labelOnTopButton = ttk.Checkbutton(visualFrame,
+                                       text = 'Labels Always On Top',
+                                       width = 20,
+                                       variable = self.fLabelOnTop,
+                                       command = self.toggleZoneLabelsOnTop)
+        self.labelOnTopButton.pack(side = LEFT, expand = 1, fill = X)
 
         self.fGrid = IntVar()
         self.fGrid.set(0)
@@ -967,6 +986,21 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.labelZones()
         else:
             self.levelEditor.clearZoneLabels()
+            
+    def toggleZoneLabelsOnTop(self):
+        self.levelEditor.labelsOnTop = self.fLabelOnTop.get()
+        for lbl in self.levelEditor.zoneLabels:
+            lbl.setDepthTest(not self.fLabelOnTop.get())
+        for lbl in self.levelEditor.NPToplevel.findAllMatches('**/suit_point_label_*'):
+            lbl.setDepthTest(not self.fLabelOnTop.get())
+            
+    def togglePathLabels(self):
+        if self.pathLabels.get():
+            for lbl in self.levelEditor.NPToplevel.findAllMatches('**/suit_point_label_*'):
+                lbl.show()
+        else:
+            for lbl in self.levelEditor.NPToplevel.findAllMatches('**/suit_point_label_*'):
+                lbl.hide()
 
     def toggleXyzSnap(self):
         base.direct.grid.setXyzSnap(self.fXyzSnap.get())

@@ -241,6 +241,8 @@ class LevelEditor(NodePath, DirectObject):
             ('page_down', base.direct)
             ]
 
+        
+        self.labelsOnTop = False
         # Initialize state
         # Make sure direct is running
         base.direct.enable()
@@ -2798,27 +2800,34 @@ class LevelEditor(NodePath, DirectObject):
         marker = self.suitPointMarker.copyTo(parent)
         marker.setName("suitPointMarker")
         marker.setPos(pos)
-        #label = DirectGui.DirectLabel(text = '%d' % suitPoint.getIndex(),
-        #                              text_font = ToontownGlobals.getSignFont(),
-        #                              parent = marker, relief = None, scale = 3)
-        #label.setBillboardPointEye(1)
-        #label.setScale(5)
-        #label.reparentTo(marker)
+        label = DirectGui.DirectLabel(text = '%d' % suitPoint.getIndex(),
+                                      pos = (0.0, 0.0, 2),
+                                      text_font = ToontownGlobals.getSignFont(),
+                                      parent = marker.getChild(0), relief = None, scale = 3)
+        label.setBillboardPointWorld()
+        label.setDepthWrite(False)
+        label.setDepthTest(not self.labelsOnTop)
+        label.setScale(3)
+        label.setName(f'suit_point_label_{suitPoint.getIndex()}')
+        if not self.panel.pathLabels.get():
+            label.hide()
         if type == DNASuitPoint.STREETPOINT:
-            marker.setColor(0, 0, 0.6)
-            #label['text_fg'] = Vec4(0.0, 0.0, 0.6, 1.0)
+            color = Vec4(0.0, 0.0, 1.0, 1.0)
             marker.setScale(0.4)
         elif type == DNASuitPoint.FRONTDOORPOINT:
-            marker.setColor(0, 0, 1)
-            #label['text_fg'] = Vec4(0.0, 0.0, 1.0, 1.0)
+            color = Vec4(0.0, 0.6, 1.0, 1.0)
             marker.setScale(0.5)
         elif type == DNASuitPoint.SIDEDOORPOINT:
-            marker.setColor(0, 0.6, 0.2)
-            #label['text_fg'] = Vec4(0.0, 0.6, 0.2, 1.0)
+            color = Vec4(0.0, 1.0, 0.2, 1.0)
             marker.setScale(0.5)
+        else:
+            color = (0.0, 0.0, 1.0, 1.0)
         # Highlight if necessary
         if suitPoint in self.visitedPoints:
             marker.setColor(1, 0, 0, 1)
+        
+        marker.setColor(color)
+        label['text_fg'] = color
         return marker
 
     def placeSuitPoint(self):
@@ -2946,15 +2955,18 @@ class LevelEditor(NodePath, DirectObject):
         marker = self.battleCellMarker.copyTo(parent)
         marker.setTag('cellId', '%d' % cellId)
 
-        label = DirectGui.DirectLabel(text = '%d' % cellId, parent = marker, relief = None, scale = 3)
-        label.setBillboardPointEye(0)
+        label = DirectGui.DirectLabel(text = '%d' % cellId, parent = marker, 
+                                      text_fg = (0.25, 1.0, 0.25, 1.0),
+                                      text_font = ToontownGlobals.getSignFont(),
+                                      relief = None, scale = 3)
+        label.setBillboardPointEye(0)   
         label.setScale(0.4)
         if not marker.getBounds().isEmpty():
             center = marker.getBounds().getCenter()
-            label.setPos(center[0], center[1], .1)
+            label.setPos(center[0], center[1], .3)
 
         # Greenish
-        marker.setColor(0.25, 0.75, 0.25, 0.5)
+        marker.setColor(0.25, 1.0, 0.25, 0.5)
         marker.setTransparency(1)
         marker.setPos(cell.getPos())
         # scale to radius
@@ -3278,7 +3290,9 @@ class LevelEditor(NodePath, DirectObject):
                                           text_fg = (0.152, 0.750, 0.258, 1),
                                           parent = np.getParent(),
                                           relief = None, scale = 3)
-            label.setBillboardPointEye(0)
+            label.setBillboardPointWorld()
+            label.setDepthWrite(False)
+            label.setDepthTest(not self.labelsOnTop)
             if not np.getBounds().isEmpty():
                 center = np.getBounds().getCenter()
                 label.setPos(center[0], center[1], .1)
