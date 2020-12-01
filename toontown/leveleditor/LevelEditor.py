@@ -3322,14 +3322,14 @@ class LevelEditor(NodePath, DirectObject):
                     # then highlight this one:
                     np = self.selectedNPRoot
                     self.showLandmarkBlockToggleGroup.append(np)
-                    np.setColor(1, 0, 0, 1)
+                    np.setColorScale(0, 1, 0, 1)
         elif self.selectedSuitPoint and self.lastLandmarkBuildingDNA:
             block = self.lastLandmarkBuildingDNA.getName()
             block = block[2:block.find(':')]
             print(("associate point with building: " + str(block)))
             self.selectedSuitPoint.setLandmarkBuildingIndex(int(block))
             marker = self.pointDict[self.selectedSuitPoint]
-            marker.setColor(1, 0, 0, 1)
+            marker.setColor(0, 1, 0, 1)
 
     def findHighestLandmarkBlock(self, dnaRoot, npRoot):
         npc = npRoot.findAllMatches("**/*:toon_landmark_*")
@@ -3390,7 +3390,7 @@ class LevelEditor(NodePath, DirectObject):
                 if self.showLandmarkBlockToggleGroup:
                     # then highlight this one:
                     self.showLandmarkBlockToggleGroup.append(nodePath)
-                    nodePath.setColor(0, 1, 0, 1)
+                    nodePath.setColorScale(0, 1, 0, 1)
 
     def landmarkBlockRemove(self, dna, nodePath):
         if dna:
@@ -3415,14 +3415,14 @@ class LevelEditor(NodePath, DirectObject):
                 for i in range(npc.getNumPaths()):
                     nodePath = npc.getPath(i)
                     group.append(nodePath)
-                    nodePath.setColor(1, 0, 0, 1)
+                    nodePath.setColorScale(0, 1, 0, 1)
 
                 # Get block zero buildings (i.e. non-blocked):
                 npc = self.NPToplevel.findAllMatches("**/tb0:*_DNARoot")
                 for i in range(npc.getNumPaths()):
                     nodePath = npc.getPath(i)
                     group.append(nodePath)
-                    nodePath.setColor(0, 1, 0, 1)
+                    nodePath.setColorScale(1, 0, 0, 1)
 
                 # Get the suit point for this lb
                 for point, marker in list(self.pointDict.items()):
@@ -3430,17 +3430,18 @@ class LevelEditor(NodePath, DirectObject):
                             or (point.getPointType() == DNASuitPoint.SIDEDOORPOINT)):
                         lbIndex = point.getLandmarkBuildingIndex()
                         if lbIndex == int(block):
-                            marker.setColor(1, 0, 0, 1)
+                            marker.setColor(0, 1, 0, 1)
                             marker.setScale(1.0)
                             # There should only be one, so break now
                         elif lbIndex == -1:
                             # This point belongs to no block
-                            marker.setColor(0, 1, 0, 1)
+                            marker.setColor(1, 0, 0, 1)
 
                 self.showLandmarkBlockToggleGroup = group
             else:
                 for i in self.showLandmarkBlockToggleGroup:
-                    i.clearColor()
+                    if not i.isEmpty():
+                        i.clearColorScale()
                 for point, marker in list(self.pointDict.items()):
                     if point.getPointType() == DNASuitPoint.FRONTDOORPOINT:
                         marker.setColor(0, 0, 1, 1)
