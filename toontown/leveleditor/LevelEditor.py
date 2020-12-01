@@ -233,7 +233,8 @@ class LevelEditor(NodePath, DirectObject):
             ('control-s', DNASerializer.outputDNADefaultFile),
             ('tab', self.enterGlobalRadialMenu),
             ('s', self.beginBoxSelection),
-            ('alt-s', self.toggleSuitBuildingPreviews)
+            ('alt-s', self.toggleSuitBuildingPreviews),
+            ('shift-r', self.setReparentTarget)
             ]
 
         self.overrideEvents = [
@@ -825,6 +826,11 @@ class LevelEditor(NodePath, DirectObject):
                 del bldg
             self.suitBuildings = []
             self.popupNotification("Disabled Suit Building View")
+
+    def setReparentTarget(self):
+        if base.direct.selected.last:
+            base.direct.setActiveParent(base.direct.selected.last)
+            self.popupNotification(f'Set reparent target to {base.direct.selected.last}')
 
     def initVisibilityData(self):
         self.showAllVisibles()
