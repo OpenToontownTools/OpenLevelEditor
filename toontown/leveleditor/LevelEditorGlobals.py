@@ -236,6 +236,7 @@ Change direction of wall part: Alt + Hold Right Click on part (MayaCam MUST be d
 --Landmark Buildings--
 Change door: Hold Right Click bottom half of building
 Change sign background: Hold Right Click on top half of building
+Show suit building previews: Alt + S
 
 --Flat Building Linking--
 Toggle Flat Building Linking mode: Shift + K
@@ -244,6 +245,8 @@ Link Flat Building to Landmark Building: Left click Flat Building and press K
 
 --All Objects--
 Change Color: Control + Hold Right Click on object
+Set active parent to selected object: P
+Reparent selected object to active parent: R
 
 --Suits--
 Place Suit Point: Shift + S
@@ -255,4 +258,6 @@ Save: Control + S
 Screenshot: F12
 Toggle Ortho Camera: Shift + O
 Take Map Screenshot: Shift + F12
+Global Radial Menu: Hold Tab
+Enter Box Selection mode: S
 '''
