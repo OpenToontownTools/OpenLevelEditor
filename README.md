@@ -18,7 +18,6 @@
 * New features are still actively being developed with no plans of stopping anytime soon!
 * Some features planned for the future are:
    * Auto Saving
-   * Improvements to the Cog Path system, as the current one is confusing and hard to use
    * Drive mode will be making a return in the future
    * Better mouse positioning widgets
    * and much more!
