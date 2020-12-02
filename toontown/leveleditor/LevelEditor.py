@@ -234,12 +234,14 @@ class LevelEditor(NodePath, DirectObject):
             ('tab', self.enterGlobalRadialMenu),
             ('s', self.beginBoxSelection),
             ('alt-s', self.toggleSuitBuildingPreviews),
-            ('shift-r', self.setReparentTarget)
+            # This already exists, but we will override it to show an input
+            ('p', self.setReparentTarget)
             ]
 
         self.overrideEvents = [
             ('page_up', base.direct),
-            ('page_down', base.direct)
+            ('page_down', base.direct),
+            ('p', base.direct)
             ]
 
         
