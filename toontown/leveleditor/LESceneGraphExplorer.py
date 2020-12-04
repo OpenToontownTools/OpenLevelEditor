@@ -27,15 +27,17 @@ DEFAULT_MENU_ITEMS = [
     'Place', 'Set Name', 'Set Color', 'Explore',
     'Separator']
 
+
 class SceneGraphExplorer(Pmw.MegaWidget, DirectObject):
     "Graphical display of a scene graph"
+
     def __init__(self, parent = None, nodePath = None, isItemEditable = True, **kw):
         if nodePath is None:
             nodePath = base.render
 
         # Define the megawidget options.
         optiondefs = (
-            ('menuItems',   [],   Pmw.INITOPT),
+            ('menuItems', [], Pmw.INITOPT),
             )
         self.defineoptions(kw, optiondefs)
 
@@ -53,15 +55,15 @@ class SceneGraphExplorer(Pmw.MegaWidget, DirectObject):
 
         # Create a label and an entry
         self._scrolledCanvas = self.createcomponent(
-            'scrolledCanvas',
-            (), None,
-            Pmw.ScrolledCanvas, (interior,),
-            hull_width = 200, hull_height = 300,
-            usehullsize = 1)
+                'scrolledCanvas',
+                (), None,
+                Pmw.ScrolledCanvas, (interior,),
+                hull_width = 200, hull_height = 300,
+                usehullsize = 1)
         self._canvas = self._scrolledCanvas.component('canvas')
         self._canvas['scrollregion'] = ('0i', '0i', '2i', '4i')
         self._scrolledCanvas.resizescrollregion()
-        self._scrolledCanvas.pack(padx = 3, pady = 3, expand=1, fill = BOTH)
+        self._scrolledCanvas.pack(padx = 3, pady = 3, expand = 1, fill = BOTH)
 
         self._canvas.bind('<ButtonPress-2>', self.mouse2Down)
         self._canvas.bind('<B2-Motion>', self.mouse2Motion)
@@ -79,16 +81,17 @@ class SceneGraphExplorer(Pmw.MegaWidget, DirectObject):
 
         self._parentFrame = Frame(interior)
         self._label = self.createcomponent(
-            'parentLabel',
-            (), None,
-            Label, (interior,),
-            text = 'Active Reparent Target: ',
-            anchor = W, justify = LEFT)
+                'parentLabel',
+                (), None,
+                Label, (interior,),
+                text = 'Active Reparent Target: ',
+                anchor = W, justify = LEFT)
         self._label.pack(fill = X)
 
         # Add update parent label
         def updateLabel(nodePath = None, s = self):
             s._label['text'] = 'Active Reparent Target: ' + nodePath.getName()
+
         self.accept('DIRECT_activeParent', updateLabel)
 
         # Add update hook
@@ -125,9 +128,9 @@ class SceneGraphExplorer(Pmw.MegaWidget, DirectObject):
         self._2ly = event.y
 
     def mouse2Motion(self, event):
-        newx = self._left - ((event.x - self._2lx)/self._width) * self._dxview
+        newx = self._left - ((event.x - self._2lx) / self._width) * self._dxview
         self._canvas.xview_moveto(newx)
-        newy = self._top - ((event.y - self._2ly)/self._height) * self._dyview
+        newy = self._top - ((event.y - self._2ly) / self._height) * self._dyview
         self._canvas.yview_moveto(newy)
         self._2lx = event.x
         self._2ly = event.y
@@ -146,8 +149,8 @@ class SceneGraphExplorer(Pmw.MegaWidget, DirectObject):
             sceneGraphItem.reveal()
             sceneGraphItem.select()
 
-class SceneGraphExplorerItem(TreeItem):
 
+class SceneGraphExplorerItem(TreeItem):
     """Example TreeItem subclass -- browse the file system."""
 
     def __init__(self, nodePath, isItemEditable = True):
@@ -173,7 +176,7 @@ class SceneGraphExplorerItem(TreeItem):
     def IsEditable(self):
         # All nodes' names can be edited nowadays.
         return self.isItemEditable
-        #return issubclass(self.nodePath.node().__class__, NamedNode)
+        # return issubclass(self.nodePath.node().__class__, NamedNode)
 
     def SetText(self, text):
         try:
@@ -182,7 +185,7 @@ class SceneGraphExplorerItem(TreeItem):
             pass
 
     def GetIconName(self):
-        return "sphere2" # XXX wish there was a "file" icon
+        return "sphere2"  # XXX wish there was a "file" icon
 
     def IsExpandable(self):
         return self.nodePath.getNumChildren() != 0

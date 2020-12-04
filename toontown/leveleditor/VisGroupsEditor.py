@@ -3,6 +3,7 @@ import sys
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets.Tree import *
 
+
 class VisGroupsEditor(Pmw.MegaToplevel):
     def __init__(self, levelEditor, visGroups = ['None'],
                  parent = None, **kw):

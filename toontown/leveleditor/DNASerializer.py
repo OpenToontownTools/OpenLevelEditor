@@ -6,6 +6,7 @@ from direct.directnotify import DirectNotifyGlobal
 
 dnaDirectory = Filename.expandFrom(userfiles)
 
+
 class DNASerializer:
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelEditor')
     outputFile = None
@@ -19,10 +20,10 @@ class DNASerializer:
             print('Using current directory')
             path = '.'
         dnaFilename = askopenfilename(defaultextension = '.dna',
-                filetypes = (('DNA Files', '*.dna'), ('All files', '*')),
-                initialdir = path,
-                title = 'Load DNA File',
-                parent = base.le.panel.component('hull'))
+                                      filetypes = (('DNA Files', '*.dna'), ('All files', '*')),
+                                      initialdir = path,
+                                      title = 'Load DNA File',
+                                      parent = base.le.panel.component('hull'))
         if dnaFilename:
             DNASerializer.loadDNAFromFile(dnaFilename)
             DNASerializer.outputFile = dnaFilename
@@ -44,19 +45,20 @@ class DNASerializer:
         if dnaFilename:
             DNASerializer.outputDNA(dnaFilename)
             DNASerializer.outputFile = dnaFilename
-    
+
     @staticmethod
     def loadDNAFromFile(filename):
         DNASerializer.notify.debug("Filename: %s" % filename)
         # Reset level, destroying existing scene/DNA hierarcy
         base.le.reset(fDeleteToplevel = 1, fCreateToplevel = 0,
-                   fUpdateExplorer = 0)
+                      fUpdateExplorer = 0)
         # Now load in new file
         try:
             DNASerializer.notify.debug("Trying to load file")
             node = loadDNAFile(DNASTORE, Filename.fromOsSpecific(filename).cStr(), CSDefault, 1)
         except Exception:
-            DNASerializer.notify.debug("Couldn't load specified DNA file. Please make sure storage code has been specified in Config.prc file")
+            DNASerializer.notify.debug(
+                    "Couldn't load specified DNA file. Please make sure storage code has been specified in Config.prc file")
             return
         if node.getNumParents() == 1:
             # If the node already has a parent arc when it's loaded, we must

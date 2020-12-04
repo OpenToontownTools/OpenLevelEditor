@@ -1,6 +1,7 @@
 from .LevelEditorGlobals import *
 
-#DNA Utility functions (possible class extensions?)
+
+# DNA Utility functions (possible class extensions?)
 def DNARemoveChildren(dnaObject):
     """ Utility function to delete all the children of a DNANode """
     children = []

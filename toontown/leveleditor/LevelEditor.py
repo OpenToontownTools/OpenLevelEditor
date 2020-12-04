@@ -73,6 +73,7 @@ DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())
 DNASTORE.storeFont('suit', ToontownGlobals.getSuitFont())
 builtins.dnaLoaded = True
 
+
 class LevelEditor(NodePath, DirectObject):
     """Class used to create a Toontown LevelEditor object"""
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelEditor')
@@ -117,7 +118,6 @@ class LevelEditor(NodePath, DirectObject):
         self.createInsertionMarker()
 
         self.panel = LevelEditorPanel.LevelEditorPanel(self)
-
 
         # Used to store whatever edges and points are loaded in the level
         self.edgeDict = {}
@@ -228,7 +228,7 @@ class LevelEditor(NodePath, DirectObject):
             ('shift-o', self.toggleOrth),
             ('f12', self.screenshot),
             ('shift-f12', self.renderMapScaled),
-            ('alt-f12', self.renderMap), # doesnt do automatic stuff, likely wont get used, but just incase
+            ('alt-f12', self.renderMap),  # doesnt do automatic stuff, likely wont get used, but just incase
             ('control-c', self.toggleVisibleCollisions),
             ('control-s', DNASerializer.outputDNADefaultFile),
             ('tab', self.enterGlobalRadialMenu),
@@ -244,7 +244,6 @@ class LevelEditor(NodePath, DirectObject):
             ('p', base.direct)
             ]
 
-        
         self.labelsOnTop = False
         # Initialize state
         # Make sure direct is running
@@ -483,7 +482,7 @@ class LevelEditor(NodePath, DirectObject):
             base.camera.setP(p)
 
         if self.isPageUp:
-            fromP = 36.8699 # REVIEW: Weird magic numbers?
+            fromP = 36.8699  # REVIEW: Weird magic numbers?
         elif self.isPageDown:
             fromP = -27.5607
         else:
@@ -505,7 +504,7 @@ class LevelEditor(NodePath, DirectObject):
 
     def pageUp(self):
         if not self.isPageUp:
-            self.lerpCameraP(36.8699, 0.6) # REVIEW: more magic numbers, seem to coinside with above
+            self.lerpCameraP(36.8699, 0.6)  # REVIEW: more magic numbers, seem to coinside with above
             self.isPageDown = 0
             self.isPageUp = 1
         else:
@@ -712,9 +711,8 @@ class LevelEditor(NodePath, DirectObject):
                 suitBuildings.append(DNASTORE.findNode("suit_landmark_g1"))
                 suitNames.append('Boardbot')
 
-
             # temporary fix for duplicate sb's
-            sb= []
+            sb = []
             for bldg in self.NPToplevel.findAllMatches('**/*sb*:toon_landmark*'):
                 # We don't do this to HQs.
                 if 'hq' in bldg.getName():
@@ -735,7 +733,7 @@ class LevelEditor(NodePath, DirectObject):
 
                 # clash has 5, the rest have 4
                 numCorps = 5 if base.server == TOONTOWN_CORPORATE_CLASH else 4
-                suitType = random.randint(0, numCorps-1)
+                suitType = random.randint(0, numCorps - 1)
 
                 suitBuilding = suitBuildings[suitType]
 
@@ -785,18 +783,18 @@ class LevelEditor(NodePath, DirectObject):
 
                 # Determine where the sign should go:
                 signOrigin = newsuit.find("**/sign_origin;+s")
-                assert(not signOrigin.isEmpty())
+                assert (not signOrigin.isEmpty())
 
                 # Get the background:
                 backgroundNP = loader.loadModel("phase_5/models/modules/suit_sign")
-                assert(not backgroundNP.isEmpty())
+                assert (not backgroundNP.isEmpty())
                 backgroundNP.reparentTo(signOrigin)
                 backgroundNP.setPosHprScale(0.0, 0.0, textHeight * 0.8 / zScale,
                                             0.0, 0.0, 0.0,
                                             8.0, 8.0, 8.0 * zScale)
 
                 signTextNodePath = backgroundNP.attachNewNode(textNode.generate())
-                assert(not signTextNodePath.isEmpty())
+                assert (not signTextNodePath.isEmpty())
 
                 signTextNodePath.setPosHprScale(0.0, -0.001, -0.21 + textHeight * 0.1 / zScale,
                                                 0.0, 0.0, 0.0,
@@ -805,7 +803,7 @@ class LevelEditor(NodePath, DirectObject):
                 signTextNodePath.setColor(1.0, 1.0, 1.0, 1.0)
                 # Decal sign onto the front of the building:
                 frontNP = newsuit.find("**/*_front/+GeomNode;+s")
-                assert(not frontNP.isEmpty())
+                assert (not frontNP.isEmpty())
                 backgroundNP.wrtReparentTo(frontNP)
                 frontNP.node().setEffect(DecalEffect.make())
 
@@ -1587,7 +1585,6 @@ class LevelEditor(NodePath, DirectObject):
             if DNAGetClassType(dnaNode) == DNA_LANDMARK_BUILDING:
                 dnaNode.setTitle(title)
 
-
     def addAnimBuilding(self, animBuildingType):
         print("addAnimBuilding %s " % animBuildingType)
         # Record new anim building type
@@ -2075,7 +2072,8 @@ class LevelEditor(NodePath, DirectObject):
         dnaNode = self.findDNANode(nodePath)
         if dnaNode:
             objClass = DNAGetClassType(dnaNode)
-            if objClass in [DNA_WALL, DNA_WINDOWS, DNA_DOOR, DNA_FLAT_DOOR, DNA_CORNICE, DNA_PROP, DNA_SIGN, DNA_SIGN_BASELINE, DNA_SIGN_TEXT, DNA_SIGN_GRAPHIC]:
+            if objClass in [DNA_WALL, DNA_WINDOWS, DNA_DOOR, DNA_FLAT_DOOR, DNA_CORNICE, DNA_PROP, DNA_SIGN,
+                            DNA_SIGN_BASELINE, DNA_SIGN_TEXT, DNA_SIGN_GRAPHIC]:
                 # Update dna information
                 dnaNode.setColor(VBase4(r / 255.0, g / 255.0, b / 255.0, a / 255.0))
 
@@ -2791,7 +2789,7 @@ class LevelEditor(NodePath, DirectObject):
         # Add offset to start and end to help differentiate lines
         relStartPos += offset
         relEndPos += offset
-        edgeLine.drawArrow(relStartPos, relEndPos, 15, 1) #startpos, endpos, ang, len
+        edgeLine.drawArrow(relStartPos, relEndPos, 15, 1)  # startpos, endpos, ang, len
         edgeLine.create()
         # Add a clickable sphere
         marker = self.suitPointMarker.copyTo(edgeLine)
@@ -2833,7 +2831,7 @@ class LevelEditor(NodePath, DirectObject):
         # Highlight if necessary
         if suitPoint in self.visitedPoints:
             marker.setColor(1, 0, 0, 1)
-        
+
         marker.setColor(color)
         label['text_fg'] = color
         return marker
@@ -2896,7 +2894,7 @@ class LevelEditor(NodePath, DirectObject):
                             self.point2edgeDict[point].append(suitEdge)
                         else:
                             self.point2edgeDict[point] = [suitEdge]
-                else: # If it's a door point, we don't set the last selected point
+                else:  # If it's a door point, we don't set the last selected point
                     base.direct.select(self.pointDict.get(suitPoint, None).getChild(0))
                     self.updateSelectedPose(base.direct.selected.getSelectedAsList())
 
@@ -2963,11 +2961,11 @@ class LevelEditor(NodePath, DirectObject):
         marker = self.battleCellMarker.copyTo(parent)
         marker.setTag('cellId', '%d' % cellId)
 
-        label = DirectGui.DirectLabel(text = '%d' % cellId, parent = marker, 
+        label = DirectGui.DirectLabel(text = '%d' % cellId, parent = marker,
                                       text_fg = (0.25, 1.0, 0.25, 1.0),
                                       text_font = ToontownGlobals.getSignFont(),
                                       relief = None, scale = 3)
-        label.setBillboardPointEye(0)   
+        label.setBillboardPointEye(0)
         label.setScale(0.4)
         if not marker.getBounds().isEmpty():
             center = marker.getBounds().getCenter()
@@ -3492,7 +3490,8 @@ class LevelEditor(NodePath, DirectObject):
         return newGroup
 
     def makeNewBuildingGroup(self, sequenceNum, side, curveName):
-        print("-------------------------- new building group %s  curveName=%s------------------------" % (sequenceNum, curveName))
+        print("-------------------------- new building group %s  curveName=%s------------------------" % (
+        sequenceNum, curveName))
         # Now create a new group with just the buildings
         self.addGroup(self.NPToplevel)
         newGroup = self.NPParent
@@ -3959,12 +3958,12 @@ class LevelEditor(NodePath, DirectObject):
 
         # Create the menu with the items
         rm = RadialMenu(
-            RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
-            RadialItem(gui.find("**/icon_save"), 'Save'),
-            RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
-            RadialItem(gui.find("**/icon_suit"), 'Toggle Suit Building Previews'),
-            RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
-            )
+                RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
+                RadialItem(gui.find("**/icon_save"), 'Save'),
+                RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
+                RadialItem(gui.find("**/icon_suit"), 'Toggle Suit Building Previews'),
+                RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
+                )
         rm.activate()
 
         del gui
@@ -4000,23 +3999,23 @@ class LevelEditor(NodePath, DirectObject):
                            text = string, font = ToontownGlobals.getToonFont(),
                            scale = 0.05, bg = (0, 0, 0, .4), fg = (1, 1, 1, 1))
 
-        #TDOO: Temporary until I make this async
+        # TDOO: Temporary until I make this async
         def destroyTxt(txt):
             txt.destroy
             del txt
 
         Parallel(
-            LerpColorScaleInterval(txt, 0.3, (1, 1, 1, 1), (1, 1, 1, 0)),
-            Sequence(
-                txt.posInterval(0.3, Point3(-.15, 0, -0.2), Point3(.1, 0, -0.2),blendType = 'easeOut'),
-                txt.posInterval(2.7, Point3(-.15, 0, -0.1), blendType = 'easeOut')
-            ),
-            Sequence(
-                Wait(2),
-                LerpColorScaleInterval(txt, 1, (1, 1, 1, 0), (1, 1, 1, 1)),
-                Func(destroyTxt, txt)
-            )
-        ).start()
+                LerpColorScaleInterval(txt, 0.3, (1, 1, 1, 1), (1, 1, 1, 0)),
+                Sequence(
+                        txt.posInterval(0.3, Point3(-.15, 0, -0.2), Point3(.1, 0, -0.2), blendType = 'easeOut'),
+                        txt.posInterval(2.7, Point3(-.15, 0, -0.1), blendType = 'easeOut')
+                        ),
+                Sequence(
+                        Wait(2),
+                        LerpColorScaleInterval(txt, 1, (1, 1, 1, 0), (1, 1, 1, 1)),
+                        Func(destroyTxt, txt)
+                        )
+                ).start()
 
     async def beginBoxSelection(self):
         self.popupNotification('entered selection mode')

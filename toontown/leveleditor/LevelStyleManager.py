@@ -7,6 +7,7 @@ from .PieMenu import *
 from .ScrollMenu import *
 from .EditorUtil import *
 
+
 class LevelStyleManager:
     """Class which reads in style files and manages class variables"""
 
@@ -92,7 +93,8 @@ class LevelStyleManager:
                 if pair[0] in style.__dict__:
                     pair_0 = pair[0]
                     # Convert some numerical values
-                    if pair_0 in ['color', 'kern', 'wiggle', 'stumble', 'stomp', 'curve', 'x', 'z', 'scaleX', 'scaleZ', 'roll']:
+                    if pair_0 in ['color', 'kern', 'wiggle', 'stumble', 'stomp', 'curve', 'x', 'z', 'scaleX', 'scaleZ',
+                                  'roll']:
                         style[pair_0] = eval(pair[1])
                     else:
                         style[pair_0] = pair[1]

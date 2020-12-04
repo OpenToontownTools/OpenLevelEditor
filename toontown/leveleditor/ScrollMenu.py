@@ -26,7 +26,7 @@ class ScrollMenu:
 
         numItemsVisible = 9
         itemHeight = 0.05
-        
+
         gui = loader.loadModel("resources/level_editor_gui.bam")
 
         myScrolledList = DirectScrolledList(
@@ -38,8 +38,8 @@ class ScrollMenu:
                     gui.find("**/arrow_u_d"),
                     gui.find("**/arrow_u_r"),
                     gui.find("**/arrow_u_i")
-                ),
-                
+                    ),
+
                 incButton_pos = (0.4, 0, -0.02),
                 incButton_scale = 0.1,
                 incButton_relief = None,
@@ -48,13 +48,12 @@ class ScrollMenu:
                     gui.find("**/arrow_d_d"),
                     gui.find("**/arrow_d_r"),
                     gui.find("**/arrow_d_i")
-                ),
-                    
-                
+                    ),
+
                 image = gui.find("**/editor_list_frame"),
                 image_pos = (.4, 0, 0.26),
                 image_scale = (1.4, 1, 0.7),
-                
+
                 frameSize = (-0.1, 0.9, -0.05, 0.59),
                 frameColor = (0, 0, 1, 0.0),
                 pos = (-0.5, 0, 0),
