@@ -15,10 +15,6 @@ import builtins
 import os
 import sys
 
-red = (1, 0, 0, 1)
-yellow = (1, 0.9, 0, 1)
-green = (0, 0.9, 0, 1)
-
 TOONTOWN_ONLINE = 0
 TOONTOWN_REWRITTEN = 1
 TOONTOWN_CORPORATE_CLASH = 2
@@ -121,7 +117,8 @@ class ToontownLevelEditor(ShowBase):
     def toggleFrameRateMeter(self, flag):
         if flag:
             if not self.frameRateMeter:
-                self.frameRateMeter = OnscreenText(parent=base.a2dTopRight, text='', pos=(-0.1125, -0.05, 0.0), scale=0.05, bg=(0, 0, 0, 0.4), font=ToontownGlobals.getToonFont())
+                self.frameRateMeter = OnscreenText(parent = base.a2dTopRight, text = '', pos = (-0.1125, -0.05, 0.0), scale = 0.05, style = 3,
+                                                   bg = (0, 0, 0, 0.4), font = ToontownGlobals.getToonFont())
                 taskMgr.add(self.frameRateCounter, 'fps')
         else:
             if self.frameRateMeter:
@@ -134,15 +131,18 @@ class ToontownLevelEditor(ShowBase):
         https://discourse.panda3d.org/t/trying-to-create-custom-fps-counter/25328/15
         """
         fps = globalClock.getAverageFrameRate()
-        color = green
-        if fps <= 60:
-            color = green
-        if fps <= 45:
-            color = yellow
-        if fps <= 30:
-            color = red
 
-        text = '{} FPS'.format(round(fps, 1))
+        # Color is green by default
+        color = (0, 0.9, 0, 1)
+
+        # At or below 45 fps is yellow
+        if fps <= 45:
+            color = (1, 0.9, 0, 1)
+        # At or below 30 fps is red
+        elif fps <= 30:
+            color = (1, 0, 0, 1)
+
+        text = f'{round(fps, 1)} FPS'
         self.frameRateMeter.setText(text)
         self.frameRateMeter.setFg(color)
 
