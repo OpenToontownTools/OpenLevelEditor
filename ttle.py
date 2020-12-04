@@ -2,17 +2,22 @@
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.ShowBase import ShowBase
+from direct.gui.OnscreenText import OnscreenText
 
 from panda3d.core import loadPrcFile, loadPrcFileData
 
 from tkinter import Tk, messagebox
+from toontown.toonbase import ToontownGlobals
 
 import asyncio
 import argparse
 import builtins
-import json
 import os
 import sys
+
+red = (1, 0, 0, 1)
+yellow = (1, 0.9, 0, 1)
+green = (0, 0.9, 0, 1)
 
 TOONTOWN_ONLINE = 0
 TOONTOWN_REWRITTEN = 1
@@ -25,6 +30,7 @@ SERVER_TO_ID = {'online': TOONTOWN_ONLINE,
                 'offline': TOONTOWN_OFFLINE}
 
 DEFAULT_SERVER = TOONTOWN_ONLINE
+
 
 class ToontownLevelEditor(ShowBase):
     notify = directNotify.newCategory("Open Level Editor")
@@ -70,7 +76,6 @@ class ToontownLevelEditor(ShowBase):
         if args.holiday:
             loadPrcFileData("", f"holiday {args.holiday[0]}")
 
-
         server = SERVER_TO_ID.get(args.server[0].lower(), DEFAULT_SERVER)
         self.server = server
 
@@ -101,9 +106,47 @@ class ToontownLevelEditor(ShowBase):
         ShowBase.__init__(self)
         aspect2d.setAntialias(AntialiasAttrib.MAuto)
 
+        # Create the framerate meter
+        flag = self.config.GetBool('show-frame-rate-meter', False)
+        if flag:
+            self.toggleFrameRateMeter(flag)
+
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
+
+    def setFrameRateMeter(self, flag):
+        return
+
+    def toggleFrameRateMeter(self, flag):
+        if flag:
+            if not self.frameRateMeter:
+                self.frameRateMeter = OnscreenText(parent=base.a2dTopRight, text='', pos=(-0.1125, -0.05, 0.0), scale=0.05, bg=(0, 0, 0, 0.4), font=ToontownGlobals.getToonFont())
+                taskMgr.add(self.frameRateCounter, 'fps')
+        else:
+            if self.frameRateMeter:
+                self.frameRateMeter.destroy()
+                self.frameRateMeter = None
+
+    def frameRateCounter(self, task):
+        """
+        Base code inspired from
+        https://discourse.panda3d.org/t/trying-to-create-custom-fps-counter/25328/15
+        """
+        fps = globalClock.getAverageFrameRate()
+        color = green
+        if fps <= 60:
+            color = green
+        if fps <= 45:
+            color = yellow
+        if fps <= 30:
+            color = red
+
+        text = '{} FPS'.format(round(fps, 1))
+        self.frameRateMeter.setText(text)
+        self.frameRateMeter.setFg(color)
+
+        return task.cont
 
     def __checkForFiles(self):
         # Make custom hood directory if it doesn't exist
