@@ -120,8 +120,8 @@ class ToontownLevelEditor(ShowBase):
     def toggleFrameRateMeter(self, flag):
         if flag:
             if not self.frameRateMeter:
-                self.frameRateMeter = OnscreenText(parent = base.a2dTopRight, text = '', pos = (-0.1125, -0.05, 0.0),
-                                                   scale = 0.05, style = 3, bg = (0, 0, 0, 0.4),
+                self.frameRateMeter = OnscreenText(parent = base.a2dTopRight, text = '', pos = (-0.01, -0.05, 0.0),
+                                                   scale = 0.05, style = 3, bg = (0, 0, 0, 0.4), align = TextNode.ARight,
                                                    font = ToontownGlobals.getToonFont())
                 taskMgr.add(self.updateFrameRateMeter, 'fps')
         else:
