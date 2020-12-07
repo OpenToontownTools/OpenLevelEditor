@@ -151,7 +151,7 @@ class VisGroupsEditor(Pmw.MegaToplevel):
                     target.addVisible(groupName)
                     # Update vis and color
                     groupNP.show()
-                    groupNP.setColor(1, 0, 0, 1)
+                    groupNP.setColorScale(0, .8, .5, 1)
             else:
                 print('Vis Group:', self.target, 'removing group:', groupName)
                 if groupName in visList:
@@ -160,7 +160,7 @@ class VisGroupsEditor(Pmw.MegaToplevel):
                     # Update vis and color
                     if self.showMode.get() == 1:
                         groupNP.hide()
-                    groupNP.clearColor()
+                    groupNP.clearColorScale()
         # Update scene
         self.refreshVisibility()
 
@@ -173,15 +173,15 @@ class VisGroupsEditor(Pmw.MegaToplevel):
             if key in visList:
                 groupNP.show()
                 if key == self.target:
-                    groupNP.setColor(0, 1, 0, 1)
+                    groupNP.setColorScale(0, 1, 0, 1)
                 else:
-                    groupNP.setColor(1, 0, 0, 1)
+                    groupNP.setColorScale(0, .8, .5, 1)
             else:
                 if self.showMode.get() == 0:
                     groupNP.show()
                 else:
                     groupNP.hide()
-                groupNP.clearColor()
+                groupNP.clearColorScale()
 
     def preDestroy(self):
         # First clear level editor variable
