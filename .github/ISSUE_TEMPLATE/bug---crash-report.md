@@ -2,7 +2,7 @@
 name: Bug / Crash Report
 about: Create a bug or crash report
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
