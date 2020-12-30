@@ -15,6 +15,9 @@ icon-filename resources/openttle_ico_temp.ico
 framebuffer-hardware #t
 multisamples 4
 
+# Font Quality
+text-pixels-per-unit 128
+
 # hw animation
 hardware-animated-vertices true
 

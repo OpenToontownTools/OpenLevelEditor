@@ -49,10 +49,12 @@ class ToontownLevelEditor(ShowBase):
         parser.add_argument("--experimental", action = 'store_true', help = "Enables experimental features")
         parser.add_argument("--debug", action = 'store_true', help = "Enables debugging features")
         parser.add_argument("--noupdate", action = 'store_true', help = "Disables Auto Updating")
+        parser.add_argument("--png", action = 'store_true', help = "Forces PNG resources mode, if this is not specified, "
+                                                                   "it will automatically determine the format")
         parser.add_argument("--compiler", nargs = "*",
                             help = "Specify which compiler to use (Only useful if your game uses a form of "
                                    "libpandadna.) Valid options are 'libpandadna', for games which use the "
-                                   "modern c++ version of libpandadna (like Toontown Offline), and 'clash', "
+                                   "modern c++ version of libpandadna, and 'clash', "
                                    "for Corporate Clash")
 
         parser.add_argument("--server", nargs = "*", help = "Enables features exclusive to various Toontown projects",
@@ -74,6 +76,19 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", f"compiler {args.compiler[0]}")
         if args.holiday:
             loadPrcFileData("", f"holiday {args.holiday[0]}")
+        if args.png:
+            loadPrcFileData("", "png-textures true")
+        else:
+            # If we don't specify png, we can search
+            # we can use the eyes texture
+            if os.path.exists("phase_3/maps/eyes.jpg"):
+                loadPrcFileData("", "png-textures false")
+            elif os.path.exists("phase_3/maps/eyes.png"):
+                loadPrcFileData("", "png-textures true")
+            else:
+                messagebox.showerror(
+                    message = "There was an error located resources!\n"
+                              "Make sure you put the phase folders in the root folder!")
 
         server = SERVER_TO_ID.get(args.server[0].lower(), DEFAULT_SERVER)
         self.server = server

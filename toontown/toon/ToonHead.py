@@ -71,41 +71,63 @@ class ToonHead(Actor.Actor):
 
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonHead')
 
+    png = base.config.GetBool("png-textures", False)
     # Eyes open and closed textures for blinks
-    EyesOpen = loader.loadTexture('phase_3/maps/eyes.jpg',
-                                  'phase_3/maps/eyes_a.rgb')
+    if png:
+        EyesOpen = loader.loadTexture('phase_3/maps/eyes.png')
+    else:
+        EyesOpen = loader.loadTexture('phase_3/maps/eyes.jpg',
+                                      'phase_3/maps/eyes_a.rgb')
     EyesOpen.setMinfilter(Texture.FTLinear)
     EyesOpen.setMagfilter(Texture.FTLinear)
-    EyesClosed = loader.loadTexture('phase_3/maps/eyesClosed.jpg',
-                                    'phase_3/maps/eyesClosed_a.rgb')
+    if png:
+        EyesClosed = loader.loadTexture('phase_3/maps/eyesClosed.png')
+    else:
+        EyesClosed = loader.loadTexture('phase_3/maps/eyesClosed.jpg',
+                                        'phase_3/maps/eyesClosed_a.rgb')
     EyesClosed.setMinfilter(Texture.FTLinear)
     EyesClosed.setMagfilter(Texture.FTLinear)
 
     # Emotional eye textures for tutorial
-    EyesSadOpen = loader.loadTexture('phase_3/maps/eyesSad.jpg',
-                                  'phase_3/maps/eyesSad_a.rgb')
+    if png:
+        EyesSadOpen = loader.loadTexture('phase_3/maps/eyesSad.png')
+    else:
+        EyesSadOpen = loader.loadTexture('phase_3/maps/eyesSad.jpg',
+                                         'phase_3/maps/eyesSad_a.rgb')
     EyesSadOpen.setMinfilter(Texture.FTLinear)
     EyesSadOpen.setMagfilter(Texture.FTLinear)
-    EyesSadClosed = loader.loadTexture('phase_3/maps/eyesSadClosed.jpg',
-                                    'phase_3/maps/eyesSadClosed_a.rgb')
+    if png:
+        EyesSadClosed = loader.loadTexture('phase_3/maps/eyesSadClosed.png')
+    else:
+        EyesSadClosed = loader.loadTexture('phase_3/maps/eyesSadClosed.jpg',
+                                           'phase_3/maps/eyesSadClosed_a.rgb')
     EyesSadClosed.setMinfilter(Texture.FTLinear)
     EyesSadClosed.setMagfilter(Texture.FTLinear)
-    EyesAngryOpen = loader.loadTexture('phase_3/maps/eyesAngry.jpg',
-                                  'phase_3/maps/eyesAngry_a.rgb')
+    if png:
+        EyesAngryOpen = loader.loadTexture('phase_3/maps/eyesAngry.png')
+    else:
+        EyesAngryOpen = loader.loadTexture('phase_3/maps/eyesAngry.jpg',
+                                           'phase_3/maps/eyesAngry_a.rgb')
     EyesAngryOpen.setMinfilter(Texture.FTLinear)
     EyesAngryOpen.setMagfilter(Texture.FTLinear)
-    EyesAngryClosed = loader.loadTexture('phase_3/maps/eyesAngryClosed.jpg',
-                                    'phase_3/maps/eyesAngryClosed_a.rgb')
+    if png:
+        EyesAngryClosed = loader.loadTexture('phase_3/maps/eyesAngryClosed.png')
+    else:
+        EyesAngryClosed = loader.loadTexture('phase_3/maps/eyesAngryClosed.jpg',
+                                             'phase_3/maps/eyesAngryClosed_a.rgb')
     EyesAngryClosed.setMinfilter(Texture.FTLinear)
     EyesAngryClosed.setMagfilter(Texture.FTLinear)
-    EyesSurprised = loader.loadTexture('phase_3/maps/eyesSurprised.jpg',
-                                       'phase_3/maps/eyesSurprised_a.rgb')
+    if png:
+        EyesSurprised = loader.loadTexture('phase_3/maps/eyesSurprised.png')
+    else:
+        EyesSurprised = loader.loadTexture('phase_3/maps/eyesSurprised.jpg',
+                                           'phase_3/maps/eyesSurprised_a.rgb')
     EyesSurprised.setMinfilter(Texture.FTLinear)
     EyesSurprised.setMagfilter(Texture.FTLinear)
-    Muzzle = loader.loadTexture('phase_3/maps/muzzleShrtGeneric.jpg')
+    Muzzle = loader.loadTexture(f'phase_3/maps/muzzleShrtGeneric.{"png" if png else "jpg"}')
     Muzzle.setMinfilter(Texture.FTLinear)
     Muzzle.setMagfilter(Texture.FTLinear)
-    MuzzleSurprised = loader.loadTexture('phase_3/maps/muzzleShortSurprised.jpg')
+    MuzzleSurprised = loader.loadTexture(f'phase_3/maps/muzzleShortSurprised.{"png" if png else "jpg"}')
     MuzzleSurprised.setMinfilter(Texture.FTLinear)
     MuzzleSurprised.setMagfilter(Texture.FTLinear)
 
