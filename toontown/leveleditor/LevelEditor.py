@@ -130,6 +130,7 @@ class LevelEditor(NodePath, DirectObject):
         self.visitedEdges = []
 
         self.zoneLabels = []
+        self.bldgLabels = []
         self.animPropDict = {}
 
         self.collisionsToggled = False
@@ -3308,6 +3309,35 @@ class LevelEditor(NodePath, DirectObject):
         for label in self.zoneLabels:
             label.removeNode()
         self.zoneLabels = []
+        
+    def labelBldgs(self):
+        ''' Draws a text label above Landmark bldgs displaying their title and block # '''
+        self.clearBldgLabels()
+        for bldg in self.NPToplevel.findAllMatches('**/*tb*:toon_landmark*'):
+            dnanode = self.findDNANode(bldg)
+            block = self.getBlockFromName(dnanode.getName())
+            title = dnanode.getTitle()
+            fg = (0.8, 0.4, 0.2, 1)
+            if not title: 
+                title = '(unnamed)'
+                fg = (1.0, 0.1, 0.1, 1)
+            label = DirectGui.DirectLabel(text = f"TB{block}\n{title}",
+                                          text_font = ToontownGlobals.getSignFont(),
+                                          text_fg = fg, text_wordwrap = 20,
+                                          parent = bldg,
+                                          relief = None, scale = 4)
+            label.setBillboardPointWorld()
+            label.setDepthWrite(False)
+            label.setDepthTest(not self.labelsOnTop)
+            if not bldg.find('**/**front').getBounds().isEmpty():
+                center = bldg.find('**/**front').getBounds().getCenter()
+                label.setPos(center[0], center[1], 50)
+            self.bldgLabels.append(label)
+            
+    def clearBldgLabels(self):
+        for label in self.bldgLabels:
+            label.removeNode()
+        self.bldgLabels = []
 
     def getBlockFromName(self, name):
         block = name[2:name.find(':')]

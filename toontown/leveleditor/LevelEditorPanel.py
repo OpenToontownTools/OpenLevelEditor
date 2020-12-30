@@ -375,6 +375,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                     landmarkBuildingsPage, width = 24,
                     textvariable = self.landmarkBuildingNameString)
             self.landmarkBuildingNameBox.pack(expand = 0, fill = X)
+            
+        self.bldgLabels = IntVar()
+        self.bldgLabels.set(0)
+        self.bldgLabelsButton = ttk.Checkbutton(
+                landmarkBuildingsPage,
+                text = 'Show Bldg Labels', width = 20,
+                variable = self.bldgLabels,
+                command = self.toggleBldgLabels)
+        self.bldgLabelsButton.pack(side = LEFT, expand = 1, fill = X)
 
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
@@ -988,7 +997,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
     def toggleZoneLabelsOnTop(self):
         self.levelEditor.labelsOnTop = self.fLabelOnTop.get()
-        for lbl in self.levelEditor.zoneLabels:
+        for lbl in self.levelEditor.zoneLabels + self.levelEditor.bldgLabels:
             lbl.setDepthTest(not self.fLabelOnTop.get())
         for lbl in self.levelEditor.NPToplevel.findAllMatches('**/suit_point_label_*'):
             lbl.setDepthTest(not self.fLabelOnTop.get())
@@ -1000,6 +1009,12 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         else:
             for lbl in self.levelEditor.NPToplevel.findAllMatches('**/suit_point_label_*'):
                 lbl.hide()
+
+    def toggleBldgLabels(self):
+        if self.bldgLabels.get():
+            self.levelEditor.labelBldgs()
+        else:
+            self.levelEditor.clearBldgLabels()
 
     def toggleXyzSnap(self):
         base.direct.grid.setXyzSnap(self.fXyzSnap.get())
