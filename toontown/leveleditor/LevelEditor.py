@@ -1585,6 +1585,8 @@ class LevelEditor(NodePath, DirectObject):
             dnaNode = self.findDNANode(selectedNode)
             if DNAGetClassType(dnaNode) == DNA_LANDMARK_BUILDING:
                 dnaNode.setTitle(title)
+        if self.panel.bldgLabels.get():
+            self.labelBldgs()
 
     def addAnimBuilding(self, animBuildingType):
         print("addAnimBuilding %s " % animBuildingType)
