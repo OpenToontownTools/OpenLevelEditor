@@ -53,7 +53,7 @@
 
 # FAQ
 ### Why can't I load a street from X playground?
-* Make sure the hood's storage file is loaded. You do this by adding it to the `--hoods` launch option. For example, if you want to work on a street in Donald's Dock and another in Minnie's Melodyland, you set the launch option `--hoods DD ML`
+* Make sure the hood's storage file is loaded. You do this by adding it to the `--hoods` launch option. For example, if you want to work on a street in Donald's Dock and another in Minnie's Melodyland, you set the launch option `--hoods DD MM`
 
 ### Do I have to credit the use of this editor?
 * There is NO requirement to list this editor anywhere in your game credits, but you definitely can do so to spread the word!
