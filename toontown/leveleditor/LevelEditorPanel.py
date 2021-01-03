@@ -1,5 +1,6 @@
-import sys
+import sys, time
 import Pmw
+import threading
 
 from tkinter import *
 from tkinter import ttk
@@ -44,6 +45,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         balloon = self.balloon = Pmw.Balloon(hull)
         # Start with balloon help disabled
         self.balloon.configure(state = 'none')
+
+        self.t = 15  # Default auto saver interval
+        # Starts auto saver not toggled
+        self.autoSaverToggled = False
+        threading.Thread(target = self.autoSaver, daemon = True).start()
 
         menuFrame = Frame(hull, relief = GROOVE, bd = 2)
         menuFrame.pack(fill = X)
@@ -127,6 +133,16 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Open Injector',
                             label = 'Injector',
                             command = self.showInjector)
+        menuBar.addmenuitem('Advanced', 'separator')
+        menuBar.addmenuitem('Advanced', 'checkbutton',
+                            'Toggle Auto-saver On/Off',
+                            label =  'Toggle Auto-Saver',
+                            command = self.toggleAutoSaver)
+        menuBar.addmenuitem('Advanced', 'command',
+                            'User Set Auto Saver Interval',
+                            label = 'Set Auto-Saver Interval',
+                            command = self.showAutoSaverDialog)
+
         # Corporate Clash Old Toontown-esque Filter
         if base.server == TOONTOWN_CORPORATE_CLASH:
             self.toggleOTVar = IntVar()
@@ -175,6 +191,14 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                                 defaultbutton = 0,
                                                 message_text = CONTROLS)
         self.controlsDialog.withdraw()
+
+        self.autoSaverDialog = Pmw.Dialog(parent,
+                                          title = 'Set Auto-Saver Interval (in minutes)',
+                                          buttons = ('Enter',),
+                                          command = self.setAutoSaverInterval)
+        self.autoSaverDialog.withdraw()
+        self.autoSaverDialogTextBox = Text(self.autoSaverDialog.interior(), height=10)
+        self.autoSaverDialogTextBox.pack(expand = 1, fill = BOTH)
 
         self.editMenu = Pmw.ComboBox(
                 menuFrame, labelpos = W,
@@ -1531,3 +1555,48 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.useDriveMode()
         else:
             self.levelEditor.useDirectFly()
+
+    def showAutoSaverDialog(self):
+        # Open dialog box for interval input
+        self.autoSaverDialog.show()
+        self.autoSaverDialog.focus_set()
+
+    def setAutoSaverInterval(self, i):
+        if i == "Enter":
+            try:
+                self.t = float(self.autoSaverDialogTextBox.get("1.0", 'end-1c'))
+            except ValueError as e:
+                self.t = 15  # Resets to default value
+                raise e
+        self.autoSaverDialog.withdraw()
+
+
+    def toggleAutoSaver(self):
+        # If the file is destroyed or renamed during the auto saving process, a final
+        # check will return back to this function to select a file to save.
+        DNASerializer.outputDNADefaultFile()
+        if self.autoSaverToggled is False:
+            # Toggles auto saver to begin auto saving loop
+            print(f'\nStarting auto save loop with an interval of {self.t} minutes.')
+            self.autoSaverToggled = True
+        else:
+            # Stops auto saving loop
+            print('Stopping auto saver loop.')
+            self.autoSaverToggled = False
+
+    def autoSaver(self):
+        while True:
+            t = self.t * 60  # Converts global t to minutes
+            # Loops without doing anything if auto saver isn't toggled
+            if self.autoSaverToggled is False:
+                time.sleep(0.1)
+            while self.autoSaverToggled is True:  # Only loops if auto saver is toggled
+                endTime = time.time() + t  # Epoch time of next auto save interval based on t
+                while time.time() <= endTime and self.autoSaverToggled is True:
+                    time.sleep(0.1)
+                # Saves file in main thread if it isn't selected already
+                if DNASerializer.outputFile is None:
+                    self.autoSaverToggled = False
+                    self.toggleAutoSaver()
+                else:
+                    DNASerializer.outputDNADefaultFile()
