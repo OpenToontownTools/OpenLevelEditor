@@ -197,7 +197,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                           buttons = ('Enter',),
                                           command = self.setAutoSaverInterval)
         self.autoSaverDialog.withdraw()
-        self.autoSaverDialogTextBox = Text(self.autoSaverDialog.interior(), height=10)
+        self.autoSaverDialogTextBox = Text(self.autoSaverDialog.interior(), height = 10)
         self.autoSaverDialogTextBox.pack(expand = 1, fill = BOTH)
 
         self.editMenu = Pmw.ComboBox(
@@ -1570,33 +1570,32 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 raise e
         self.autoSaverDialog.withdraw()
 
-
     def toggleAutoSaver(self):
-        # If the file is destroyed or renamed during the auto saving process, a final
-        # check will return back to this function to select a file to save.
-        DNASerializer.outputDNADefaultFile()
+        # If no working DNA out file is selected, one is chosen here as a new specific
+        # out file can't be selected in the auto saver thread.
+        if DNASerializer.outputFile is None:
+            DNASerializer.saveToSpecifiedDNAFile()
         if self.autoSaverToggled is False:
             # Toggles auto saver to begin auto saving loop
-            print(f'\nStarting auto save loop with an interval of {self.t} minutes.')
             self.autoSaverToggled = True
         else:
             # Stops auto saving loop
-            print('Stopping auto saver loop.')
             self.autoSaverToggled = False
 
     def autoSaver(self):
         while True:
             t = self.t * 60  # Converts global t to minutes
+            DNASerializer.autoSaveCount = 0
             # Loops without doing anything if auto saver isn't toggled
             if self.autoSaverToggled is False:
                 time.sleep(0.1)
             while self.autoSaverToggled is True:  # Only loops if auto saver is toggled
                 endTime = time.time() + t  # Epoch time of next auto save interval based on t
                 while time.time() <= endTime and self.autoSaverToggled is True:
+                    # If no outfile is selected, prompt user to enter a new file in the main thread
+                    if DNASerializer.outputFile is None:
+                        self.toggleAutoSaver()
                     time.sleep(0.1)
-                # Saves file in main thread if it isn't selected already
-                if DNASerializer.outputFile is None:
-                    self.autoSaverToggled = False
-                    self.toggleAutoSaver()
-                else:
-                    DNASerializer.outputDNADefaultFile()
+                if self.autoSaverToggled is True:
+                    DNASerializer.manageAutoSaveFiles()
+                    DNASerializer.autoSaveCount += 1
