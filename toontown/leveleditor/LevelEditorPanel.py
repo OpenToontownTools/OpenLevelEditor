@@ -1,6 +1,5 @@
-import sys, time
+import sys
 import Pmw
-import threading
 
 from tkinter import *
 from tkinter import ttk
@@ -9,6 +8,7 @@ from direct.showbase.TkGlobal import *
 from direct.tkwidgets import Floater
 
 from .DNASerializer import DNASerializer
+from .AutoSaver import AutoSaver
 from .LevelStyleManager import *
 from .LevelEditorGlobals import *
 from .LESceneGraphExplorer import *
@@ -45,11 +45,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         balloon = self.balloon = Pmw.Balloon(hull)
         # Start with balloon help disabled
         self.balloon.configure(state = 'none')
-
-        self.t = 15  # Default auto saver interval
-        # Starts auto saver not toggled
-        self.autoSaverToggled = False
-        threading.Thread(target = self.autoSaver, daemon = True).start()
 
         menuFrame = Frame(hull, relief = GROOVE, bd = 2)
         menuFrame.pack(fill = X)
@@ -986,6 +981,9 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Make sure input variables processed
         self.initialiseoptions(LevelEditorPanel)
 
+        # Initializes auto saver for use
+        AutoSaver(DNASerializer).initializeAutoSaver()
+
     def updateInfo(self, page):
         if page == 'Signs':
             self.updateSignPage()
@@ -1490,6 +1488,15 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def setBattleCellType(self, name):
         self.levelEditor.currentBattleCellType = name
 
+    def setAutoSaverInterval(self, i):
+        if i == 'Enter':
+            try:
+                AutoSaver.autoSaverInterval = float(self.autoSaverDialogTextBox.get("1.0", 'end-1c'))
+            except ValueError as e:
+                # Non-float was passed
+                raise e
+        self.autoSaverDialog.withdraw()
+
     def updateSelectedObjColor(self, color):
         try:
             obj = self.levelEditor.DNATarget
@@ -1530,6 +1537,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.controlsDialog.show()
         self.controlsDialog.focus_set()
 
+    def showAutoSaverDialog(self):
+        self.autoSaverDialog.show()
+        self.autoSaverDialog.focus_set()
+
     def showInjector(self):
         self.injectorDialog.show()
         self.injectorDialog.focus_set()
@@ -1556,42 +1567,13 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         else:
             self.levelEditor.useDirectFly()
 
-    def showAutoSaverDialog(self):
-        # Open dialog box for interval input
-        self.autoSaverDialog.show()
-        self.autoSaverDialog.focus_set()
-
-    def setAutoSaverInterval(self, i):
-        if i:
-            try:
-                self.t = float(self.autoSaverDialogTextBox.get("1.0", 'end-1c'))
-            except ValueError as e:
-                # Non-float was passed
-                raise e
-        self.autoSaverDialog.withdraw()
-
     def toggleAutoSaver(self):
         # If no working DNA outputFile is selected, one is chosen here.
         if DNASerializer.outputFile is None:
             DNASerializer.saveToSpecifiedDNAFile()
-        if self.autoSaverToggled is False:
+        if AutoSaver.autoSaverToggled is False:
             # Toggles auto saver to begin auto saving loop
-            self.autoSaverToggled = True
+            AutoSaver.autoSaverToggled = True
         else:
             # Stops auto saving loop
-            self.autoSaverToggled = False
-
-    def autoSaver(self):
-        while True:
-            t = self.t * 60  # Converts global t to minutes
-            DNASerializer.autoSaveCount = 0
-            # Loops without doing anything if auto saver isn't toggled
-            if self.autoSaverToggled is False:
-                time.sleep(0.1)
-            while self.autoSaverToggled is True:
-                endTime = time.time() + t  # Epoch time of next auto save interval based on t
-                while time.time() <= endTime and self.autoSaverToggled is True:
-                    time.sleep(0.1)
-                if self.autoSaverToggled is True:
-                    DNASerializer.manageAutoSaveFiles()  # Saves DNA file
-                    DNASerializer.autoSaveCount += 1
+            AutoSaver.autoSaverToggled = False

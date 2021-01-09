@@ -1,8 +1,9 @@
 from panda3d.core import Filename
-import os, shutil
+import os
 from tkinter import *
 from tkinter.filedialog import *
 from direct.directnotify import DirectNotifyGlobal
+from .AutoSaver import AutoSaver
 
 dnaDirectory = Filename.expandFrom(userfiles)
 
@@ -10,8 +11,7 @@ dnaDirectory = Filename.expandFrom(userfiles)
 class DNASerializer:
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelEditor')
     outputFile = None
-    autoSaverRunning = False
-    autoSaveCount = 0
+    dnaDirectory = dnaDirectory  # For AutoSaver.py
 
     # STYLE/DNA FILE FUNCTIONS
     @staticmethod
@@ -26,10 +26,10 @@ class DNASerializer:
                                       initialdir = path,
                                       title = 'Load DNA File',
                                       parent = base.le.panel.component('hull'))
-        DNASerializer.autoSaveCount = 0
+        AutoSaver.autoSaveCount = 0
         # Wait until auto saver is done managing files before loading new file
-        while DNASerializer.autoSaverRunning is True:
-            if DNASerializer.autoSaverRunning is False:
+        while AutoSaver.autoSaverMgrRunning is True:
+            if AutoSaver.autoSaverMgrRunning is False:
                 break
         if dnaFilename:
             DNASerializer.loadDNAFromFile(dnaFilename)
@@ -49,10 +49,10 @@ class DNASerializer:
                 initialdir = path,
                 title = 'Save DNA File as',
                 parent = base.le.panel.component('hull'))
-        DNASerializer.autoSaveCount = 0
+        AutoSaver.autoSaveCount = 0
         # Wait until auto saver is done managing files before saving new file
-        while DNASerializer.autoSaverRunning is True:
-            if DNASerializer.autoSaverRunning is False:
+        while AutoSaver.autoSaverMgrRunning is True:
+            if AutoSaver.autoSaverMgrRunning is False:
                 break
         if dnaFilename:
             DNASerializer.outputDNA(dnaFilename)
@@ -125,32 +125,6 @@ class DNASerializer:
         if ConfigVariableString("compiler") in ['libpandadna', 'clash']:
             print(f"Compiling PDNA for {ConfigVariableString('compiler')}")
             DNASerializer.compileDNA(binaryFilename)
-
-    @staticmethod
-    def manageAutoSaveFiles():
-        DNASerializer.autoSaverRunning = True
-        autoSaveCount = DNASerializer.autoSaveCount
-        # Sets max number of auto save files
-        if autoSaveCount >= 10:
-            autoSaveCount = 10
-        base = os.path.basename(os.path.abspath(DNASerializer.outputFile))
-        baseDir = os.path.dirname(os.path.abspath(DNASerializer.outputFile).replace('\\', '/'))
-        basename, extension = os.path.splitext(base)
-        # Renames output file to auto save file naming convention
-        if autoSaveCount == 0:
-            DNASerializer.outputFile = baseDir + '/' + basename + '_autosave-latest' + extension
-        basename = basename[:-6]  # Deletes 'latest' from filename
-        # Incrementally copies each auto save file
-        while autoSaveCount != 0:
-            filename = baseDir + '/' + basename + str(autoSaveCount) + extension
-            oldFilename = baseDir + '/' + basename + str(autoSaveCount - 1) + extension
-            if autoSaveCount == 1:
-                shutil.copy2(DNASerializer.outputFile, filename)
-            if autoSaveCount > 1:
-                shutil.copy2(oldFilename, filename)
-            autoSaveCount -= 1
-        DNASerializer.outputDNADefaultFile()  # Saves working DNA file
-        DNASerializer.autoSaverRunning = False
 
     @staticmethod
     def compileDNA(filename):
