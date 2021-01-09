@@ -1562,17 +1562,16 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.autoSaverDialog.focus_set()
 
     def setAutoSaverInterval(self, i):
-        if i == "Enter":
+        if i:
             try:
                 self.t = float(self.autoSaverDialogTextBox.get("1.0", 'end-1c'))
             except ValueError as e:
-                self.t = 15  # Resets to default value
+                # Non-float was passed
                 raise e
         self.autoSaverDialog.withdraw()
 
     def toggleAutoSaver(self):
-        # If no working DNA out file is selected, one is chosen here as a new specific
-        # out file can't be selected in the auto saver thread.
+        # If no working DNA outputFile is selected, one is chosen here.
         if DNASerializer.outputFile is None:
             DNASerializer.saveToSpecifiedDNAFile()
         if self.autoSaverToggled is False:
@@ -1589,13 +1588,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             # Loops without doing anything if auto saver isn't toggled
             if self.autoSaverToggled is False:
                 time.sleep(0.1)
-            while self.autoSaverToggled is True:  # Only loops if auto saver is toggled
+            while self.autoSaverToggled is True:
                 endTime = time.time() + t  # Epoch time of next auto save interval based on t
                 while time.time() <= endTime and self.autoSaverToggled is True:
-                    # If no outfile is selected, prompt user to enter a new file in the main thread
-                    if DNASerializer.outputFile is None:
-                        self.toggleAutoSaver()
                     time.sleep(0.1)
                 if self.autoSaverToggled is True:
-                    DNASerializer.manageAutoSaveFiles()
+                    DNASerializer.manageAutoSaveFiles()  # Saves DNA file
                     DNASerializer.autoSaveCount += 1
