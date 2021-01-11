@@ -982,7 +982,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.initialiseoptions(LevelEditorPanel)
 
         # Initializes auto saver for use
-        AutoSaver(DNASerializer).initializeAutoSaver()
+        AutoSaver.initializeAutoSaver()
 
     def updateInfo(self, page):
         if page == 'Signs':
@@ -1568,12 +1568,14 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.useDirectFly()
 
     def toggleAutoSaver(self):
-        # If no working DNA outputFile is selected, one is chosen here.
-        if DNASerializer.outputFile is None:
-            DNASerializer.saveToSpecifiedDNAFile()
         if AutoSaver.autoSaverToggled is False:
+            # If no working DNA outputFile is selected, one is chosen here
+            if DNASerializer.outputFile is None:
+                DNASerializer.saveToSpecifiedDNAFile()
+            print(f'Started auto saver on an interval of {AutoSaver.autoSaverInterval} minutes')
             # Toggles auto saver to begin auto saving loop
             AutoSaver.autoSaverToggled = True
         else:
+            print('Stopped auto saver process')
             # Stops auto saving loop
             AutoSaver.autoSaverToggled = False
