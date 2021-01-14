@@ -48,7 +48,7 @@ class AutoSaver:
 
         # Sets max number of auto save files
         if autoSaveCount >= AutoSaver.maxAutoSaveCount:
-            autoSaveCount = AutoSaver.maxAutoSaveCount
+            autoSaveCount = int(AutoSaver.maxAutoSaveCount)
 
         # Defining outputFile name properties
         base = os.path.basename(DNASerializer.outputFile)
@@ -57,6 +57,12 @@ class AutoSaver:
 
         # Renames output file to auto save file naming convention
         if autoSaveCount == 0:
+            # Only save & manage 'latest' file
+            if AutoSaver.maxAutoSaveCount == 0:
+                # Only save auto save latest file
+                if basename[-16:] == '_autosave-latest':
+                    DNASerializer.outputDNADefaultFile()  # Saves working DNA file
+                    return
             DNASerializer.outputFile = os.path.join(dir, basename + '_autosave-latest' + extension).replace('\\', '/')
 
         # Deletes 'latest' from filename

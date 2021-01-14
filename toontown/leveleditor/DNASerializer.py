@@ -10,6 +10,7 @@ dnaDirectory = Filename.expandFrom(userfiles)
 class DNASerializer:
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelEditor')
     outputFile = None
+    # Local AutoSaver variables
     autoSaverMgrRunning = False
     autoSaveCount = 0
 

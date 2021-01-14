@@ -131,11 +131,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         menuBar.addmenuitem('Advanced', 'separator')
         menuBar.addmenuitem('Advanced', 'checkbutton',
                             'Toggle Auto-saver On/Off',
-                            label =  'Toggle Auto-Saver',
+                            label =  'Toggle Auto Saver',
                             command = self.toggleAutoSaver)
         menuBar.addmenuitem('Advanced', 'command',
-                            'User Set Auto Saver Interval',
-                            label = 'Set Auto-Saver Interval',
+                            'User Set Auto Saver Options',
+                            label = 'Auto Saver Options',
                             command = self.showAutoSaverDialog)
 
         # Corporate Clash Old Toontown-esque Filter
@@ -187,13 +187,32 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                                 message_text = CONTROLS)
         self.controlsDialog.withdraw()
 
-        self.autoSaverDialog = Pmw.Dialog(parent,
-                                          title = 'Set Auto-Saver Interval (in minutes)',
-                                          buttons = ('Enter',),
-                                          command = self.setAutoSaverInterval)
+        self.autoSaverDialog = Pmw.Dialog(parent, title='Autosaver Options',
+                                          buttons=('Save Options',),
+                                          command=self.setAutoSaverInterval
+                                          )
         self.autoSaverDialog.withdraw()
-        self.autoSaverDialogTextBox = Text(self.autoSaverDialog.interior(), height = 10)
-        self.autoSaverDialogTextBox.pack(expand = 1, fill = BOTH)
+
+        self.autoSaverDialogInterval = Pmw.Counter(self.autoSaverDialog.interior(),
+                                                   labelpos='w',
+                                                   label_text = 'Auto save interval in minutes:',
+                                                   entry_width=10,
+                                                   entryfield_value = int(AutoSaver.autoSaverInterval),
+                                                   entryfield_validate={'validator': 'real',
+                                                                        'min': 1, 'max': 60})
+
+        self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
+                                              labelpos='w',
+                                              label_text = 'Max auto save files:',
+                                              entry_width=10,
+                                              entryfield_value = int(AutoSaver.maxAutoSaveCount),
+                                              entryfield_validate={'validator': 'numeric',
+                                                                   'min': 0, 'max': 99})
+
+        counters = (self.autoSaverDialogInterval, self.autoSaverDialogMax)
+        Pmw.alignlabels(counters)
+        for counter in counters:
+            counter.pack(fill='both', expand=1, padx=10, pady=10)
 
         self.editMenu = Pmw.ComboBox(
                 menuFrame, labelpos = W,
@@ -1489,9 +1508,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.levelEditor.currentBattleCellType = name
 
     def setAutoSaverInterval(self, i):
-        if i == 'Enter':
+        if i == 'Save Options':
             try:
-                AutoSaver.autoSaverInterval = float(self.autoSaverDialogTextBox.get("1.0", 'end-1c'))
+                AutoSaver.autoSaverInterval = float(self.autoSaverDialogInterval.get())
+                AutoSaver.maxAutoSaveCount = float(self.autoSaverDialogMax.get())
             except ValueError as e:
                 # Non-float was passed
                 raise e
