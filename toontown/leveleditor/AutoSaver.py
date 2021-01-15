@@ -39,16 +39,16 @@ class AutoSaver:
                 # Only auto save if auto save is toggled
                 if AutoSaver.autoSaverToggled is True:
                     AutoSaver.manageAutoSaveFiles()
-                    DNASerializer.autoSaveCount += 1
+                    # Sets autoSaveCount
+                    if DNASerializer.autoSaveCount >= AutoSaver.maxAutoSaveCount:
+                        DNASerializer.autoSaveCount = AutoSaver.maxAutoSaveCount
+                    else:
+                        DNASerializer.autoSaveCount += 1
 
     @staticmethod
     def manageAutoSaveFiles():
         DNASerializer.autoSaverMgrRunning = True
-        autoSaveCount = DNASerializer.autoSaveCount
-
-        # Sets max number of auto save files
-        if autoSaveCount >= AutoSaver.maxAutoSaveCount:
-            autoSaveCount = int(AutoSaver.maxAutoSaveCount)
+        autoSaveCount = int(DNASerializer.autoSaveCount)
 
         # Defining outputFile name properties
         base = os.path.basename(DNASerializer.outputFile)
