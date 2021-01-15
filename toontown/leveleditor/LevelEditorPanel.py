@@ -187,32 +187,31 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                                 message_text = CONTROLS)
         self.controlsDialog.withdraw()
 
-        self.autoSaverDialog = Pmw.Dialog(parent, title='Autosaver Options',
-                                          buttons=('Save Options',),
-                                          command=self.setAutoSaverInterval
-                                          )
+        self.autoSaverDialog = Pmw.Dialog(parent, title = 'Autosaver Options',
+                                          buttons = ('Save Options',),
+                                          command = self.setAutoSaverInterval)
         self.autoSaverDialog.withdraw()
 
         self.autoSaverDialogInterval = Pmw.Counter(self.autoSaverDialog.interior(),
-                                                   labelpos='w',
+                                                   labelpos = 'w',
                                                    label_text = 'Auto save interval in minutes:',
-                                                   entry_width=10,
+                                                   entry_width = 10,
                                                    entryfield_value = int(AutoSaver.autoSaverInterval),
-                                                   entryfield_validate={'validator': 'real',
+                                                   entryfield_validate = {'validator': 'real',
                                                                         'min': 1, 'max': 60})
 
         self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
-                                              labelpos='w',
+                                              labelpos = 'w',
                                               label_text = 'Max auto save files:',
-                                              entry_width=10,
+                                              entry_width = 10,
                                               entryfield_value = int(AutoSaver.maxAutoSaveCount),
-                                              entryfield_validate={'validator': 'numeric',
+                                              entryfield_validate = {'validator': 'numeric',
                                                                    'min': 0, 'max': 99})
 
         counters = (self.autoSaverDialogInterval, self.autoSaverDialogMax)
         Pmw.alignlabels(counters)
         for counter in counters:
-            counter.pack(fill='both', expand=1, padx=10, pady=10)
+            counter.pack(fill = 'both', expand = 1)
 
         self.editMenu = Pmw.ComboBox(
                 menuFrame, labelpos = W,
@@ -1592,10 +1591,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             # If no working DNA outputFile is selected, one is chosen here
             if DNASerializer.outputFile is None:
                 DNASerializer.saveToSpecifiedDNAFile()
-            print(f'Started auto saver on an interval of {AutoSaver.autoSaverInterval} minutes')
+            print(f'Starting auto saver on an interval of {AutoSaver.autoSaverInterval} minutes')
             # Toggles auto saver to begin auto saving loop
             AutoSaver.autoSaverToggled = True
         else:
-            print('Stopped auto saver process')
+            print('Stopping auto saver')
             # Stops auto saving loop
             AutoSaver.autoSaverToggled = False

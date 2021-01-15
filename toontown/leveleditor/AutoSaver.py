@@ -9,11 +9,11 @@ from .DNASerializer import DNASerializer
 class AutoSaver:
     autoSaverToggled = False
     autoSaverInterval = 15.0
-    maxAutoSaveCount = 10
+    maxAutoSaveCount = 10.0
 
     @staticmethod
     def initializeAutoSaver():
-        threading.Thread(target=AutoSaver.autoSaverProcess, daemon=True).start()
+        threading.Thread(target = AutoSaver.autoSaverProcess, daemon = True).start()
 
     @staticmethod
     def autoSaverProcess():
@@ -63,8 +63,10 @@ class AutoSaver:
                 if basename[-16:] == '_autosave-latest':
                     DNASerializer.outputDNADefaultFile()  # Saves working DNA file
                     return
-            DNASerializer.outputFile = os.path.join(dir, basename + '_autosave-latest' + extension).replace('\\', '/')
+            DNASerializer.outputFile = os.path.join(dir, basename + '_autosave-latest' + extension)
 
+        # Change mix of separators to forward slashes
+        DNASerializer.outputFile.replace('\\', '/')
         # Deletes 'latest' from filename
         basename = basename[:-6]
 
