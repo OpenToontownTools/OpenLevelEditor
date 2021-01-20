@@ -1595,6 +1595,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             # Toggles auto saver to begin auto saving loop
             AutoSaver.autoSaverToggled = True
         else:
-            print('Stopping auto saver')
+            print('Stopping auto saver...')
             # Stops auto saving loop
             AutoSaver.autoSaverToggled = False

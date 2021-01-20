@@ -14,6 +14,10 @@ class AutoSaver:
     @staticmethod
     def initializeAutoSaver():
         threading.Thread(target = AutoSaver.autoSaverProcess, daemon = True).start()
+        # Creates 'autosaves' directory in user data directory
+        if not os.path.isdir('leveleditor/autosaves'):
+            os.mkdir('leveleditor/autosaves')
+            print('Created "autosaves" dir')
 
     @staticmethod
     def autoSaverProcess():
@@ -26,11 +30,12 @@ class AutoSaver:
             while AutoSaver.autoSaverToggled is True:
                 # outputFile filename is empty, which may occur if filename is left blank in file prompt
                 if DNASerializer.outputFile is None:
-                    print('No file loaded, exiting auto saving loop')
+                    print('No file loaded, exiting auto saving loop...')
                     DNASerializer.autoSaveCount = 0
                     DNASerializer.autoSaverMgrRunning = False
                     AutoSaver.autoSaverToggled = False
                     break
+
                 # Epoch time of next auto save
                 endTime = time.time() + autoSaverInterval
                 # Loops until endTime is reached or the auto saver is un-toggled by user
@@ -63,10 +68,14 @@ class AutoSaver:
                 if basename[-16:] == '_autosave-latest':
                     DNASerializer.outputDNADefaultFile()  # Saves working DNA file
                     return
-            DNASerializer.outputFile = os.path.join(dir, basename + '_autosave-latest' + extension)
+            DNASerializer.outputFile = os.path.join(dir, 'autosaves', basename + '_autosave-latest' + extension)
+            # Replaces any back slashes in outputFile with forward slashes
+            DNASerializer.outputFile = DNASerializer.outputFile.replace('\\', '/')
+            # Creates new 'autosaves' directory if none is found
+            # This also accounts for if the directory of outputFile is not in the default user data folder
+            if not os.path.isdir(os.path.join(dir, 'autosaves')):
+                os.mkdir(os.path.join(dir, 'autosaves'))
 
-        # Change mix of separators to forward slashes
-        DNASerializer.outputFile.replace('\\', '/')
         # Deletes 'latest' from filename
         basename = basename[:-6]
 
