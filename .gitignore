@@ -136,3 +136,4 @@ phase_*/
 build.py
 *.bat
 ttle_dist.py
+leveleditor/settings.json

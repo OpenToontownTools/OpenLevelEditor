@@ -1,19 +1,19 @@
 """ OpenLevelEditor Base Class - Drewcification 091420 """
 
-from direct.directnotify.DirectNotifyGlobal import directNotify
-from direct.showbase.ShowBase import ShowBase
-from direct.gui.OnscreenText import OnscreenText
-
-from panda3d.core import loadPrcFile, loadPrcFileData
-
-from tkinter import Tk, messagebox
-from toontown.toonbase import ToontownGlobals
-
-import asyncio
 import argparse
+import asyncio
 import builtins
 import os
+import pathlib
 import sys
+from direct.directnotify.DirectNotifyGlobal import directNotify
+from direct.gui.OnscreenText import OnscreenText
+from direct.showbase.ShowBase import ShowBase
+from panda3d.core import loadPrcFile, loadPrcFileData
+from tkinter import Tk, messagebox
+
+from ott.Settings import Settings
+from toontown.toonbase import ToontownGlobals
 
 TOONTOWN_ONLINE = 0
 TOONTOWN_REWRITTEN = 1
@@ -28,6 +28,12 @@ SERVER_TO_ID = {'online':    TOONTOWN_ONLINE,
 
 DEFAULT_SERVER = TOONTOWN_ONLINE
 
+DEFAULT_SETTINGS = {
+    'autosave-enabled':   True,
+    'autosave-interval':  15,
+    'autosave-max-files': 10,
+    'fps-meter-update-rate': 0
+    }
 
 class ToontownLevelEditor(ShowBase):
     notify = directNotify.newCategory("Open Level Editor")
@@ -44,18 +50,24 @@ class ToontownLevelEditor(ShowBase):
         if not os.path.exists(userfiles):
             pathlib.Path(userfiles).mkdir(parents = True, exist_ok = True)
 
+        builtins.settings = Settings(f'{userfiles}/settings.json')
+
+        for setting in DEFAULT_SETTINGS:
+            if setting not in settings:
+                settings[setting] = DEFAULT_SETTINGS[setting]
+
         # Check for -e or -d launch options
         parser = argparse.ArgumentParser(description = "Modes")
         parser.add_argument("--experimental", action = 'store_true', help = "Enables experimental features")
         parser.add_argument("--debug", action = 'store_true', help = "Enables debugging features")
         parser.add_argument("--noupdate", action = 'store_true', help = "Disables Auto Updating")
-        parser.add_argument("--png", action = 'store_true', help = "Forces PNG resources mode, if this is not specified, "
-                                                                   "it will automatically determine the format")
+        parser.add_argument("--png", action = 'store_true', help = "Forces PNG resources mode, if this is not "
+                                                                   "specified, it will automatically determine the "
+                                                                   "format")
         parser.add_argument("--compiler", nargs = "*",
                             help = "Specify which compiler to use (Only useful if your game uses a form of "
                                    "libpandadna.) Valid options are 'libpandadna', for games which use the "
-                                   "modern c++ version of libpandadna, and 'clash', "
-                                   "for Corporate Clash")
+                                   "modern c++ version of libpandadna, and 'clash', for Corporate Clash")
 
         parser.add_argument("--server", nargs = "*", help = "Enables features exclusive to various Toontown projects",
                             default = 'online')
@@ -151,21 +163,21 @@ class ToontownLevelEditor(ShowBase):
         """
         fps = globalClock.getAverageFrameRate()
 
-        # Color is green by default
-        color = (0, 0.9, 0, 1)
-
-        # At or below 45 fps is yellow
         if fps <= 45:
+            # At or below 45 fps is yellow
             color = (1, 0.9, 0, 1)
-        # At or below 30 fps is red
         elif fps <= 30:
+            # At or below 30 fps is red
             color = (1, 0, 0, 1)
+        else:
+            # Color is green by default
+            color = (0, 0.9, 0, 1)
 
         text = f'{round(fps, 1)} FPS'
         self.frameRateMeter.setText(text)
         self.frameRateMeter.setFg(color)
-
-        return task.cont
+        task.delayTime = settings['fps-meter-update-rate']/1000
+        return task.again
 
     def __checkForFiles(self):
         # Make custom hood directory if it doesn't exist
@@ -194,7 +206,8 @@ class ToontownLevelEditor(ShowBase):
 
         self.tkRoot = tkroot
 
-    def __addCullBins(self):
+    @staticmethod
+    def __addCullBins():
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
