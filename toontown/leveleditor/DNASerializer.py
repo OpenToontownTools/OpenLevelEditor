@@ -10,6 +10,9 @@ dnaDirectory = Filename.expandFrom(userfiles)
 class DNASerializer:
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelEditor')
     outputFile = None
+    # Local AutoSaver variables
+    autoSaverMgrRunning = False
+    autoSaveCount = 0
 
     # STYLE/DNA FILE FUNCTIONS
     @staticmethod
@@ -24,6 +27,11 @@ class DNASerializer:
                                       initialdir = path,
                                       title = 'Load DNA File',
                                       parent = base.le.panel.component('hull'))
+        DNASerializer.autoSaveCount = 0
+        # Wait until auto saver is done managing files before loading new file
+        while DNASerializer.autoSaverMgrRunning is True:
+            if DNASerializer.autoSaverMgrRunning is False:
+                break
         if dnaFilename:
             DNASerializer.loadDNAFromFile(dnaFilename)
             DNASerializer.outputFile = dnaFilename
@@ -42,6 +50,11 @@ class DNASerializer:
                 initialdir = path,
                 title = 'Save DNA File as',
                 parent = base.le.panel.component('hull'))
+        DNASerializer.autoSaveCount = 0
+        # Wait until auto saver is done managing files before saving new file
+        while DNASerializer.autoSaverMgrRunning is True:
+            if DNASerializer.autoSaverMgrRunning is False:
+                break
         if dnaFilename:
             DNASerializer.outputDNA(dnaFilename)
             DNASerializer.outputFile = dnaFilename

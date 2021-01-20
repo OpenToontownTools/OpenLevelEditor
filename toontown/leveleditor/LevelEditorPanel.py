@@ -8,6 +8,7 @@ from direct.showbase.TkGlobal import *
 from direct.tkwidgets import Floater
 
 from .DNASerializer import DNASerializer
+from .AutoSaver import AutoSaver
 from .LevelStyleManager import *
 from .LevelEditorGlobals import *
 from .LESceneGraphExplorer import *
@@ -127,6 +128,16 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Open Injector',
                             label = 'Injector',
                             command = self.showInjector)
+        menuBar.addmenuitem('Advanced', 'separator')
+        menuBar.addmenuitem('Advanced', 'checkbutton',
+                            'Toggle Auto-saver On/Off',
+                            label =  'Toggle Auto Saver',
+                            command = self.toggleAutoSaver)
+        menuBar.addmenuitem('Advanced', 'command',
+                            'User Set Auto Saver Options',
+                            label = 'Auto Saver Options',
+                            command = self.showAutoSaverDialog)
+
         # Corporate Clash Old Toontown-esque Filter
         if base.server == TOONTOWN_CORPORATE_CLASH:
             self.toggleOTVar = IntVar()
@@ -175,6 +186,32 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                                 defaultbutton = 0,
                                                 message_text = CONTROLS)
         self.controlsDialog.withdraw()
+
+        self.autoSaverDialog = Pmw.Dialog(parent, title = 'Autosaver Options',
+                                          buttons = ('Save Options',),
+                                          command = self.setAutoSaverInterval)
+        self.autoSaverDialog.withdraw()
+
+        self.autoSaverDialogInterval = Pmw.Counter(self.autoSaverDialog.interior(),
+                                                   labelpos = 'w',
+                                                   label_text = 'Auto save interval in minutes:',
+                                                   entry_width = 10,
+                                                   entryfield_value = int(AutoSaver.autoSaverInterval),
+                                                   entryfield_validate = {'validator': 'real',
+                                                                        'min': 1, 'max': 60})
+
+        self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
+                                              labelpos = 'w',
+                                              label_text = 'Max auto save files:',
+                                              entry_width = 10,
+                                              entryfield_value = int(AutoSaver.maxAutoSaveCount),
+                                              entryfield_validate = {'validator': 'numeric',
+                                                                   'min': 0, 'max': 99})
+
+        counters = (self.autoSaverDialogInterval, self.autoSaverDialogMax)
+        Pmw.alignlabels(counters)
+        for counter in counters:
+            counter.pack(fill = 'both', expand = 1)
 
         self.editMenu = Pmw.ComboBox(
                 menuFrame, labelpos = W,
@@ -962,6 +999,9 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Make sure input variables processed
         self.initialiseoptions(LevelEditorPanel)
 
+        # Initializes auto saver for use
+        AutoSaver.initializeAutoSaver()
+
     def updateInfo(self, page):
         if page == 'Signs':
             self.updateSignPage()
@@ -1466,6 +1506,16 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def setBattleCellType(self, name):
         self.levelEditor.currentBattleCellType = name
 
+    def setAutoSaverInterval(self, i):
+        if i == 'Save Options':
+            try:
+                AutoSaver.autoSaverInterval = float(self.autoSaverDialogInterval.get())
+                AutoSaver.maxAutoSaveCount = float(self.autoSaverDialogMax.get())
+            except ValueError as e:
+                # Non-float was passed
+                raise e
+        self.autoSaverDialog.withdraw()
+
     def updateSelectedObjColor(self, color):
         try:
             obj = self.levelEditor.DNATarget
@@ -1506,6 +1556,10 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.controlsDialog.show()
         self.controlsDialog.focus_set()
 
+    def showAutoSaverDialog(self):
+        self.autoSaverDialog.show()
+        self.autoSaverDialog.focus_set()
+
     def showInjector(self):
         self.injectorDialog.show()
         self.injectorDialog.focus_set()
@@ -1531,3 +1585,16 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.useDriveMode()
         else:
             self.levelEditor.useDirectFly()
+
+    def toggleAutoSaver(self):
+        if AutoSaver.autoSaverToggled is False:
+            # If no working DNA outputFile is selected, one is chosen here
+            if DNASerializer.outputFile is None:
+                DNASerializer.saveToSpecifiedDNAFile()
+            print(f'Starting auto saver on an interval of {AutoSaver.autoSaverInterval} minutes')
+            # Toggles auto saver to begin auto saving loop
+            AutoSaver.autoSaverToggled = True
+        else:
+            print('Stopping auto saver...')
+            # Stops auto saving loop
+            AutoSaver.autoSaverToggled = False
