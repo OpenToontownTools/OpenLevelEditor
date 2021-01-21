@@ -13,6 +13,8 @@ from panda3d.core import loadPrcFile, loadPrcFileData
 from tkinter import Tk, messagebox
 
 from ott.Settings import Settings
+from ott.ShaderRegistry import ShaderRegistry
+
 from toontown.toonbase import ToontownGlobals
 
 TOONTOWN_ONLINE = 0
@@ -128,6 +130,8 @@ class ToontownLevelEditor(ShowBase):
             loop.run_until_complete(self.__checkUpdates())
 
         self.__addCullBins()
+        
+        self.__registerShaders()
 
         # Now we actually start the editor
         ShowBase.__init__(self)
@@ -218,6 +222,15 @@ class ToontownLevelEditor(ShowBase):
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
+        
+    @staticmethod
+    def __registerShaders():
+        ShaderRegistry.register('render:black_and_white',
+                                frag = 'resources/shaders/tt_sha_render_bandw.frag',
+                                vert = 'resources/shaders/tt_sha_render_bandw.vert')
+        ShaderRegistry.register('dna:anim_prop',
+                                frag = 'resources/shaders/tt_sha_dna_anim_prop.frag',
+                                vert = 'resources/shaders/tt_sha_dna_anim_prop.vert')
 
     async def __checkUpdates(self):
         import aiohttp, webbrowser

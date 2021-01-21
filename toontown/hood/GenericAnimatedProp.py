@@ -2,6 +2,9 @@ from . import AnimatedProp
 from direct.actor import Actor
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
+
+from ott.ShaderRegistry import ShaderRegistry
+
 from toontown.toonbase import ToontownGlobals
 from toontown.hood import ZoneUtil
 from toontown.hood import HoodUtil
@@ -85,7 +88,10 @@ class GenericAnimatedProp(AnimatedProp.AnimatedProp):
         self.trashcan.loadAnims({'anim': f"{self.path}/{anim}"})
         self.trashcan.pose('anim', 0)
         self.trashcan.setBlend(frameBlend = 1)
-        self.trashcan.setShaderAuto()
+        shader = ShaderRegistry.get('dna:anim_prop')
+        attr = ShaderAttrib.make(shader)
+        attr = attr.setFlag(ShaderAttrib.F_hardware_skinning, True)
+        self.trashcan.setAttrib(attr)
         self.node = self.trashcan
 
     def calcHoodId(self, node):

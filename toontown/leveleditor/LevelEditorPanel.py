@@ -13,6 +13,8 @@ from .LevelStyleManager import *
 from .LevelEditorGlobals import *
 from .LESceneGraphExplorer import *
 
+from ott.ShaderRegistry import ShaderRegistry
+
 from toontown.fixes import VectorWidgets
 
 
@@ -1578,10 +1580,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
 
     def toggleOT(self):
         if self.toggleOTVar.get():
-            self.levelEditor.getNPToplevel().setShader(
-                    Shader.load(Shader.SL_GLSL,
-                                vertex = 'resources/shaders/tt_sha_render_bandw.vert',
-                                fragment = 'resources/shaders/tt_sha_render_bandw.frag'))
+            self.levelEditor.getNPToplevel().setShader(ShaderRegistry.get('render:black_and_white'))
         else:
             self.levelEditor.getNPToplevel().clearShader()
 
