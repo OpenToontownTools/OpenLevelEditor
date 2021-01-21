@@ -129,10 +129,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             label = 'Injector',
                             command = self.showInjector)
         menuBar.addmenuitem('Advanced', 'separator')
-        menuBar.addmenuitem('Advanced', 'checkbutton',
-                            'Toggle Auto-saver On/Off',
-                            label =  'Toggle Auto Saver',
-                            command = self.toggleAutoSaver)
         menuBar.addmenuitem('Advanced', 'command',
                             'User Set Auto Saver Options',
                             label = 'Auto Saver Options',
@@ -192,23 +188,32 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                           command = self.setAutoSaverInterval)
         self.autoSaverDialog.withdraw()
 
+        self.autoSaverEnabled = IntVar()
+        self.autoSaverEnabled.set(settings['autosave-enabled'])
+        self.autoSaverEnable = ttk.Checkbutton(
+                self.autoSaverDialog.interior(),
+                text = 'Enable Autosaving', width = 20,
+                variable = self.autoSaverEnabled)
+
         self.autoSaverDialogInterval = Pmw.Counter(self.autoSaverDialog.interior(),
                                                    labelpos = 'w',
                                                    label_text = 'Auto save interval in minutes:',
                                                    entry_width = 10,
-                                                   entryfield_value = int(AutoSaver.autoSaverInterval),
+                                                   entryfield_value = int(settings['autosave-interval']),
                                                    entryfield_validate = {'validator': 'real',
-                                                                        'min': 1, 'max': 60})
+                                                                          'min':       1, 'max': 60
+                                                                          })
 
-        self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
-                                              labelpos = 'w',
-                                              label_text = 'Max auto save files:',
-                                              entry_width = 10,
-                                              entryfield_value = int(AutoSaver.maxAutoSaveCount),
-                                              entryfield_validate = {'validator': 'numeric',
-                                                                   'min': 0, 'max': 99})
+        #self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
+        #                                      labelpos = 'w',
+        #                                      label_text = 'Max auto save files:',
+        #                                      entry_width = 10,
+        #                                      entryfield_value = int(settings['autosave-max-files']),
+        #                                      entryfield_validate = {'validator': 'numeric',
+        #                                                             'min':       0, 'max': 99
+        #                                                             })
 
-        counters = (self.autoSaverDialogInterval, self.autoSaverDialogMax)
+        counters = (self.autoSaverEnable, self.autoSaverDialogInterval)#, self.autoSaverDialogMax)
         Pmw.alignlabels(counters)
         for counter in counters:
             counter.pack(fill = 'both', expand = 1)
@@ -412,7 +417,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                     landmarkBuildingsPage, width = 24,
                     textvariable = self.landmarkBuildingNameString)
             self.landmarkBuildingNameBox.pack(expand = 0, fill = X)
-            
+
         self.bldgLabels = IntVar()
         self.bldgLabels.set(0)
         self.bldgLabelsButton = ttk.Checkbutton(
@@ -999,9 +1004,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         # Make sure input variables processed
         self.initialiseoptions(LevelEditorPanel)
 
-        # Initializes auto saver for use
-        AutoSaver.initializeAutoSaver()
-
     def updateInfo(self, page):
         if page == 'Signs':
             self.updateSignPage()
@@ -1509,8 +1511,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def setAutoSaverInterval(self, i):
         if i == 'Save Options':
             try:
-                AutoSaver.autoSaverInterval = float(self.autoSaverDialogInterval.get())
-                AutoSaver.maxAutoSaveCount = float(self.autoSaverDialogMax.get())
+                settings['autosave-enabled'] = bool(self.autoSaverEnabled.get())
+                settings['autosave-interval'] = int(self.autoSaverDialogInterval.get())
+                #settings['autosave-max-files'] = float(self.autoSaverDialogMax.get())
+                # Reset the autosaver
+                AutoSaver.initializeAutoSaver()
             except ValueError as e:
                 # Non-float was passed
                 raise e
@@ -1585,16 +1590,3 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.useDriveMode()
         else:
             self.levelEditor.useDirectFly()
-
-    def toggleAutoSaver(self):
-        if AutoSaver.autoSaverToggled is False:
-            # If no working DNA outputFile is selected, one is chosen here
-            if DNASerializer.outputFile is None:
-                DNASerializer.saveToSpecifiedDNAFile()
-            print(f'Starting auto saver on an interval of {AutoSaver.autoSaverInterval} minutes')
-            # Toggles auto saver to begin auto saving loop
-            AutoSaver.autoSaverToggled = True
-        else:
-            print('Stopping auto saver...')
-            # Stops auto saving loop
-            AutoSaver.autoSaverToggled = False

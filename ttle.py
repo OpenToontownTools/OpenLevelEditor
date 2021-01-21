@@ -29,11 +29,12 @@ SERVER_TO_ID = {'online':    TOONTOWN_ONLINE,
 DEFAULT_SERVER = TOONTOWN_ONLINE
 
 DEFAULT_SETTINGS = {
-    'autosave-enabled':   True,
-    'autosave-interval':  15,
-    'autosave-max-files': 10,
+    'autosave-enabled':      True,
+    'autosave-interval':     15,
+    'autosave-max-files':    10,
     'fps-meter-update-rate': 0
     }
+
 
 class ToontownLevelEditor(ShowBase):
     notify = directNotify.newCategory("Open Level Editor")
@@ -99,8 +100,8 @@ class ToontownLevelEditor(ShowBase):
                 loadPrcFileData("", "png-textures true")
             else:
                 messagebox.showerror(
-                    message = "There was an error located resources!\n"
-                              "Make sure you put the phase folders in the root folder!")
+                        message = "There was an error located resources!\n"
+                                  "Make sure you put the phase folders in the root folder!")
 
         server = SERVER_TO_ID.get(args.server[0].lower(), DEFAULT_SERVER)
         self.server = server
@@ -148,7 +149,8 @@ class ToontownLevelEditor(ShowBase):
         if flag:
             if not self.frameRateMeter:
                 self.frameRateMeter = OnscreenText(parent = base.a2dTopRight, text = '', pos = (-0.01, -0.05, 0.0),
-                                                   scale = 0.05, style = 3, bg = (0, 0, 0, 0.4), align = TextNode.ARight,
+                                                   scale = 0.05, style = 3, bg = (0, 0, 0, 0.4),
+                                                   align = TextNode.ARight,
                                                    font = ToontownGlobals.getToonFont())
                 taskMgr.add(self.updateFrameRateMeter, 'fps')
         else:
@@ -176,7 +178,7 @@ class ToontownLevelEditor(ShowBase):
         text = f'{round(fps, 1)} FPS'
         self.frameRateMeter.setText(text)
         self.frameRateMeter.setFg(color)
-        task.delayTime = settings['fps-meter-update-rate']/1000
+        task.delayTime = settings['fps-meter-update-rate'] / 1000
         return task.again
 
     def __checkForFiles(self):
@@ -230,8 +232,8 @@ class ToontownLevelEditor(ShowBase):
                         self.notify.info("Client is up to date!")
             except:
                 messagebox.showerror(
-                    message = "There was an error checking for updates! This is likely an issue with your connection. "
-                              "Press OK to continue using the application.")
+                        message = "There was an error checking for updates! This is likely an issue with your connection. "
+                                  "Press OK to continue using the application.")
 
 
 # Run it

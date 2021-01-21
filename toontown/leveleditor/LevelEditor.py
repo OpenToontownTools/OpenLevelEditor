@@ -26,6 +26,7 @@ from direct.task import Task
 from otp.otpbase import OTPGlobals
 from toontown.hood.GenericAnimatedProp import *
 from toontown.toon import RobotToon, LEAvatar
+from .AutoSaver import AutoSaver
 from . import LevelEditorGlobals
 from . import LevelEditorPanel
 from . import VisGroupsEditor
@@ -342,6 +343,8 @@ class LevelEditor(NodePath, DirectObject):
         self.isSelecting = False
         self.boxStartMouse = (0, 0)
         self.boxEndMouse = (0, 0)
+
+        AutoSaver.initializeAutoSaver()
 
     # ENABLE/DISABLE
     def enable(self):
@@ -4107,7 +4110,7 @@ class LevelEditor(NodePath, DirectObject):
         return task.again
 
     def finishBoxSelection(self):
-        ''' Calculates all the stuff in the selection '''
+        """ Calculates all the stuff in the selection """
         base.direct.deselectAll()
 
         # The following is mostly from direct.directtools.DirectManipulation, but modified for dnanodes instead of geom nodes.
