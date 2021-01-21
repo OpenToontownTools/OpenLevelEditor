@@ -1,8 +1,6 @@
 """Avatar Module: contains the avatar class"""
 
 from panda3d.core import *
-from libotp import Nametag, NametagGroup
-from libotp import CFSpeech, CFThought, CFTimeout, CFPageButton, CFNoQuitButton, CFQuitButton
 
 from direct.actor.Actor import Actor
 from direct.distributed import ClockDelta

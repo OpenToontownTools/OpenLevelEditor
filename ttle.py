@@ -195,8 +195,13 @@ class ToontownLevelEditor(ShowBase):
     def __importMainLibs(self):
         builtin_dict = builtins.__dict__
         builtin_dict.update(__import__('panda3d.core', fromlist = ['*']).__dict__)
-        builtin_dict.update(__import__('libotp', fromlist = ['*']).__dict__)
-        builtin_dict.update(__import__('libtoontown', fromlist = ['*']).__dict__)
+        try:
+            # detect if using a panda with libtoontown baked in
+            builtin_dict.update(__import__('panda3d.toontown', fromlist = ['*']).__dict__)
+        except:
+            # using open-source version
+            builtin_dict.update(__import__('libotp', fromlist = ['*']).__dict__)
+            builtin_dict.update(__import__('libtoontown', fromlist = ['*']).__dict__)
 
     def __createTk(self):
         tkroot = Tk()

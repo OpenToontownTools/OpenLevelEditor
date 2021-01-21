@@ -8,8 +8,6 @@ from direct.actor.DistributedActor import DistributedActor
 from direct.task import Task
 from direct.showbase import PythonUtil
 
-from libotp import Nametag
-
 import random
 
 from .Avatar import Avatar
