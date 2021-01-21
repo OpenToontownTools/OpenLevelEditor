@@ -13,7 +13,7 @@ from .LevelStyleManager import *
 from .LevelEditorGlobals import *
 from .LESceneGraphExplorer import *
 
-from ott.ShaderRegistry import ShaderRegistry
+from ottutil.ShaderRegistry import ShaderRegistry
 
 from toontown.fixes import VectorWidgets
 

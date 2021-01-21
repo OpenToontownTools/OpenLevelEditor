@@ -12,8 +12,8 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import loadPrcFile, loadPrcFileData
 from tkinter import Tk, messagebox
 
-from ott.Settings import Settings
-from ott.ShaderRegistry import ShaderRegistry
+from ottutil.Settings import Settings
+from ottutil.ShaderRegistry import ShaderRegistry
 
 from toontown.toonbase import ToontownGlobals
 
