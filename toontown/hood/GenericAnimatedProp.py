@@ -3,7 +3,7 @@ from direct.actor import Actor
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 
-from ottutil.ShaderRegistry import ShaderRegistry
+from ott.ShaderRegistry import ShaderRegistry
 
 from toontown.toonbase import ToontownGlobals
 from toontown.hood import ZoneUtil
