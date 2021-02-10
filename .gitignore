@@ -128,6 +128,7 @@ notice.txt
 screenshots/
 maps/
 phase_*/
+leveleditor/*.bam
 
 # VS Code
 .history

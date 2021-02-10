@@ -1,8 +1,10 @@
 import sys
 import Pmw
+import os
 
 from tkinter import *
 from tkinter import ttk
+from tkinter.filedialog import asksaveasfilename
 
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets import Floater
@@ -66,6 +68,11 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Save DNA File',
                             label = 'Save DNA',
                             command = DNASerializer.outputDNADefaultFile)
+        menuBar.addmenuitem('Level Editor', 'command',
+                            'Export level as .BAM',
+                            label = 'Export as .BAM',
+                            command = self.exportToBam)
+
         menuBar.addmenuitem('Level Editor', 'separator')
         menuBar.addmenuitem('Level Editor', 'command',
                             'Edit Visibility Groups',
@@ -84,6 +91,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             'Make Street Along Curve',
                             label = 'Make Street Along Curve',
                             command = self.levelEditor.makeStreetAlongCurve)
+
         menuBar.addmenuitem('Level Editor', 'separator')
         menuBar.addmenuitem('Level Editor', 'command',
                             'Exit Level Editor Panel',
@@ -206,7 +214,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                                                           'min':       1, 'max': 60
                                                                           })
 
-        #self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
+        # self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
         #                                      labelpos = 'w',
         #                                      label_text = 'Max auto save files:',
         #                                      entry_width = 10,
@@ -215,7 +223,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         #                                                             'min':       0, 'max': 99
         #                                                             })
 
-        counters = (self.autoSaverEnable, self.autoSaverDialogInterval)#, self.autoSaverDialogMax)
+        counters = (self.autoSaverEnable, self.autoSaverDialogInterval)  # , self.autoSaverDialogMax)
         Pmw.alignlabels(counters)
         for counter in counters:
             counter.pack(fill = 'both', expand = 1)
@@ -1515,7 +1523,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             try:
                 settings['autosave-enabled'] = bool(self.autoSaverEnabled.get())
                 settings['autosave-interval'] = int(self.autoSaverDialogInterval.get())
-                #settings['autosave-max-files'] = float(self.autoSaverDialogMax.get())
+                # settings['autosave-max-files'] = float(self.autoSaverDialogMax.get())
                 # Reset the autosaver
                 AutoSaver.initializeAutoSaver()
             except ValueError as e:
@@ -1589,3 +1597,19 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             self.levelEditor.useDriveMode()
         else:
             self.levelEditor.useDirectFly()
+
+    def exportToBam(self):
+        """
+        Export level geometry as .bam
+        :return:
+        """
+        path = Filename.expandFrom(userfiles).toOsSpecific()
+        if not os.path.isdir(path):
+            path = '.'
+        fileName = asksaveasfilename(defaultextension = '.dna',
+                                     filetypes = (('Panda3D Model Files', '*.bam'), ('All files', '*')),
+                                     initialdir = path,
+                                     title = 'Export as .BAM',
+                                     parent = self.component('hull'))
+        if fileName:
+            self.levelEditor.getNPToplevel().writeBamFile(Filename.expandFrom(fileName))
