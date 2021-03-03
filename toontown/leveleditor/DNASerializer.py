@@ -3,6 +3,8 @@ import os
 from tkinter import *
 from tkinter.filedialog import *
 from direct.directnotify import DirectNotifyGlobal
+from .EditorUtil import *
+from .LevelStyleManager import *
 
 dnaDirectory = Filename.expandFrom(userfiles)
 
