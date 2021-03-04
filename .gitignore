@@ -7,6 +7,9 @@
 leveleditor/hoods/SC.json
 leveleditor/stylefiles/sketched_central/*
 
+leveleditor/hoods/OT.json
+leveleditor/stylefiles/olde_toontown/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
