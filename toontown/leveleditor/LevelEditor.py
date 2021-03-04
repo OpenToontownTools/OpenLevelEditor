@@ -686,7 +686,6 @@ class LevelEditor(NodePath, DirectObject):
             This is used to show where a suit building is placed in relation
             to a toon building. this ensures you line up your buildings and walls
             properly to prevent walls clipping through elevators, or gaps in the wall
-        '''
         """
 
         self.suitPreviewsToggled = not self.suitPreviewsToggled
@@ -701,9 +700,8 @@ class LevelEditor(NodePath, DirectObject):
             suitNames = ['Lawbot', 'Bossbot', 'Sellbot', 'Cashbot']
 
             if base.server == TOONTOWN_CORPORATE_CLASH:
-            # if base.server == TOONTOWN_CORPORATE_CLASH:
-            #    suitBuildings.append(DNASTORE.findNode("suit_landmark_g1"))
-            #    suitNames.append('Boardbot')
+               suitBuildings.append(DNASTORE.findNode("suit_landmark_g1"))
+               suitNames.append('Boardbot')
 
             # temporary fix for duplicate sb's
             sb = []
@@ -726,7 +724,7 @@ class LevelEditor(NodePath, DirectObject):
                 bldg.setPosHpr(tb.getPos(), tb.getHpr())
 
                 # clash has 5, the rest have 4
-                numCorps = 4 if base.server == TOONTOWN_CORPORATE_CLASH else 4
+                numCorps = 5 if base.server == TOONTOWN_CORPORATE_CLASH else 4
                 suitType = random.randint(0, numCorps - 1)
 
                 suitBuilding = suitBuildings[suitType]
