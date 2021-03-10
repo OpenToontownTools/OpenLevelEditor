@@ -1601,7 +1601,6 @@ class LevelEditorPanel(Pmw.MegaToplevel):
     def exportToBam(self):
         """
         Export level geometry as .bam
-        :return:
         """
         path = Filename.expandFrom(userfiles).toOsSpecific()
         if not os.path.isdir(path):

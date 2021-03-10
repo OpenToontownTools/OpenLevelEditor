@@ -12,13 +12,14 @@
         from ott.ShaderRegistry import ShaderRegistry
         render.setShader(ShaderRegistry.get('render:black_and_white'))
 """
+from typing import Dict, Any
 
 from panda3d.core import Shader
 
 
 class ShaderRegistry:
     # Static shader dictionary
-    shaders = {}
+    shaders: Dict[str, Shader] = {}
 
     @staticmethod
     def register(identifier: str, frag: str, vert: str):

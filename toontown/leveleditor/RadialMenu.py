@@ -1,4 +1,4 @@
-''' Camera Radial Menu - drewcification 091720 '''
+""" Camera Radial Menu - drewcification 091720 """
 from direct.directtools.DirectGeometry import *
 from direct.gui.DirectFrame import DirectFrame, OnscreenImage, OnscreenText
 from direct.showbase.DirectObject import DirectObject
@@ -15,19 +15,19 @@ class RadialItem:
 
 class RadialMenu(DirectObject):
     def __init__(self, *items):
-        ''' 
+        """
             Initialize using the set of items specified
             Set of items should be passed as RadialItems
-        '''
+        """
         DirectObject.__init__(self)
         # Initialize variables
-        self.isActive = 0
-        self.selected = 0
+        self.isActive: bool = False
+        self.selected: int = 0
 
-        self.items = items
+        self.items: List[RadialItem] = items
 
         # Load the palletized gui model
-        gui = loader.loadModel("resources/camera_gui.bam")
+        gui: NodePath = loader.loadModel("resources/camera_gui.bam")
 
         # Create the frame
         self.frame = DirectFrame(geom = gui.find("**/radial_menu_bg"), parent = hidden, scale = 1.3, relief = None)
@@ -41,7 +41,7 @@ class RadialMenu(DirectObject):
 
         # Load all the and calculate their positions
         self.itemAngle = 360 / len(items)
-        self.itemImages = []
+        self.itemImages: List[OnscreenImage] = []
         for i in range(len(items)):
             x = .38 * math.cos(i * deg2Rad(self.itemAngle))
             z = .38 * math.sin(i * deg2Rad(self.itemAngle))
@@ -50,19 +50,19 @@ class RadialMenu(DirectObject):
             self.itemImages.append(img)
 
     def activate(self):
-        ''' Shows the menu and spawns the mouse reader task '''
+        """ Shows the menu and spawns the mouse reader task """
         self.frame.reparentTo(aspect2d)
         taskMgr.add(self.radialTask, 'cam-radialTask')
         self.isActive = 1
 
     def deactivate(self):
-        ''' Hides the menu and kills the mouse reader task '''
+        """ Hides the menu and kills the mouse reader task """
         taskMgr.remove('cam-radialTask')
         self.frame.reparentTo(hidden)
         self.isActive = 0
 
     def destroy(self):
-        ''' Destroy everything '''
+        """ Destroy everything """
         self.frame.destroy()
         self.selector.destroy()
         for item in self.itemImages:
@@ -74,12 +74,12 @@ class RadialMenu(DirectObject):
         del self.frame
         del self.selector
 
-    def getChoice(self):
-        ''' Convenience Function Get the selected item '''
+    def getChoice(self) -> int:
+        """ Convenience Function Get the selected item """
         return self.selected
 
     def radialTask(self, task):
-        ''' Reads the mouse position and calculates which object it is looking at '''
+        """ Reads the mouse position and calculates which object it is looking at """
         # Initialize these as 0 incase we can't read the mouses position
         mouseX = 0
         mouseY = 0
