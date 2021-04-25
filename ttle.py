@@ -130,7 +130,7 @@ class ToontownLevelEditor(ShowBase):
             loop.run_until_complete(self.__checkUpdates())
 
         self.__addCullBins()
-        
+
         self.__registerShaders()
 
         # Now we actually start the editor
