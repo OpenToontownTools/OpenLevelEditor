@@ -437,6 +437,14 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 command = self.toggleBldgLabels)
         self.bldgLabelsButton.pack(side = LEFT, expand = 1, fill = X)
 
+        self.bldgIsSafeZone = IntVar()
+        self.bldgIsSafeZone.set(0)
+        self.bldgIsSafeZoneButton = ttk.Checkbutton(
+                landmarkBuildingsPage,
+                text = 'Safe Zone Building', width = 20,
+                variable = self.bldgIsSafeZone)
+        self.bldgIsSafeZoneButton.pack(side = LEFT, expand = 1, fill = X)
+
         # ANIMATED BUILDINGS
         Label(animBuildingsPage, text = 'Animated Buildings',
               font = ('Calibri', 14, 'bold')).pack(expand = 0)

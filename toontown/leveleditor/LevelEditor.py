@@ -1557,8 +1557,12 @@ class LevelEditor(NodePath, DirectObject):
         self.setCurrent('toon_landmark_texture', landmarkType)
         block = self.getNextLandmarkBlock()
         print(landmarkType)
+        if self.panel.bldgIsSafeZone.get() and specialType == '':
+            prefix = 'sz'
+        else:
+            prefix = 'tb'
         newDNALandmarkBuilding = DNALandmarkBuilding(
-                f"tb{block}:{landmarkType}_DNARoot")
+                f"{prefix}{block}:{landmarkType}_DNARoot")
         newDNALandmarkBuilding.setCode(landmarkType)
         newDNALandmarkBuilding.setTitle(title)
         newDNALandmarkBuilding.setBuildingType(specialType)
