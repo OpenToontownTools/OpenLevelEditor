@@ -1613,8 +1613,7 @@ class LevelEditor(NodePath, DirectObject):
         print("addAnimProp %s " % animPropType)
         # Record new anim prop type
         self.setCurrent('anim_prop_texture', animPropType)
-        simpleName = re.sub(r'phase_\d_models_char__', '', animPropType).replace('animated_prop_', '').upper()
-        newDNAAnimProp = DNAAnimProp(f"ANIM.{simpleName}_DNARoot")
+        newDNAAnimProp = DNAAnimProp(f"{animPropType}_DNARoot")
         newDNAAnimProp.setCode(animPropType)
         newDNAAnimProp.setPos(VBase3(0))
         newDNAAnimProp.setHpr(VBase3(0))
@@ -1625,8 +1624,7 @@ class LevelEditor(NodePath, DirectObject):
         print("addInteractiveProp %s " % interactivePropType)
         # Record new interactive prop type
         self.setCurrent('interactive_prop_texture', interactivePropType)
-        simpleName = re.sub(r'phase_\d_models_char__', '', interactivePropType).replace('interactive_prop_', '').upper()
-        newDNAInteractiveProp = DNAInteractiveProp(f"INTR.{simpleName}_DNARoot")
+        newDNAInteractiveProp = DNAInteractiveProp(f"{interactivePropType}_DNARoot")
         newDNAInteractiveProp.setCode(interactivePropType)
         newDNAInteractiveProp.setPos(VBase3(0))
         newDNAInteractiveProp.setHpr(VBase3(0))
