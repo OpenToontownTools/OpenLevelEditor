@@ -1525,9 +1525,9 @@ class LevelEditor(NodePath, DirectObject):
         print("createNewGroup")
         """ Create a new DNA Node group under the active parent """
         if type == 'dna':
-            newDNANode = DNAGroup('GROUP.' + repr(self.getGroupNum()))
+            newDNANode = DNAGroup('grp.' + repr(self.getGroupNum()))
         else:
-            newDNANode = DNAVisGroup('VIS.' + repr(self.getGroupNum()))
+            newDNANode = DNAVisGroup('grp.' + repr(self.getGroupNum()))
             # Increment group counter
         self.setGroupNum(self.getGroupNum() + 1)
         # Add new DNA Node group to the current parent DNA Object
@@ -1544,7 +1544,7 @@ class LevelEditor(NodePath, DirectObject):
     def addFlatBuilding(self, buildingType):
         # Create new building
         newDNAFlatBuilding = DNAFlatBuilding()
-        self.setRandomBuildingStyle(newDNAFlatBuilding, name = f'tb0:FLAT_DNARoot')
+        self.setRandomBuildingStyle(newDNAFlatBuilding, name = f'tb0:flat_DNARoot')
         # Now place new building in the world
         self.initDNANode(newDNAFlatBuilding)
 
@@ -1589,8 +1589,7 @@ class LevelEditor(NodePath, DirectObject):
         # Record new anim building type
         self.setCurrent('anim_building_texture', animBuildingType)
         block = self.getNextLandmarkBlock()
-        simpleName = re.sub(r'phase_\d_models_char__', '', animBuildingType).replace('animated_building_', '').upper()
-        newDNAAnimBuilding = DNAAnimBuilding(f"tb{block}:ALND.{simpleName}_DNARoot")
+        newDNAAnimBuilding = DNAAnimBuilding(f"tb{block}:{animBuildingType}_DNARoot")
         newDNAAnimBuilding.setCode(animBuildingType)
         newDNAAnimBuilding.setPos(VBase3(0))
         newDNAAnimBuilding.setHpr(VBase3(0))
@@ -1602,7 +1601,7 @@ class LevelEditor(NodePath, DirectObject):
         print("addProp %s " % propType)
         # Record new prop type
         self.setCurrent('prop_texture', propType)
-        newDNAProp = DNAProp(f"PROP.{propType.upper()}_DNARoot")
+        newDNAProp = DNAProp(f"prop.{propType.lower()}_DNARoot")
         newDNAProp.setCode(propType)
         newDNAProp.setPos(VBase3(0))
         newDNAProp.setHpr(VBase3(0))
@@ -1634,7 +1633,7 @@ class LevelEditor(NodePath, DirectObject):
     def addStreet(self, streetType):
         # Record new street type
         self.setCurrent('street_texture', streetType)
-        newDNAStreet = DNAStreet(f"STR.{streetType.replace('street_', '').upper()}_DNARoot")
+        newDNAStreet = DNAStreet(f"str.{streetType.replace('street_', '').lower()}_DNARoot")
         newDNAStreet.setCode(streetType)
         newDNAStreet.setPos(VBase3(0))
         newDNAStreet.setHpr(VBase3(0))
