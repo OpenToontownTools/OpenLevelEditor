@@ -127,6 +127,7 @@ class LevelEditor(NodePath, DirectObject):
         self.collisionsToggled = False
         self.suitPreviewsToggled = False
         self.orthCam = False
+        self.occludersVisible = False
 
     def startUp(self, dnaPath = None):
         # Initialize LevelEditor variables DNAData, DNAToplevel, NPToplevel
@@ -226,6 +227,7 @@ class LevelEditor(NodePath, DirectObject):
             ('tab', self.enterGlobalRadialMenu),
             ('s', self.beginBoxSelection),
             ('alt-s', self.toggleSuitBuildingPreviews),
+            ('alt-o', self.toggleVisibleOccluders),
             # This already exists, but we will override it to show an input
             ('p', self.setReparentTarget)
             ]
@@ -820,6 +822,15 @@ class LevelEditor(NodePath, DirectObject):
                 del bldg
             self.suitBuildings = []
             self.popupNotification("Disabled Suit Building View")
+
+    def toggleVisibleOccluders(self):
+        self.occludersVisible = not self.occludersVisible
+        if occludersVisible:
+            for node in render.findAllMatches('**/+OccluderNode'):
+                node.show()
+        else:
+            for node in render.findAllMatches('**/+OccluderNode'):
+                node.hide()
 
     def setReparentTarget(self):
         if base.direct.selected.last:

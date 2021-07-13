@@ -261,7 +261,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 text = 'ADD STREET',
                 command = self.addStreet)
         self.addStreetButton.pack(fill = X, padx = 20, pady = 10)
-        streets = [s[7:] for s in self.styleManager.getCatalogCodes(
+        streets = [s for s in self.styleManager.getCatalogCodes(
                 'street')]
         streets.sort()
         self.streetSelector = Pmw.ComboBox(
@@ -277,7 +277,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                 scrolledlist_items = streets
                 )
         self.streetModuleType = self.styleManager.getCatalogCode('street', 0)
-        self.streetSelector.selectitem(self.streetModuleType[7:])
+        self.streetSelector.selectitem(self.streetModuleType)
         self.streetSelector.pack(expand = 1, fill = BOTH)
 
         # TOON BUILDINGS
@@ -1086,7 +1086,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.levelEditor.toggleMapVis(self.fMapVis.get())
 
     def setStreetModuleType(self, name):
-        self.streetModuleType = 'street_' + name
+        self.streetModuleType = name
         self.levelEditor.setCurrent('street_texture', self.streetModuleType)
 
     def addStreet(self):
