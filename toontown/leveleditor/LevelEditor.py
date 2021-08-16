@@ -825,7 +825,7 @@ class LevelEditor(NodePath, DirectObject):
 
     def toggleVisibleOccluders(self):
         self.occludersVisible = not self.occludersVisible
-        if occludersVisible:
+        if self.occludersVisible:
             for node in render.findAllMatches('**/+OccluderNode'):
                 node.show()
         else:
@@ -3323,7 +3323,10 @@ class LevelEditor(NodePath, DirectObject):
     def labelBldgs(self):
         """ Draws a text label above Landmark bldgs displaying their title and block # """
         self.clearBldgLabels()
+        bldg: NodePath
         for bldg in self.NPToplevel.findAllMatches('**/*tb*:toon_landmark*'):
+            if bldg.find('**/**front').isEmpty():
+                continue
             dnanode = self.findDNANode(bldg)
             block = self.getBlockFromName(dnanode.getName())
             title = dnanode.getTitle()
