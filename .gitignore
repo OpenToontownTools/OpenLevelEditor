@@ -141,3 +141,5 @@ build.py
 *.bat
 ttle_dist.py
 leveleditor/settings.json
+otherstuff/
+leveleditor/hoods/TS.json

@@ -1612,7 +1612,7 @@ class LevelEditor(NodePath, DirectObject):
         print("addProp %s " % propType)
         # Record new prop type
         self.setCurrent('prop_texture', propType)
-        newDNAProp = DNAProp(f"prop.{propType.lower()}_DNARoot")
+        newDNAProp = DNAProp(f"{propType}_DNARoot")
         newDNAProp.setCode(propType)
         newDNAProp.setPos(VBase3(0))
         newDNAProp.setHpr(VBase3(0))

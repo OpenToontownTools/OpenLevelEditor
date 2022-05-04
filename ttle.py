@@ -80,6 +80,7 @@ class ToontownLevelEditor(ShowBase):
                                        'DL', 'MM', 'GS', 'GZ',
                                        'SBHQ', 'LBHQ', 'CBHQ', 'BBHQ',
                                        'OZ', 'PA', 'ES', 'TUT'])
+        parser.add_argument("--minigame", nargs="*", help = "Enables features specific to certain minigames")
         parser.add_argument("dnaPath", nargs = "?", help = "Load the DNA file through the specified path")
 
         args = parser.parse_args()
@@ -93,6 +94,8 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", f"holiday {args.holiday[0]}")
         if args.png:
             loadPrcFileData("", "png-textures true")
+        if args.minigame:
+            loadPrcFileData("", f"minigame {args.minigame[0]}")
         else:
             # If we don't specify png, we can search
             # we can use the eyes texture
