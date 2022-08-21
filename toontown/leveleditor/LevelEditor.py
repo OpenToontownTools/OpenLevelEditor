@@ -3163,8 +3163,8 @@ class LevelEditor(NodePath, DirectObject):
         bounds: Tuple[Point3, Point3] = tl.getTightBounds()
         p1, p2 = bounds
         center: Point3 = Point3((p1.x + p2.x)/2, (p1.y + p2.y)/2, 0)
-
-        size: float = Vec3(center - p2).length() * 1.8
+        # Get the longer side to use for the radius
+        size: float = max(Vec3(center - p1).length(), Vec3(center - p2).length()) * 1.8
         radius: float = size/2
 
         self.orthLens.setFilmSize(size, size)
