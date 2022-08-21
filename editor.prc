@@ -45,6 +45,7 @@ model-cache-textures #f
 dna-directory leveleditor
 dna-built-directory $TTMODELS/built # Currently unused
 userfiles-directory leveleditor
+png-textures #t
 
 # Default Extensions
 default-model-extension .bam

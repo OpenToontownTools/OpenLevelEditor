@@ -12,6 +12,7 @@ from direct.controls import ControlManager
 from direct.controls import NonPhysicsWalker
 from direct.gui import DirectGui
 from panda3d.core import BoundingHexahedron
+from typing import Tuple
 
 from otp.otpbase import OTPGlobals
 from toontown.hood.GenericAnimatedProp import *
@@ -3159,11 +3160,12 @@ class LevelEditor(NodePath, DirectObject):
         """
 
         tl = self.getNPToplevel()
-        bounds = tl.getBounds()
-        radius = bounds.getRadius()
-        center = bounds.getCenter()
+        bounds: Tuple[Point3, Point3] = tl.getTightBounds()
+        p1, p2 = bounds
+        center: Point3 = Point3((p1.x + p2.x)/2, (p1.y + p2.y)/2, 0)
 
-        size = (radius * 2)
+        size: float = Vec3(center - p2).length() * 1.8
+        radius: float = size/2
 
         self.orthLens.setFilmSize(size, size)
 
@@ -4044,7 +4046,7 @@ class LevelEditor(NodePath, DirectObject):
                            scale = 0.05, bg = (0, 0, 0, .4), fg = (1, 1, 1, 1))
 
         def destroyTxt(ost: OnscreenText):
-            ost.destroy
+            ost.destroy()
             del ost
 
         Parallel(
