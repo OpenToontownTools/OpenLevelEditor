@@ -16,7 +16,6 @@
 ## Now that the editor is fully released? What's next?
 * New features are still actively being developed with no plans of stopping anytime soon!
 * Some features planned for the future are:
-   * Auto Saving
    * Drive mode will be making a return in the future
    * Better mouse positioning widgets
    * and much more!
