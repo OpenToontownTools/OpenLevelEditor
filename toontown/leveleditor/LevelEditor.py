@@ -59,6 +59,9 @@ for hood in base.hoods:
                     storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_WINTER_PATH]
         for storage in storages:
             loadDNAFile(DNASTORE, storage, CSDefault, 1)
+            
+if base.config.GetString("minigame") == "ttoff:prophunt":
+    loadDNAFile(DNASTORE, 'phase_14.5/dna/ttoff_d_strg_ara_mg_phunt.dna', CSDefault, 1)
 
 DNASTORE.storeFont('humanist', ToontownGlobals.getInterfaceFont())
 DNASTORE.storeFont('mickey', ToontownGlobals.getSignFont())

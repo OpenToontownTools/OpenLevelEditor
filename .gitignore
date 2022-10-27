@@ -9,6 +9,8 @@ leveleditor/stylefiles/sketched_central/*
 
 leveleditor/hoods/OT.json
 leveleditor/stylefiles/olde_toontown/*
+leveleditor/stylefiles/toonland_ttoff/*
+leveleditor/stylefiles/toontown_outskirt/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -143,3 +145,6 @@ ttle_dist.py
 leveleditor/settings.json
 otherstuff/
 leveleditor/hoods/TS.json
+walls.bam
+leveleditor/hoods/TTOFF_TOONLAND.json
+leveleditor/hoods/OUTSKIRT.json
