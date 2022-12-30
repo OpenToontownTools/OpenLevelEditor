@@ -34,7 +34,8 @@ DEFAULT_SETTINGS = {
     'autosave-enabled':      True,
     'autosave-interval':     15,
     'autosave-max-files':    10,
-    'fps-meter-update-rate': 0
+    'fps-meter-update-rate': 0,
+    'panel-scaling': 1.0
     }
 
 
@@ -213,6 +214,7 @@ class ToontownLevelEditor(ShowBase):
     def __createTk(self):
         tkroot = Tk()
         tkroot.withdraw()
+        tkroot.tk.call('tk', 'scaling', settings.get('panel-scaling', 1.0))
         tkroot.title("Open Level Editor")
         if sys.platform == 'win32':
             # FIXME: This doesn't work in other platforms for some reason...

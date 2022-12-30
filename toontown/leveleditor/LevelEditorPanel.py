@@ -44,7 +44,9 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         self.fUpdateSelected = 1
         # Handle to the toplevels hull
         hull = self.component('hull')
-        hull.geometry('650x625')
+        w = int(650 * settings.get('panel-scaling', 1.0))
+        h = int(625 * settings.get('panel-scaling', 1.0))
+        hull.geometry(f'{w}x{h}')
 
         balloon = self.balloon = Pmw.Balloon(hull)
         # Start with balloon help disabled
@@ -140,8 +142,8 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             command = self.showInjector)
         menuBar.addmenuitem('Advanced', 'separator')
         menuBar.addmenuitem('Advanced', 'command',
-                            'User Set Auto Saver Options',
-                            label = 'Auto Saver Options',
+                            'Options',
+                            label = 'Options',
                             command = self.showAutoSaverDialog)
 
         # Corporate Clash Old Toontown-esque Filter
@@ -193,7 +195,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                                 message_text = CONTROLS)
         self.controlsDialog.withdraw()
 
-        self.autoSaverDialog = Pmw.Dialog(parent, title = 'Autosaver Options',
+        self.autoSaverDialog = Pmw.Dialog(parent, title = 'Options',
                                           buttons = ('Save Options',),
                                           command = self.setAutoSaverInterval)
         self.autoSaverDialog.withdraw()
@@ -211,8 +213,16 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                                                    entry_width = 10,
                                                    entryfield_value = int(settings['autosave-interval']),
                                                    entryfield_validate = {'validator': 'real',
-                                                                          'min':       1, 'max': 60
+                                                                          'min': 1, 'max': 60
                                                                           })
+        self.panelScalingOption = Pmw.Counter(self.autoSaverDialog.interior(),
+                                              labelpos = 'w',
+                                              label_text = 'Window Scaling (Restart Required):',
+                                              entry_width = 10,
+                                              entryfield_value = settings['panel-scaling'],
+                                              entryfield_validate = {'validator': 'real',
+                                                                     'min': 0.5, 'max': 3.0
+                                                                     })
 
         # self.autoSaverDialogMax = Pmw.Counter(self.autoSaverDialog.interior(),
         #                                      labelpos = 'w',
@@ -223,7 +233,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
         #                                                             'min':       0, 'max': 99
         #                                                             })
 
-        counters = (self.autoSaverEnable, self.autoSaverDialogInterval)  # , self.autoSaverDialogMax)
+        counters = (self.autoSaverEnable, self.autoSaverDialogInterval, self.panelScalingOption)  # , self.autoSaverDialogMax)
         Pmw.alignlabels(counters)
         for counter in counters:
             counter.pack(fill = 'both', expand = 1)
@@ -1531,6 +1541,7 @@ class LevelEditorPanel(Pmw.MegaToplevel):
             try:
                 settings['autosave-enabled'] = bool(self.autoSaverEnabled.get())
                 settings['autosave-interval'] = int(self.autoSaverDialogInterval.get())
+                settings['panel-scaling'] = float(self.panelScalingOption.get())
                 # settings['autosave-max-files'] = float(self.autoSaverDialogMax.get())
                 # Reset the autosaver
                 AutoSaver.initializeAutoSaver()
