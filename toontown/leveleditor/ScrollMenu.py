@@ -2,24 +2,26 @@
 # Class to create and maintain a scrolled list
 # that can be embedded in a LevelAttribute instance
 ###########################################################
+from typing import Union, List, Tuple
 
 from direct.gui.DirectGui import *
+from panda3d.core import NodePath
 
 from toontown.toontowngui.ToontownScrolledFrame import ToontownScrolledFrame
 from toontown.toonbase import ToontownGlobals
 
 
 class ScrollMenu:
-    def __init__(self, nodePath, textList):
+    def __init__(self, nodePath, itemsList: List[Union[str, Tuple[NodePath, str]]]):
         self.action = None  # Call back fucntion
-        self.textList = textList
+        self.itemsList = itemsList
 
         self.parent = nodePath
         self.frame = None
 
         self.initialState = None  # To maintain backward compatibility
 
-    def createScrolledList(self):
+    def createScrolledList(self, itemSize: float = 1.0, itemPadding = 0.05, itemMargin = (0.05, 0)):
         # First create a frame in which direct elements maybe placed
         self.frame = DirectFrame(scale = 1.1, relief = 1,
                                  frameSize = (-0.5, 0.2, -0.05, 0.59),
@@ -37,9 +39,9 @@ class ScrollMenu:
                 image_hpr = (0, 0, 90),
                 image_scale = (1.8, 1, 1.0),
                 pos = (0.0, 0, 0),
-                itemMargin = (0.05, 0),
+                itemMargin = itemMargin,
                 useItemBoundsForPadding = False,
-                itemPadding = 0.05,
+                itemPadding = itemPadding,
                 width = .45,
                 height = .6,
                 manageScrollBars = False,
@@ -54,17 +56,21 @@ class ScrollMenu:
                 verticalScroll_resizeThumb = False,
                 verticalScroll_decButton_relief = None,
                 verticalScroll_incButton_relief = None
-                )
+        )
 
         btns = []
-        for t in self.textList:
-            btns.append(DirectButton(text = (t, t, t),
-                                                text_scale = 0.05, command = self.__selected,
-                                                extraArgs = [t], relief = None, text_style = 3,
-                                                text_font = ToontownGlobals.getToonFont(),
-                                                text0_fg = (0.152, 0.750, 0.258, 1),
-                                                text1_fg = (0.152, 0.750, 0.258, 1),
-                                                text2_fg = (0.977, 0.816, 0.133, 1), ))
+        for t in self.itemsList:
+            if isinstance(t, str):
+                btns.append(DirectButton(text = (t, t, t),
+                                         text_scale = 0.05, command = self.__selected,
+                                         extraArgs = [t], relief = None, text_style = 3,
+                                         text_font = ToontownGlobals.getToonFont(),
+                                         text0_fg = (0.152, 0.750, 0.258, 1),
+                                         text1_fg = (0.152, 0.750, 0.258, 1),
+                                         text2_fg = (0.977, 0.816, 0.133, 1), ))
+            elif isinstance(t, tuple):
+                btns.append(DirectButton(relief = None, command = self.__selected, extraArgs = [t[1]],
+                                         geom = t[0], geom_scale = itemSize))
         myScrolledList.addItems(*btns)
 
         # An exit button
