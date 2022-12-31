@@ -5,6 +5,7 @@
 
 from direct.gui.DirectGui import *
 
+from toontown.toontowngui.ToontownScrolledFrame import ToontownScrolledFrame
 from toontown.toonbase import ToontownGlobals
 
 
@@ -29,56 +30,49 @@ class ScrollMenu:
 
         gui = loader.loadModel("resources/level_editor_gui.bam")
 
-        myScrolledList = DirectScrolledList(
-                decButton_pos = (0.4, 0, 0.53),
-                decButton_scale = 0.1,
-                decButton_relief = None,
-                decButton_image = (
-                    gui.find("**/arrow_u_n"),
-                    gui.find("**/arrow_u_d"),
-                    gui.find("**/arrow_u_r"),
-                    gui.find("**/arrow_u_i")
-                    ),
-
-                incButton_pos = (0.4, 0, -0.02),
-                incButton_scale = 0.1,
-                incButton_relief = None,
-                incButton_image = (
-                    gui.find("**/arrow_d_n"),
-                    gui.find("**/arrow_d_d"),
-                    gui.find("**/arrow_d_r"),
-                    gui.find("**/arrow_d_i")
-                    ),
-
+        myScrolledList = ToontownScrolledFrame(
+                parent = self.frame,
                 image = gui.find("**/editor_list_frame"),
-                image_pos = (.4, 0, 0.26),
-                image_scale = (1.4, 1, 0.7),
-
-                frameSize = (-0.1, 0.9, -0.05, 0.59),
-                frameColor = (0, 0, 1, 0.0),
-                pos = (-0.5, 0, 0),
-                items = [],
-                numItemsVisible = numItemsVisible,
-                forceHeight = itemHeight,
-                itemFrame_pos = (0.4, 0, 0.45),
+                image_pos = (0, 0, 0),
+                image_hpr = (0, 0, 90),
+                image_scale = (1.8, 1, 1.0),
+                pos = (0.0, 0, 0),
+                itemMargin = (0.05, 0),
+                useItemBoundsForPadding = False,
+                itemPadding = 0.05,
+                width = .45,
+                height = .6,
+                manageScrollBars = False,
+                verticalScroll_frameColor = (0, 0, 0, 0),
+                verticalScroll_manageButtons = False,
+                verticalScroll_thumb_geom = (
+                    gui.find('**/scrollbar_normal'),
+                    gui.find('**/scrollbar_press'),
+                    gui.find('**/scrollbar_hover')),
+                verticalScroll_thumb_geom_scale = ((151 / 399) * .06, 1, .06),
+                verticalScroll_thumb_relief = None,
+                verticalScroll_resizeThumb = False,
+                verticalScroll_decButton_relief = None,
+                verticalScroll_incButton_relief = None
                 )
 
+        btns = []
         for t in self.textList:
-            myScrolledList.addItem(DirectButton(text = (t, t, t),
+            btns.append(DirectButton(text = (t, t, t),
                                                 text_scale = 0.05, command = self.__selected,
                                                 extraArgs = [t], relief = None, text_style = 3,
                                                 text_font = ToontownGlobals.getToonFont(),
                                                 text0_fg = (0.152, 0.750, 0.258, 1),
                                                 text1_fg = (0.152, 0.750, 0.258, 1),
                                                 text2_fg = (0.977, 0.816, 0.133, 1), ))
-        myScrolledList.reparentTo(self.frame)
+        myScrolledList.addItems(*btns)
 
         # An exit button
         b1 = DirectButton(parent = self.frame, text = "Exit", text_font = ToontownGlobals.getSignFont(),
                           text0_fg = (0.152, 0.750, 0.258, 1), text1_fg = (0.152, 0.750, 0.258, 1),
                           text2_fg = (0.977, 0.816, 0.133, 1), text_scale = 0.05, borderWidth = (0.01, 0.01),
-                          relief = 1, command = self.__hide)
-        b1.setPos(0.15, 0, -0.025)
+                          relief = 0, command = self.__hide)
+        b1.setPos(0.0, 0, -0.64)
 
         self.frame.reparentTo(self.parent)
 
@@ -94,13 +88,9 @@ class ScrollMenu:
     # existing architecture that is tied into pie menu's
     #######################################################
     def spawnPieMenuTask(self):
-        # Where did the user press the button?
-        originX = base.direct.dr.mouseX
-        originY = base.direct.dr.mouseY
-
         # Pop up menu
-        self.frame.reparentTo(aspect2d)
-        self.frame.setPos(originX, 0.0, originY)
+        self.frame.reparentTo(base.a2dRightCenter)
+        self.frame.setPos(-.55, 0.0, 0)
 
     def removePieMenuTask(self):
         pass
