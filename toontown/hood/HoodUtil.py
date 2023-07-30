@@ -3,7 +3,7 @@ from toontown.toonbase import ToontownGlobals
 
 # make sure that the methods here can work on the AI and the client
 
-def calcPropType(node):
+def calcPropType(node: NodePath) -> ToontownGlobals.AnimPropTypes:
     """Calculate if we are hydrant, mailbox, trashcan, or unknown."""
     propType = ToontownGlobals.AnimPropTypes.Unknown
     fullString = str(node)

@@ -1,0 +1,16 @@
+{
+	"name_longhand": "donalds_dreamland_ttoff",
+	"storage_files": [
+		"phase_8/dna/ttrm_d_strg_ddl.dna", 
+		"phase_8/dna/ttrm_d_strg_ddl_sz.dna", 
+		"phase_8/dna/ttrm_d_strg_ddl_town.dna"
+	],
+	"holiday_storage_files": {
+	    "halloween": [
+			"phase_8/dna/ttrm_d_strg_ddl_halloween.dna"
+		],
+	    "winter": [
+			"phase_8/dna/ttrm_d_strg_ddl_winter.dna"
+		]
+	}
+}

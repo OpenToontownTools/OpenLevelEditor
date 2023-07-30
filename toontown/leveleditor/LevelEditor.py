@@ -36,8 +36,12 @@ useSnowTree = base.config.GetBool("use-snow-tree", 0)
 
 builtins.DNASTORE = DNASTORE = DNAStorage()
 
-loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
-loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)
+if base.config.GetString("project") == "offline":
+    loadDNAFile(DNASTORE, 'phase_4/dna/ttrm_d_strg.dna', CSDefault, 1)
+    loadDNAFile(DNASTORE, 'phase_5/dna/ttrm_d_strg_town.dna', CSDefault, 1)
+else:
+    loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
+    loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)
 
 builtins.NEIGHBORHOODS = []
 NEIGHBORHOOD_CODES = {}

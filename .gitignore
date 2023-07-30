@@ -11,6 +11,7 @@ leveleditor/hoods/OT.json
 leveleditor/stylefiles/olde_toontown/*
 leveleditor/stylefiles/toonland_ttoff/*
 leveleditor/stylefiles/toontown_outskirt/*
+leveleditor/stylefiles/donalds_dreamland_ttoff/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
