@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/ttle.css" />
+    <link rel="stylesheet" href="css/realmssite.css" />
+</head>
+
+<body>
+    <div id="error-popup-wrap" class="error-popup-wrapper">
+        <div class="error-popup">
+            <h3>Error</h3>
+            <hr />
+            <p id="error-msg">error msg</p>
+            <hr />
+            <button onclick="hide_error_popup()" class="nav-item" id="close-error">OK</button>
+        </div>
+    </div>
+
+    <div onmouseover="set_mouse_events(false)" onmouseout="set_mouse_events(true)" class="left-ui">
+        <div class="d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-item active" id="t-home" data-bs-toggle="pill" data-bs-target="#p-home" type="button" role="tab" aria-controls="p-home" aria-selected="true">Home</button>
+                <button class="nav-item" id="t-streets" data-bs-toggle="pill" data-bs-target="#p-streets" type="button" role="tab" aria-controls="p-streets" aria-selected="false">Streets</button>
+                <button class="nav-item" id="t-walls" data-bs-toggle="pill" data-bs-target="#p-walls" type="button" role="tab" aria-controls="p-walls" aria-selected="false">Walls</button>
+                <button class="nav-item" id="t-landmark" data-bs-toggle="pill" data-bs-target="#p-landmark" type="button" role="tab" aria-controls="p-landmark" aria-selected="false">Landmark</button>
+                <button class="nav-item" id="t-props" data-bs-toggle="pill" data-bs-target="#p-props" type="button" role="tab" aria-controls="p-props" aria-selected="false">Props</button>
+                <button class="nav-item" id="t-anprops" data-bs-toggle="pill" data-bs-target="#p-anprops" type="button" role="tab" aria-controls="p-anprops" aria-selected="false">Anim. Props</button>
+                <button class="nav-item" id="t-intprops" data-bs-toggle="pill" data-bs-target="#p-intprops" type="button" role="tab" aria-controls="p-intprops" aria-selected="false">Inter. Props</button>
+                <button class="nav-item" id="t-signs" data-bs-toggle="pill" data-bs-target="#p-signs" type="button" role="tab" aria-controls="p-signs" aria-selected="false">Signs</button>
+                <button class="nav-item" id="t-cogs" data-bs-toggle="pill" data-bs-target="#p-cogs" type="button" role="tab" aria-controls="p-cogs" aria-selected="false">Cogs</button>
+
+                <button class="nav-item" id="t-vis" data-bs-toggle="pill" data-bs-target="#p-vis" type="button" role="tab" aria-controls="p-vis" aria-selected="false">Vis</button>
+            </div>
+            <div class="tab-content" id="v-pills-tabContent">
+                <!--HOME-->
+                <div class="tab-pane fade show active" id="p-home" role="tabpanel" aria-labelledby="t-home" tabindex="0">
+
+                </div>
+                <!--STREETS-->
+                <div class="tab-pane fade" id="p-streets" role="tabpanel" aria-labelledby="t-streets" tabindex="0">
+                    <div class="ttle-page">
+                        <button onclick="spawn_street()" class="btn btn-success">Place Module</button>
+                        <select multiple id="street-module-list" class="selection-list">
+                            <!--<option value="street_10x40">street 10x40</option>-->
+                        </select>
+                    </div>
+                </div>
+                <!--WALLS-->
+                <div class="tab-pane fade" id="p-walls" role="tabpanel" aria-labelledby="t-walls" tabindex="0">
+                    <div class="ttle-page">
+                        <button class="join-button">Spawn 10ft</button>
+                        <button class="join-button">Spawn 14ft</button>
+                        <button class="join-button">Spawn 20ft</button>
+                        <button class="join-button">Spawn 24ft</button>
+                        <button class="join-button">Spawn 25ft</button>
+                        <button class="join-button">Spawn 30ft</button>
+                    </div>
+                </div>
+
+
+                <!--LANDMARK BLDGS-->
+                <div class="tab-pane fade" id="p-landmark" role="tabpanel" aria-labelledby="t-landmark" tabindex="0">
+                    <div class="ttle-page">
+                        <button onclick="spawn_landmark()" class="btn btn-success">Place Building</button>
+                        <select multiple id="landmark-list" class="selection-list shorter">
+                        </select>
+
+                        <p class="section-header">Building Type</p>
+                        <select multiple id="landmark-type-list" class="selection-list shorter">
+                            <option value="" selected></option>
+                        </select>
+                        <div class="check-holder">
+                            <input id="landmark-is-sz" type="checkbox" /><label class="check-lbl" for="landmark-is-sz">Safezone Building</label>
+                        </div>
+                        <p class="section-header">Building Name</p>
+                        <input onfocus="set_input_focus(true)" onfocusout="set_input_focus(false)" id="landmark-bldg-name" type="text" placeholder="Building Name"/>
+                        <button onclick="rename_selected_landmark()" id="rename-selected" class="nav-item hidden">Rename Selected</button>
+                    </div>
+                </div>
+
+                <!--Props-->
+                <div class="tab-pane fade" id="p-props" role="tabpanel" aria-labelledby="t-props" tabindex="0">
+                    <div class="ttle-page">
+                        <button onclick="spawn_prop()" class="btn btn-success">Place Prop</button>
+                        <select multiple id="prop-list" class="selection-list">
+                            <!--<option value="street_10x40">street 10x40</option>-->
+                        </select>
+                    </div>
+                </div>
+
+                <!--Anim Props-->
+                <div class="tab-pane fade" id="p-anprops" role="tabpanel" aria-labelledby="t-anprops" tabindex="0">
+                    <div class="ttle-page">
+
+                    </div>
+                </div>
+
+                <!--interactive Props-->
+                <div class="tab-pane fade" id="p-intprops" role="tabpanel" aria-labelledby="t-intprops" tabindex="0">
+                    <div class="ttle-page">
+
+                    </div>
+                </div>
+
+                <!--Signs-->
+                <div class="tab-pane fade" id="p-signs" role="tabpanel" aria-labelledby="t-signs" tabindex="0">
+                    <div class="ttle-page">
+
+                    </div>
+                </div>
+
+                <!--Cogs (Paths & Cells merged to one pag)-->
+                <div class="tab-pane fade" id="p-cogs" role="tabpanel" aria-labelledby="t-cogs" tabindex="0">
+                    <div class="ttle-page">
+
+                    </div>
+                </div>
+
+                <!--Vis-->
+                <div class="tab-pane fade" id="p-vis" role="tabpanel" aria-labelledby="t-vis" tabindex="0">
+                    <div class="ttle-page">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/ttle.js"></script>
+</body>
+
+
+</html>

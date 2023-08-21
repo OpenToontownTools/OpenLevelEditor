@@ -93,10 +93,11 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", f"compiler {args.compiler[0]}")
         if args.holiday:
             loadPrcFileData("", f"holiday {args.holiday[0]}")
-        if args.png:
-            loadPrcFileData("", "png-textures true")
         if args.minigame:
             loadPrcFileData("", f"minigame {args.minigame[0]}")
+
+        if args.png:
+            loadPrcFileData("", "png-textures true")
         else:
             # If we don't specify png, we can search
             # we can use the eyes texture

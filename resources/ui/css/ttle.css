@@ -1,0 +1,141 @@
+.left-ui{
+    width:fit-content;
+    text-align:center;
+    /*background-color: rgba(0, 0, 0, 0.2);*/
+    height:100vh;
+}
+
+.hidden{
+    display: none !important;
+}
+
+
+body{
+    background-color:transparent;
+}
+
+.selection-list{
+    margin-top:4px;
+    height: 80vh !important;
+    overflow-y:scroll;
+}
+
+.selection-list.short{
+    height: 40vh !important;
+}
+
+.selection-list.shorter{
+    height: 20vh !important;
+}
+
+button{
+    font-size: 2vh !important;
+}
+
+select{
+    background-color:rgba(0, 0, 0, 0.2);
+}
+
+option{
+    font-size:1.2vh !important;
+    text-align:left;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.34);
+	color:white;
+}
+
+
+.ttle-page{
+    display:flex;
+    flex-direction:column;
+}
+
+.nav-item {
+    font-size: 0.9rem;
+    font-family:GROBOLD;
+    margin:4px;
+    border: none;
+    background-color: rgba(255,255,255,0.1);
+    color: #d7d7d7;
+    border-radius: 5px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+    font-size: 0.9rem;
+    transition: background-color .25s, outline-offset .25s, outline-color .25s, box-shadow .25s;
+    outline-color: transparent;
+    outline-width: 2px;
+    outline-style: solid;
+    outline-offset: 3px;
+    text-overflow: clip;
+}
+        .nav-item.active {
+            background-color: purple;
+            color: white;
+        }
+
+        .nav-item:hover {
+            box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.2);
+            outline-color: purple;
+            outline-width: 2px;
+            outline-offset: -1px;
+            color: white;
+        }
+
+.check-lbl {
+    font-size: 1.5vh !important;
+    color:white;
+    text-shadow: 1px 2px 6px rgba(0, 0, 0, 0.34);
+}
+
+.section-header {
+    font-family: GROBOLD;
+    margin-top: 1vh;
+    margin-bottom: .1vh;
+    font-size: 1.6vh;
+    color: mediumpurple;
+    text-shadow: 1px 2px 6px rgba(0, 0, 0, 0.34);
+}
+
+
+.error-popup-wrapper {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display:none;
+}
+
+    .error-popup-wrapper.showing {
+        display: flex;
+    }
+
+
+.error-popup {
+    background-color: rebeccapurple;
+    width: 700px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    animation: popup .59s ease-in-out;
+}
+    .error-popup h3 {
+        margin-top: 4px;
+        font-family: GROBOLD;
+        text-align: center;
+        color: white;
+    }
+
+    .error-popup #error-msg {
+        margin:auto;
+        font-family: GROBOLD;
+        text-align: center;
+        color: white;
+    }
+
+    .error-popup #close-error{
+        margin:auto;
+    }

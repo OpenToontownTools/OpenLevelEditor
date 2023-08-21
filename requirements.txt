@@ -1,1 +1,2 @@
 aiohttp
+cefpython3==66.0

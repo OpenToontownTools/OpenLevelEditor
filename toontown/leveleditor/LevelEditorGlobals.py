@@ -44,6 +44,8 @@ LANDMARK_SPECIAL_TYPES = ['', 'hq', 'gagshop', 'clotheshop', 'petshop', 'kartsho
 # Corporate Clash has an UNCAPTURABLE building type to flag uncapturable buildings
 if base.server == TOONTOWN_CORPORATE_CLASH:
     LANDMARK_SPECIAL_TYPES.append('uncapturable')
+elif base.server == TOONTOWN_OFFLINE:
+    LANDMARK_SPECIAL_TYPES.append('arcade')
 
 OBJECT_SNAP_POINTS = {
     'street_5x20':                  [(Vec3(5.0, 0, 0), Vec3(0)),

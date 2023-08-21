@@ -1,4 +1,5 @@
 import builtins
+import cefpanda
 import glob
 import json
 import os
@@ -17,7 +18,7 @@ from typing import Tuple
 from otp.otpbase import OTPGlobals
 from toontown.hood.GenericAnimatedProp import *
 from toontown.toon import RobotToon, LEAvatar
-from . import LevelEditorGlobals
+from . import LevelEditorGlobals, CEFLevelEditorPanel
 from . import LevelEditorPanel
 from . import VisGroupsEditor
 from .AutoSaver import AutoSaver
@@ -49,6 +50,8 @@ for hood in base.hoods:
     with open(f'{userfiles}/hoods/{hood}.json') as info:
         data = json.load(info)
         hoodName = data.get(LevelEditorGlobals.HOOD_NAME_LONGHAND)
+        if hood.startswith('TTOFF_'):
+            hood = hood[6:]
         NEIGHBORHOOD_CODES[hoodName] = hood
         NEIGHBORHOODS.append(hoodName)
         storages = data.get(LevelEditorGlobals.HOOD_PATH)
@@ -107,6 +110,8 @@ class LevelEditor(NodePath, DirectObject):
 
         # Start block ID at 0 (it will be incremented before use (to 1)):
         self.landmarkBlock = 0
+        self.inputEnabled = False
+        self.mouseEnabled = False
 
         # Create ancillary objects
         # Style manager for keeping track of styles/colors
@@ -117,6 +122,7 @@ class LevelEditor(NodePath, DirectObject):
         self.createInsertionMarker()
 
         self.panel = LevelEditorPanel.LevelEditorPanel(self)
+        self.cefPanel = CEFLevelEditorPanel.CEFLevelEditorPanel(self)
 
         # Used to store whatever edges and points are loaded in the level
         self.edgeDict = {}
@@ -311,6 +317,9 @@ class LevelEditor(NodePath, DirectObject):
         # Update scene graph explorer
         self.panel.sceneGraphExplorer.update()
 
+        self.cefPanel.setupLists()
+        self.cefPanel.bindFunctions()
+
         # Karting
         # the key is the barricade number,  the data is a two element list,
         # first number is the first bldg group that uses this
@@ -364,6 +373,21 @@ class LevelEditor(NodePath, DirectObject):
         self.enableMouse()
         self.spawnInsertionMarkerTask()
 
+    def allowInput(self):
+        if self.inputEnabled:
+            return
+        # Add all the action events
+        for event in self.actionEvents:
+            if len(event) == 3:
+                self.accept(event[0], event[1], event[2])
+            else:
+                self.accept(event[0], event[1])
+        base.direct.enableKeyEvents()
+        self.toggleMouseInputs(True)
+        base.direct.enableActionEvents()
+        base.direct.enableModifierEvents()
+        self.inputEnabled = True
+
     def disable(self):
         """ Disable level editing and hide level """
         base.direct.deselectAll()
@@ -375,6 +399,27 @@ class LevelEditor(NodePath, DirectObject):
         self.ignore('space')
         self.disableMouse()
         taskMgr.remove('insertionMarkerTask')
+
+    def disallowInput(self):
+        if not self.inputEnabled:
+            return
+        for eventPair in self.actionEvents:
+            self.ignore(eventPair[0])
+
+        base.direct.disableKeyEvents()
+        base.direct.disableModifierEvents()
+        self.toggleMouseInputs(False)
+        base.direct.disableActionEvents()
+        self.inputEnabled = False
+
+    def toggleMouseInputs(self, state: bool):
+        if state == self.mouseEnabled:
+            return
+        self.mouseEnabled = state
+        if state:
+            base.direct.enableMouseEvents()
+        else:
+            base.direct.disableMouseEvents()
 
     def reset(self, fDeleteToplevel = 1, fCreateToplevel = 1,
               fUpdateExplorer = 1):
@@ -1571,12 +1616,13 @@ class LevelEditor(NodePath, DirectObject):
         self.landmarkBlock = self.landmarkBlock + 1
         return str(self.landmarkBlock)
 
-    def addLandmark(self, landmarkType, specialType, title = ''):
+    def addLandmark(self, landmarkType: str, specialType: str, title: str = '', isSz: bool = False):
         # Record new landmark type
+
         self.setCurrent('toon_landmark_texture', landmarkType)
         block = self.getNextLandmarkBlock()
         print(landmarkType)
-        if self.panel.bldgIsSafeZone.get() and specialType == '':
+        if isSz and specialType == '':
             prefix = 'sz'
         else:
             prefix = 'tb'
@@ -1652,7 +1698,7 @@ class LevelEditor(NodePath, DirectObject):
     def addStreet(self, streetType):
         # Record new street type
         self.setCurrent('street_texture', streetType)
-        newDNAStreet = DNAStreet(f"str.{streetType.replace('street_', '').lower()}_DNARoot")
+        newDNAStreet = DNAStreet(f"{streetType}_DNARoot")
         newDNAStreet.setCode(streetType)
         newDNAStreet.setPos(VBase3(0))
         newDNAStreet.setHpr(VBase3(0))
@@ -2126,12 +2172,14 @@ class LevelEditor(NodePath, DirectObject):
             # Reset last landmark
             if DNAClassEqual(dnaNode, DNA_LANDMARK_BUILDING):
                 self.lastLandmarkBuildingDNA = dnaNode
-                self.panel.landmarkBuildingNameString.set(dnaNode.getTitle())
+                self.cefPanel.selectLandmark(dnaNode.getTitle())
                 if self.showLandmarkBlockToggleGroup:
                     # Toggle old highlighting off:
                     self.toggleShowLandmarkBlock()
                     # Toggle on the the new highlighting:
                     self.toggleShowLandmarkBlock()
+            else:
+                self.cefPanel.deselectLandmark()
             # Reset last Code (for autoPositionGrid)
             if DNAClassEqual(dnaNode, DNA_STREET):
                 self.snapList = self.getSnapPoint(dnaNode.getCode())
@@ -2159,6 +2207,8 @@ class LevelEditor(NodePath, DirectObject):
         self.selectedDNARoot = None
         self.selectedNPRoot = None
         self.selectedSuitPoint = None
+
+        self.cefPanel.deselectLandmark()
         for hook in self.deselectedNodePathHookHooks:
             hook()
 
