@@ -491,6 +491,7 @@ class LevelEditor(NodePath, DirectObject):
         self.NPParent = self.NPToplevel
         self.VGParent = None
         self.suitPointToplevel = self.NPToplevel.attachNewNode('suitPoints')
+        self.cefPanel.repopulateVisgroupList()
 
     def destroy(self):
         """ Disable level editor and destroy node path """
@@ -1604,6 +1605,17 @@ class LevelEditor(NodePath, DirectObject):
         self.NPParent = newNodePath
         # Update scene graph explorer
         # self.panel.sceneGraphExplorer.update()
+
+    def newVisGroup(self, visName: str):
+        newVis = DNAVisGroup(visName)
+        # Add new DNA Node group to the current parent DNA Object
+        self.DNAParent.add(newVis)
+        # The new Node group becomes the active parent
+        self.DNAParent = newVis
+        # Traverse it to generate the new node path as a child of NPParent
+        newNodePath = self.DNAParent.traverse(self.NPParent, DNASTORE, 1)
+        # Update NPParent to point to the new node path
+        self.NPParent = newNodePath
 
     def addFlatBuilding(self, buildingType):
         # Create new building

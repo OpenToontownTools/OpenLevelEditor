@@ -1,5 +1,6 @@
 function populate_list(list_name, contents) {
     const list = document.getElementById(list_name)
+    list.innerHTML = ''
     contents.forEach(
         content => {
             list.innerHTML += `<option value="${content}">${content}</option>`
@@ -63,4 +64,16 @@ function deselect_landmark() {
         return
     
     btn.classList.add('hidden')
+}
+
+function select_visgroup() {
+    le_select_visgroup(document.getElementById('visgroup-list').value)
+}
+
+function set_new_visgroup_id(id) {
+    document.getElementById('new-visgroup-id').value = id
+}
+
+function new_visgroup() {
+    le_new_visgroup(document.getElementById('new-visgroup-id').value)
 }

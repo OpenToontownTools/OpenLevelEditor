@@ -1,15 +1,24 @@
-from typing import Dict, Callable
+from typing import Dict, Callable, List, Optional
+
+from direct.showbase.DirectObject import DirectObject
+from panda3d.core import NodePath
+from panda3d.toontown import DNAVisGroup
 
 from toontown.leveleditor import LevelEditorGlobals
 from toontown.toonbase.CEFPanda import CEFPanda
 
 
-class CEFLevelEditorPanel:
+class CEFLevelEditorPanel(DirectObject):
     def __init__(self, levelEditor):
+        DirectObject.__init__(self)
         self.levelEditor = levelEditor
 
         self.htmlUi = CEFPanda()
         self.htmlUi.load_file('resources/ui/ui.html')
+
+        self.visNumToNP: Dict[str, NodePath] = {}
+
+        self.accept('SGE_Update Explorer', lambda np, s = self: s.repopulateVisgroupList())
 
     def setupLists(self):
         # streets
@@ -31,6 +40,9 @@ class CEFLevelEditorPanel:
         # Landmark building types
         self.htmlUi.exec_js_func('populate_list', 'landmark-type-list', LevelEditorGlobals.LANDMARK_SPECIAL_TYPES[1:])
 
+        # vis
+        self.repopulateVisgroupList()
+
     def bindFunctions(self):
         """
         Binds functions called from the javascript to their python counterparts
@@ -39,6 +51,8 @@ class CEFLevelEditorPanel:
             # generic events
             'le_set_input_focus': self.__toggleInputFocus,
             'le_set_mouse_events': self.__toggleMouseEvents,
+            'le_select_visgroup': self.__selectVisGroup,
+            'le_new_visgroup': self.__newVisGroup,
 
             # spawn events
             'le_spawn_street': self.__spawnStreet,
@@ -52,6 +66,21 @@ class CEFLevelEditorPanel:
 
         for js, py in binds.items():
             self.htmlUi.set_js_function(js, py)
+
+    def repopulateVisgroupList(self):
+        vis: List[DNAVisGroup] = self.levelEditor.getDNAVisGroups(self.levelEditor.NPToplevel)
+        self.visNumToNP = {}
+        for group in vis:
+            self.visNumToNP[group[1].getName()] = group[0]
+        # vis
+        visNames = [x[1].getName() for x in vis]
+        visNames.sort()
+        if len(visNames) != 0:
+            lastVisNum = int(visNames[-1])
+            self.htmlUi.exec_js_func('set_new_visgroup_id', lastVisNum+1)
+
+        self.htmlUi.exec_js_func('populate_list', 'visgroup-list', visNames)
+        print('popualting vis group')
 
     def popupError(self, message: str):
         self.htmlUi.exec_js_func('show_error_popup', message)
@@ -81,12 +110,6 @@ class CEFLevelEditorPanel:
         if code == '':
             self.popupError("Unable to spawn building!<br/>You must select a building model before spawning.")
             return
-        print(f"Requested landmark spawn: \n"
-              f"    Code {code}\n"
-              f"    Type {extraType}\n"
-              f"    is Safezone {isSz}\n"
-              f"    name '{bldgName}'")
-
         self.levelEditor.addLandmark('toon_landmark_'+code, extraType, bldgName, isSz)
 
     def selectLandmark(self, title: str):
@@ -97,3 +120,21 @@ class CEFLevelEditorPanel:
 
     def deselectLandmark(self):
         self.htmlUi.exec_js_func('deselect_landmark')
+
+    def __selectVisGroup(self, visGroup: str):
+        if visGroup == '':
+            self.popupError('Select a Vis Group in the list first!')
+            return
+        visNP: Optional[NodePath] = self.visNumToNP.get(visGroup, None)
+        if not visNP:
+            self.popupError(f'Error selecting Vis Group.<br/><b>{visGroup}</b> not in dict.')
+            return
+        messenger.send('SGE_Set Reparent Target', [visNP])
+        messenger.send('SGE_Flash', [visNP])
+
+    def __newVisGroup(self, visName: str):
+        if visName == '':
+            self.popupError('Unable to create Vis Group!<br/>You must set an ID for the Vis Group!')
+            return
+        self.levelEditor.newVisGroup(visName)
+        self.repopulateVisgroupList()

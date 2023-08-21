@@ -121,7 +121,14 @@
                 <!--Vis-->
                 <div class="tab-pane fade" id="p-vis" role="tabpanel" aria-labelledby="t-vis" tabindex="0">
                     <div class="ttle-page">
+                        <button onclick="select_visgroup()" class="btn btn-success">Set as Active</button>
+                        <select multiple id="visgroup-list" class="selection-list shorter">
+                            <!--<option value="street_10x40">street 10x40</option>-->
+                        </select>
+                        <br />
 
+                        <button onclick="new_visgroup()" id="new-visgroup" class="nav-item">New Visgroup</button>
+                        <input onfocus="set_input_focus(true)" onfocusout="set_input_focus(false)" id="new-visgroup-id" type="number" min="1000" max="99999" placeholder="New Visgroup ID" />
                     </div>
                 </div>
 

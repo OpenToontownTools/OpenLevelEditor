@@ -138,6 +138,7 @@ leveleditor/*.bam
 
 # VS Code
 .history
+resources/ui/.vs/*
 
 # Misc.
 build.py
