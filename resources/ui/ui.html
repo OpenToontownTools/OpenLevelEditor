@@ -30,13 +30,19 @@
                 <button class="nav-item" id="t-intprops" data-bs-toggle="pill" data-bs-target="#p-intprops" type="button" role="tab" aria-controls="p-intprops" aria-selected="false">Inter. Props</button>
                 <button class="nav-item" id="t-signs" data-bs-toggle="pill" data-bs-target="#p-signs" type="button" role="tab" aria-controls="p-signs" aria-selected="false">Signs</button>
                 <button class="nav-item" id="t-cogs" data-bs-toggle="pill" data-bs-target="#p-cogs" type="button" role="tab" aria-controls="p-cogs" aria-selected="false">Cogs</button>
-
                 <button class="nav-item" id="t-vis" data-bs-toggle="pill" data-bs-target="#p-vis" type="button" role="tab" aria-controls="p-vis" aria-selected="false">Vis</button>
+
+                <button class="nav-item" id="t-selected" data-bs-toggle="pill" data-bs-target="#p-selected" type="button" role="tab" aria-controls="p-selected" aria-selected="false">Object</button>
             </div>
             <div class="tab-content" id="v-pills-tabContent">
                 <!--HOME-->
                 <div class="tab-pane fade show active" id="p-home" role="tabpanel" aria-labelledby="t-home" tabindex="0">
-
+                    <div class="ttle-page">
+                        <p class="section-header">File</p>
+                        <button onclick="le_load_dna()" class="nav-item">Load...</button>
+                        <button onclick="le_save_as_dna()" class="nav-item">Save As...</button>
+                        <button onclick="le_save_dna()" class="nav-item">Save</button>
+                    </div>
                 </div>
                 <!--STREETS-->
                 <div class="tab-pane fade" id="p-streets" role="tabpanel" aria-labelledby="t-streets" tabindex="0">
@@ -129,6 +135,51 @@
 
                         <button onclick="new_visgroup()" id="new-visgroup" class="nav-item">New Visgroup</button>
                         <input onfocus="set_input_focus(true)" onfocusout="set_input_focus(false)" id="new-visgroup-id" type="number" min="1000" max="99999" placeholder="New Visgroup ID" />
+
+                        <br />
+
+                        <p class="section-header">Visibility</p>
+                        <div id="visgroup-visibles-list" class="selection-list short"><!--
+                            <input type="checkbox" id="vgc-9402" value="9402"/>
+                            <label for="vgc-9402">9402</label>-->
+                        </div>
+
+                    </div>
+                </div>
+                <!--Selected (this will have controls like color changing and manual position modification)-->
+                <div class="tab-pane fade" id="p-selected" role="tabpanel" aria-labelledby="t-selected" tabindex="0">
+                    <div class="ttle-page">
+                        <p class="section-header">Position</p>
+                        <div class="vec3">
+                            <input value=0 step=".1" type="number" id="pos-x" />
+                            <input value=0 step=".1" type="number" id="pos-y" />
+                            <input value=0 step=".1" type="number" id="pos-z" />
+                        </div>
+
+                        <p class="section-header">Rotation</p>
+                        <div class="vec3">
+                            <input value=0 step="1" type="number" id="rot-x" />
+                            <input value=0 step="1" type="number" id="rot-y" />
+                            <input value=0 step="1" type="number" id="rot-z" />
+                        </div>
+
+
+                        <p class="section-header">Scale</p>
+                        <div class="vec3">
+                            <input value=0 step=".1" type="number" id="scale-x" />
+                            <input value=0 step=".1" type="number" id="scale-y" />
+                            <input value=0 step=".1" type="number" id="scale-z" />
+                        </div>
+
+
+
+                        <p class="section-header">Color</p>
+                        <div class="vec4">
+                            <input min=0 max=255 value=255 step="1" type="number" id="color-r" />
+                            <input min=0 max=255 value=255 step="1" type="number" id="color-g" />
+                            <input min=0 max=255 value=255 step="1" type="number" id="color-b" />
+                            <input min=0 max=255 value=255 step="1" type="number" id="color-a" />
+                        </div>
                     </div>
                 </div>
 

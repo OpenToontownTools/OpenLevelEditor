@@ -139,3 +139,15 @@ option{
     .error-popup #close-error{
         margin:auto;
     }
+
+.vec3{
+    display:flex;
+}
+
+.vec3 input{
+    width:4vw;
+}
+
+.vec4 input {
+    width: 2.6vw;
+}

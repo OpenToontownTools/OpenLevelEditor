@@ -77,3 +77,37 @@ function set_new_visgroup_id(id) {
 function new_visgroup() {
     le_new_visgroup(document.getElementById('new-visgroup-id').value)
 }
+
+function populate_visgroup_list(contents) {
+    const list = document.getElementById('visgroup-list')
+    list.innerHTML = ''
+    contents.forEach(
+        content => {
+            list.innerHTML += `<option onclick="le_flash_visgroup(this.value)" value="${content}">${content}</option>`
+        }
+    )
+}
+function populate_visgroup_visibles_list(vis) {
+    const list = document.getElementById("visgroup-visibles-list")
+    list.innerHTML = ''
+    vis.forEach(
+        group => {
+            groupName = group[0]
+            groupState = group[1]
+            if (groupState) {
+                list.innerHTML += `<div><input checked type="checkbox" id="vgc-${groupName}" value="${groupName}"/>
+            <label class="check-lbl" for="vgc-${groupName}">${groupName}</label></div>`
+            }
+            else {
+                list.innerHTML += `<div><input type="checkbox" id="vgc-${groupName}" value="${groupName}"/>
+            <label class="check-lbl for="vgc-${groupName}">${groupName}</label></div>`
+            }
+        }
+    )
+}
+
+function check_visgroup(input) {
+    groupName = input.value
+    groupStatus = input.checked
+    le_set_visgroup_state(groupName, groupStatus)
+}
