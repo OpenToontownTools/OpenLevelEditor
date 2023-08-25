@@ -116,7 +116,7 @@ class CEFPanda(DirectObject):
             # Tweaking OSR performance by setting the same Chromium flags as the
             # cefpython SDL2 example (also see cefpython issue #240)
             "disable-gpu-compositing": "",
-            "enable-begin-frame-scheduling": "",
+            "enable-begin-frame-scheduling": ""
         }
         browser_settings = {
             "windowless_frame_rate": 60,
@@ -179,8 +179,8 @@ class CEFPanda(DirectObject):
         self.accept('mouse1', self._handle_mouse, [False])
         self.accept('mouse1-up', self._handle_mouse, [True])
 
-        self.accept('wheel_up-up', self._handle_scroll, [False])
-        self.accept('wheel_down-up', self._handle_scroll, [True])
+        self.accept('wheel_up', self._handle_scroll, [False])
+        self.accept('wheel_down', self._handle_scroll, [True])
 
         self._msg_loop_task = base.taskMgr.add(self._cef_message_loop, 'CEFMessageLoop')
 
@@ -368,20 +368,3 @@ class CEFPanda(DirectObject):
             self.browser.SendMouseMoveEvent(posx, posy, mouseLeave=False)
 
         return task.cont
-
-    # aliases for deprecated functions
-    def load(self, filepath):
-        warnings.warn(
-            'load() is deprecated, use load_file() instead',
-            DeprecationWarning,
-            stacklevel=2
-        )
-        self.load_file(filepath)
-
-    def execute_js(self, js_string, onload=False):
-        warnings.warn(
-            'execute_js() is deprecated, use exec_js_string() instead',
-            DeprecationWarning,
-            stacklevel=2
-        )
-        self.exec_js_string(js_string, onload=onload)

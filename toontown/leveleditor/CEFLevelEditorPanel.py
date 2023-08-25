@@ -26,20 +26,24 @@ class CEFLevelEditorPanel(DirectObject):
         self.htmlUi.exec_js_func('populate_list', 'street-module-list', [s for s in self.levelEditor.styleManager.getCatalogCodes('street')])
 
         # static props
-        propList = self.levelEditor.styleManager.getCatalogCodes('prop') + self.levelEditor.styleManager.getCatalogCodes('holiday_prop')
+        propList: List[str] = self.levelEditor.styleManager.getCatalogCodes('prop') + self.levelEditor.styleManager.getCatalogCodes('holiday_prop')
         # make it alphabetical
         propList.sort()
         self.htmlUi.exec_js_func('populate_list', 'prop-list', propList)
         del propList
 
         # Landmark buildings
-        landmarks = [s[14:] for s in self.levelEditor.styleManager.getCatalogCodes('toon_landmark')]
+        landmarks: List[str] = [s[14:] for s in self.levelEditor.styleManager.getCatalogCodes('toon_landmark')]
         landmarks.sort()
         self.htmlUi.exec_js_func('populate_list', 'landmark-list', landmarks)
         del landmarks
 
         # Landmark building types
         self.htmlUi.exec_js_func('populate_list', 'landmark-type-list', LevelEditorGlobals.LANDMARK_SPECIAL_TYPES[1:])
+
+        # Interactive Props
+        interPropList: List[str] = self.levelEditor.styleManager.getCatalogCodes('interactive_prop')
+        self.htmlUi.exec_js_func('populate_list', 'interactive-prop-list', interPropList)
 
         # vis
         self.repopulateVisgroupList()
@@ -62,6 +66,7 @@ class CEFLevelEditorPanel(DirectObject):
             'le_spawn_street': self.__spawnStreet,
             'le_spawn_prop': self.__spawnProp,
             'le_spawn_landmark': self.__spawnLandmark,
+            'le_spawn_interactive_prop': self.__spawnInteractiveProp,
 
             # edit events
             'le_rename_landmark': self.__renameLandmark,
@@ -76,7 +81,6 @@ class CEFLevelEditorPanel(DirectObject):
         for js, py in binds.items():
             self.htmlUi.set_js_function(js, py)
 
-
     def popupError(self, message: str):
         self.htmlUi.exec_js_func('show_error_popup', message)
 
@@ -88,6 +92,8 @@ class CEFLevelEditorPanel(DirectObject):
 
     def __toggleMouseEvents(self, state: bool):
         self.levelEditor.toggleMouseInputs(state)
+
+    ''' Spawn Events '''
 
     def __spawnStreet(self, code: str):
         if code == '':
@@ -107,6 +113,14 @@ class CEFLevelEditorPanel(DirectObject):
             return
         self.levelEditor.addLandmark('toon_landmark_'+code, extraType, bldgName, isSz)
 
+    def __spawnInteractiveProp(self, code: str):
+        if code == '':
+            self.popupError("Unable to spawn interactive prop!<br/>You must select a prop type before spawning.")
+            return
+        self.levelEditor.addInteractiveProp(code)
+
+    ''' Edit Events '''
+
     def selectLandmark(self, title: str):
         self.htmlUi.exec_js_func('select_landmark', title)
 
@@ -115,6 +129,8 @@ class CEFLevelEditorPanel(DirectObject):
 
     def deselectLandmark(self):
         self.htmlUi.exec_js_func('deselect_landmark')
+
+    ''' Visgroups '''
 
     def __selectVisGroup(self, visGroup: str):
         if visGroup == '':

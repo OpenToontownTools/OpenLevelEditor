@@ -929,10 +929,10 @@ class LevelStyleManager:
             else:
                 return 1
 
-    def getCatalogCode(self, category, i):
+    def getCatalogCode(self, category, i) -> str:
         return DNASTORE.getCatalogCode(category, i)
 
-    def getCatalogCodes(self, category):
+    def getCatalogCodes(self, category) -> List[str]:
         numCodes = DNASTORE.getNumCatalogCodes(category)
         codes = []
         for i in range(numCodes):

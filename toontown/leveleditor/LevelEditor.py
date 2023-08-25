@@ -1276,7 +1276,10 @@ class LevelEditor(NodePath, DirectObject):
         phaseDelimeter = len('phase_') + pathStr[len('phase_'):].find('_')
         phaseStr = pathStr[:phaseDelimeter]
         pathTokens = pathStr[phaseDelimeter + 1:].split('_')
-        modelPathStr = phaseStr
+        modelPathStr = ''
+        if base.config.GetString("root-dir"):
+            modelPathStr += base.config.GetString("root-dir") + '/'
+        modelPathStr += phaseStr
         for path in pathTokens:
             modelPathStr += '/'
             modelPathStr += path

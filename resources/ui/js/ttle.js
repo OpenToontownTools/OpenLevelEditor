@@ -46,6 +46,10 @@ function spawn_landmark() {
     )
 }
 
+function spawn_interactive_prop() {
+    le_spawn_interactive_prop(document.getElementById("interactive-prop-list").value)
+}
+
 function select_landmark(current_title) {
     const btn = document.getElementById('rename-selected')
     if (btn.classList.contains('hidden'))
