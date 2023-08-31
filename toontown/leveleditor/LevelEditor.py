@@ -1,5 +1,4 @@
 import builtins
-import cefpanda
 import glob
 import json
 import os
@@ -234,6 +233,8 @@ class LevelEditor(NodePath, DirectObject):
             ('page_up', self.pageUp),
             ('page_down', self.pageDown),
             ('shift-o', self.toggleOrth),
+
+            ('f11', self.editorScreenshot),
             ('f12', self.screenshot),
             ('shift-f12', self.renderMapScaled),
             ('alt-f12', self.renderMap),  # doesnt do automatic stuff, likely wont get used, but just incase
@@ -387,6 +388,8 @@ class LevelEditor(NodePath, DirectObject):
         self.toggleMouseInputs(True)
         base.direct.enableActionEvents()
         base.direct.enableModifierEvents()
+
+        base.direct.manipulationControl.enableManipulation()
         self.inputEnabled = True
 
     def disable(self):
@@ -411,6 +414,7 @@ class LevelEditor(NodePath, DirectObject):
         base.direct.disableModifierEvents()
         self.toggleMouseInputs(False)
         base.direct.disableActionEvents()
+        base.direct.manipulationControl.disableManipulation()
         self.inputEnabled = False
 
     def toggleMouseInputs(self, state: bool):
@@ -3124,6 +3128,13 @@ class LevelEditor(NodePath, DirectObject):
                 return point
         return None
 
+    def editorScreenshot(self):
+        """
+        Generic screenshot
+        """
+        base.graphicsEngine.renderFrame()
+        base.screenshot("screenshots/screenshot")
+
     def screenshot(self):
         """
         Generic screenshots. Hides insertion markers, keeps dropshadows.
@@ -3759,7 +3770,7 @@ class LevelEditor(NodePath, DirectObject):
             side, barricadeOrigNum, barricadeDict[barricadeOrigNum][0], barricadeDict[barricadeOrigNum][1]))
 
     def makeStreetAlongCurve(self):
-        curves = self.loadStreetCurve()
+        curves = DNASerializer.loadStreetCurve()
         if curves is None:
             return
 

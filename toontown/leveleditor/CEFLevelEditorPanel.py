@@ -1,7 +1,9 @@
+import os
+from tkinter.filedialog import asksaveasfilename
 from typing import Dict, Callable, List, Optional, Tuple
 
 from direct.showbase.DirectObject import DirectObject
-from panda3d.core import NodePath
+from panda3d.core import NodePath, Filename
 from panda3d.toontown import DNAVisGroup
 
 from toontown.leveleditor import LevelEditorGlobals
@@ -61,7 +63,8 @@ class CEFLevelEditorPanel(DirectObject):
             'le_load_dna': DNASerializer.loadSpecifiedDNAFile,
             'le_save_dna': DNASerializer.outputDNADefaultFile,
             'le_save_as_dna': DNASerializer.saveToSpecifiedDNAFile,
-            
+            'le_export_bam': self.__exportToBam,
+
             # spawn events
             'le_spawn_street': self.__spawnStreet,
             'le_spawn_prop': self.__spawnProp,
@@ -93,6 +96,28 @@ class CEFLevelEditorPanel(DirectObject):
     def __toggleMouseEvents(self, state: bool):
         self.levelEditor.toggleMouseInputs(state)
 
+    ''' Save / Load events'''
+
+    def __exportToBam(self):
+        """
+        Export level geometry as .bam
+        """
+        path = Filename.expandFrom(userfiles).toOsSpecific()
+        if not os.path.isdir(path):
+            path = '.'
+        fileName = asksaveasfilename(defaultextension = '.dna',
+                                     filetypes = (('Panda3D Model Files', '*.bam'), ('All files', '*')),
+                                     initialdir = path,
+                                     title = 'Export as .BAM')
+        if fileName:
+            self.levelEditor.getNPToplevel().findAllMatches('**/+CollisionNode').stash()
+            self.levelEditor.getNPToplevel().writeBamFile(Filename.expandFrom(fileName))
+            self.levelEditor.getNPToplevel().findAllMatches('**/+CollisionNode').unstash()
+
+            self.popupError(f'Exported level as {fileName}')
+        else:
+            self.popupError('Export cancelled.')
+
     ''' Spawn Events '''
 
     def __spawnStreet(self, code: str):
@@ -111,7 +136,7 @@ class CEFLevelEditorPanel(DirectObject):
         if code == '':
             self.popupError("Unable to spawn building!<br/>You must select a building model before spawning.")
             return
-        self.levelEditor.addLandmark('toon_landmark_'+code, extraType, bldgName, isSz)
+        self.levelEditor.addLandmark('toon_landmark_' + code, extraType, bldgName, isSz)
 
     def __spawnInteractiveProp(self, code: str):
         if code == '':
@@ -170,7 +195,7 @@ class CEFLevelEditorPanel(DirectObject):
         visNames.sort()
         if len(visNames) != 0:
             lastVisNum = int(visNames[-1])
-            self.htmlUi.exec_js_func('set_new_visgroup_id', lastVisNum+1)
+            self.htmlUi.exec_js_func('set_new_visgroup_id', lastVisNum + 1)
 
         self.htmlUi.exec_js_func('populate_visgroup_list', visNames)
 
