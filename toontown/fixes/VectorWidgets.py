@@ -2,6 +2,8 @@
 
 __all__ = ['VectorEntry', 'Vector2Entry', 'Vector3Entry', 'Vector4Entry', 'ColorEntry']
 
+from tkinter import *
+
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets import Valuator
 import Pmw

@@ -11,6 +11,7 @@ from tkinter.messagebox import showinfo
 
 from direct.controls import ControlManager
 from direct.controls import NonPhysicsWalker
+from direct.directtools.DirectGlobals import *
 from direct.gui import DirectGui
 from panda3d.core import BoundingHexahedron
 from typing import Tuple

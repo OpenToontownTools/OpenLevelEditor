@@ -5,6 +5,8 @@ Requires Pmw."""
 
 __all__ = ['SceneGraphExplorer', 'SceneGraphExplorerItem', 'explore']
 
+from tkinter import *
+
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets.Tree import *

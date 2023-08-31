@@ -7,6 +7,7 @@ from . import TTLocalizer
 from otp.otpbase.OTPGlobals import *
 from direct.showbase.PythonUtil import invertDict
 from panda3d.core import BitMask32, Vec4
+from enum import Enum
 
 AccountDatabaseChannelId = 4008
 ToonDatabaseChannelId = 4021
