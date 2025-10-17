@@ -21,11 +21,13 @@ TOONTOWN_ONLINE = 0
 TOONTOWN_REWRITTEN = 1
 TOONTOWN_CORPORATE_CLASH = 2
 TOONTOWN_OFFLINE = 3
+TOONTOWN_HOSTTKVR = 4
 
 SERVER_TO_ID = {'online':    TOONTOWN_ONLINE,
                 'rewritten': TOONTOWN_REWRITTEN,
                 'clash':     TOONTOWN_CORPORATE_CLASH,
-                'offline':   TOONTOWN_OFFLINE
+                'offline':   TOONTOWN_OFFLINE,
+                'ttht':      TOONTOWN_HOSTTKVR
                 }
 
 DEFAULT_SERVER = TOONTOWN_ONLINE
@@ -71,7 +73,7 @@ class ToontownLevelEditor(ShowBase):
         parser.add_argument("--compiler", nargs = "*",
                             help = "Specify which compiler to use (Only useful if your game uses a form of "
                                    "libpandadna.) Valid options are 'libpandadna', for games which use the "
-                                   "modern c++ version of libpandadna, and 'clash', for Corporate Clash")
+                                   "modern c++ version of libpandadna, 'clash', for Corporate Clash, and 'ht', for Hostile Takeover")
 
         parser.add_argument("--server", nargs = "*", help = "Enables features exclusive to various Toontown projects",
                             default = 'online')

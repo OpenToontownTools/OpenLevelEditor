@@ -1,0 +1,16 @@
+{
+	"name_longhand": "the_burrrgh",
+	"storage_files": [
+		"phase_8/dna/ttrm_d_strg_tbr.dna", 
+		"phase_8/dna/ttrm_d_strg_tbr_sz.dna", 
+		"phase_8/dna/ttrm_d_strg_tbr_town.dna"
+	],
+	"holiday_storage_files": {
+	    "halloween": [
+			"phase_8/dna/halloween_props_storage_BR.dna"
+		],
+	    "winter": [
+			"phase_8/dna/winter_storage_BR.dna"
+		]
+	}
+}

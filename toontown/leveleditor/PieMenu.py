@@ -150,6 +150,8 @@ class TextPieMenu(PieMenu):
                 tn.setFont(getDefaultFont())
                 tn.setTransform(Mat4.scaleMat(0.07, 0.07, 0.07 * aspectRatio))
                 tn.setTextColor(1, 1, 1, 1)
+                tn.setShadow(.05, .05)
+                tn.setShadowColor(0.0, 0.0, 0.0, 0.5)
                 tn.setCardColor(0, 0, 0, 0.2)
                 tn.setCardAsMargin(0.1, 0.1, 0.1, 0.1)
                 tn.setText(str(textList[i]))
@@ -163,6 +165,7 @@ class TextPieMenu(PieMenu):
                 node.setPos(radius * math.cos(i * angle) - center[0], 0.0,
                             ((radius * aspectRatio * math.sin(i * angle)) -
                              center[1]))
+        newMenu.setScale(0.5)
         # Create and return a pie menu
         PieMenu.__init__(self, newMenu, textList, action = action,
                          fUpdateOnlyOnChange = fUpdateOnlyOnChange)

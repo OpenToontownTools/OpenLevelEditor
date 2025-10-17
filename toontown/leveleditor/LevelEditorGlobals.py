@@ -5,11 +5,13 @@ TOONTOWN_ONLINE = 0
 TOONTOWN_REWRITTEN = 1
 TOONTOWN_CORPORATE_CLASH = 2
 TOONTOWN_OFFLINE = 3
+TOONTOWN_HOSTTKVR = 4
 
 SERVER_TO_ID = {'online':    TOONTOWN_ONLINE,
                 'rewritten': TOONTOWN_REWRITTEN,
                 'clash':     TOONTOWN_CORPORATE_CLASH,
-                'offline':   TOONTOWN_OFFLINE
+                'offline':   TOONTOWN_OFFLINE,
+                'ttht':      TOONTOWN_HOSTTKVR
                 }
 
 HOOD_NAME_SHORTHAND = 'name_shorthand'
@@ -44,6 +46,13 @@ LANDMARK_SPECIAL_TYPES = ['', 'hq', 'gagshop', 'clotheshop', 'petshop', 'kartsho
 # Corporate Clash has an UNCAPTURABLE building type to flag uncapturable buildings
 if base.server == TOONTOWN_CORPORATE_CLASH:
     LANDMARK_SPECIAL_TYPES.append('uncapturable')
+if base.server == TOONTOWN_HOSTTKVR:
+    LANDMARK_SPECIAL_TYPES.append('theater')
+    LANDMARK_SPECIAL_TYPES.append('diner')
+    LANDMARK_SPECIAL_TYPES.append('house')
+    LANDMARK_SPECIAL_TYPES.append('paintshop')
+    LANDMARK_SPECIAL_TYPES.append('toptoons')
+    LANDMARK_SPECIAL_TYPES.append('snoozebar')
 
 OBJECT_SNAP_POINTS = {
     'street_5x20':                  [(Vec3(5.0, 0, 0), Vec3(0)),

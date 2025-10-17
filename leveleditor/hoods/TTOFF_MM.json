@@ -1,0 +1,16 @@
+{
+	"name_longhand": "minnies_melody_land",
+	"storage_files": [
+		"phase_6/dna/ttrm_d_strg_mml.dna", 
+		"phase_6/dna/ttrm_d_strg_mml_sz.dna", 
+		"phase_6/dna/ttrm_d_strg_mml_town.dna"
+	],
+	"holiday_storage_files": {
+	    "halloween": [
+			"phase_6/dna/halloween_props_storage_MM.dna"
+		],
+	    "winter": [
+			"phase_6/dna/winter_storage_MM.dna"
+		]
+	}
+}

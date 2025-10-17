@@ -13,7 +13,9 @@ from direct.controls import NonPhysicsWalker
 from direct.directtools.DirectGlobals import *
 from direct.gui import DirectGui
 from panda3d.core import BoundingHexahedron
-from typing import Tuple
+from typing import Tuple, Any
+
+from panda3d.toontown import DNAVisGroup
 
 from otp.otpbase import OTPGlobals
 from toontown.hood.GenericAnimatedProp import *
@@ -238,7 +240,8 @@ class LevelEditor(NodePath, DirectObject):
             ('alt-s', self.toggleSuitBuildingPreviews),
             ('alt-o', self.toggleVisibleOccluders),
             # This already exists, but we will override it to show an input
-            ('p', self.setReparentTarget)
+            ('p', self.setReparentTarget),
+            ('f8', self.createNewVisGroup)
             ]
 
         self.overrideEvents = [
@@ -1236,7 +1239,10 @@ class LevelEditor(NodePath, DirectObject):
             modelPathStr += '/'
             modelPathStr += path
 
-        animFileList = glob.glob(f"{modelPathStr}/{tokens[0]}_a_{tokens[1]}_*.bam")
+        r = ConfigVariableString("root-dir", "").getValue()
+        if r != "":
+            r += "/"
+        animFileList = glob.glob(f"{r}{modelPathStr}/{tokens[0]}_a_{tokens[1]}_*.bam")
 
         animNameList = []
         for animFile in animFileList:
@@ -1653,16 +1659,16 @@ class LevelEditor(NodePath, DirectObject):
     def addStreet(self, streetType):
         # Record new street type
         self.setCurrent('street_texture', streetType)
-        newDNAStreet = DNAStreet(f"str.{streetType.replace('street_', '').lower()}_DNARoot")
+        newDNAStreet = DNAStreet(f"{streetType}_DNARoot")
         newDNAStreet.setCode(streetType)
         newDNAStreet.setPos(VBase3(0))
         newDNAStreet.setHpr(VBase3(0))
         newDNAStreet.setStreetTexture(
-                'street_street_' + self.neighborhoodCode + '_tex')
+                'street_street_' + self.neighborhoodCode.replace("TTOFF_", '') + '_tex')
         newDNAStreet.setSidewalkTexture(
-                'street_sidewalk_' + self.neighborhoodCode + '_tex')
+                'street_sidewalk_' + self.neighborhoodCode.replace("TTOFF_", '') + '_tex')
         newDNAStreet.setCurbTexture(
-                'street_curb_' + self.neighborhoodCode + '_tex')
+                'street_curb_' + self.neighborhoodCode.replace("TTOFF_", '') + '_tex')
         # Now place new street in the world
         self.initDNANode(newDNAStreet)
 
@@ -2402,6 +2408,54 @@ class LevelEditor(NodePath, DirectObject):
             self.vgpanel = VisGroupsEditor.VisGroupsEditor(self, visGroups)
         else:
             showinfo('Vis Groups Editor', 'No DNA Vis Groups Found!')
+
+    def resetDNAVisibility(self):
+        visgroups: list[tuple[Any, DNAVisGroup]] = self.getDNAVisGroups(self.NPToplevel)
+        allVisName: list[str] = []
+        for groupInfo in visgroups:
+            group = groupInfo[1]
+            name = group.getName()
+            #if int(name) > 2360:
+            allVisName.append(name)
+
+        # Add every vis group name to each vis group, only if it's not already present
+        for _g in visgroups:
+
+            for i in range(_g[1].getNumVisibles()).__reversed__():
+                _g[1].removeVisible(_g[1].getVisibleName(i))
+            for vis in allVisName + [_g[1].getName()]:
+                found = False
+                for i in range(_g[1].getNumVisibles()):
+                    if _g[1].getVisibleName(i) == vis:
+                        found = True
+                        break
+                if not found:
+
+                    print(vis)
+                    if vis != ' ':
+                        _g[1].addVisible(vis)
+
+    def createNewVisGroup(self):
+        """Create a new DNAVisGroup with the next available group number."""
+        visGroups = self.getDNAVisGroups(self.NPToplevel)
+        max_num = 0
+        for np, dna in visGroups:
+            name = dna.getName()
+            try:
+                num = int(name)
+                if num > max_num:
+                    max_num = num
+            except Exception:
+                continue
+        next_num = max_num + 1
+        newVisGroup = DNAVisGroup(f'{next_num}')
+        self.DNAToplevel.add(newVisGroup)
+        newNodePath = newVisGroup.traverse(self.NPToplevel, DNASTORE, 1)
+        self.popupNotification(f'Created new visgroup {next_num}')
+
+        base.direct.setActiveParent(newNodePath)
+
+        return newNodePath
 
     def getDNAVisGroups(self, nodePath):
         """ Find the highest level vis groups in the scene graph """
@@ -3314,10 +3368,10 @@ class LevelEditor(NodePath, DirectObject):
             name = dna.getName()
             label = DirectGui.DirectLabel(text = name,
                                           text_font = ToontownGlobals.getSignFont(),
-                                          text_fg = (0.152, 0.750, 0.258, 1),
+                                          text_fg = (0.152, 1, 1, 1),
                                           parent = np.getParent(),
-                                          relief = None, scale = 3)
-            label.setBillboardPointWorld()
+                                          relief = None, scale = 4)
+            label.setBillboardPointEye()
             label.setDepthWrite(False)
             label.setDepthTest(not self.labelsOnTop)
             if not np.getBounds().isEmpty():

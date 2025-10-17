@@ -76,6 +76,18 @@ class LevelEditorPanel(Pmw.MegaToplevel):
                             command = self.exportToBam)
 
         menuBar.addmenuitem('Level Editor', 'separator')
+
+
+        menuBar.addmenuitem('Level Editor', 'command',
+                            'Add Vis Group',
+                            label = 'Add Vis Group',
+                            command = self.levelEditor.createNewVisGroup)
+
+        menuBar.addmenuitem('Level Editor', 'command',
+                            'Reset All Visibility',
+                            label = 'Reset All Visibility',
+                            command = self.levelEditor.resetDNAVisibility)
+
         menuBar.addmenuitem('Level Editor', 'command',
                             'Edit Visibility Groups',
                             label = 'Edit Vis Groups',

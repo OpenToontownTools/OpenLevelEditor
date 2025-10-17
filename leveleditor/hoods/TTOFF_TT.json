@@ -1,0 +1,18 @@
+{
+	"name_longhand": "toontown_central",
+	"storage_files": [
+		"phase_4/dna/ttrm_d_strg_ttc.dna", 
+		"phase_4/dna/ttrm_d_strg_ttc_sz.dna", 
+		"phase_5/dna/ttrm_d_strg_ttc_town.dna"
+	],
+	"holiday_storage_files": {
+	    "halloween": [
+			"phase_4/dna/halloween_props_storage_TT.dna",
+			"phase_4/dna/halloween_props_storage_TT_sz.dna"
+		],
+	    "winter": [
+			"phase_4/dna/winter_storage_TT.dna",
+			"phase_4/dna/winter_storage_TT_sz.dna"
+		]
+	}
+}

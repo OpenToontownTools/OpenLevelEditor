@@ -737,7 +737,7 @@ class LevelStyleManager:
                                                         sf = 0.25))
             elif (dnaType == 'sign'):
                 attribute.setMenu(self.createNodeScrollMenu(dnaType, dnaList))
-                attribute.getMenu().createScrolledList(0.028, itemPadding = 0.20)
+                attribute.getMenu().createScrolledList(0.018, itemPadding = 0.20)
             elif (dnaType == 'door_double'):
                 attribute.setMenu(self.createDNAPieMenu(dnaType, dnaList,
                                                         sf = 0.035))
@@ -833,7 +833,7 @@ class LevelStyleManager:
 
     def createNodeScrollMenu(self, dnaType, dnaList):
         newMenu = hidden.attachNewNode(dnaType + 'ScrollMenu')
-        nodePaths = []
+        nodePaths = ['']
         for node in dnaList:
             if node:
                 _n = DNASTORE.findNode(node).copyTo(newMenu)

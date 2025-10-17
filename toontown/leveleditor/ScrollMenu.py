@@ -61,7 +61,7 @@ class ScrollMenu:
         btns = []
         for t in self.itemsList:
             if isinstance(t, str):
-                btns.append(DirectButton(text = (t, t, t),
+                btns.append(DirectButton(text = 'NO BG' if t == '' else t,
                                          text_scale = 0.05, command = self.__selected,
                                          extraArgs = [t], relief = None, text_style = 3,
                                          text_font = ToontownGlobals.getToonFont(),
@@ -71,6 +71,14 @@ class ScrollMenu:
             elif isinstance(t, tuple):
                 btns.append(DirectButton(relief = None, command = self.__selected, extraArgs = [t[1]],
                                          geom = t[0], geom_scale = itemSize))
+            elif t is None:
+                btns.append(DirectButton(text = "None",
+                                         text_scale = 0.05, command = self.__selected,
+                                         extraArgs = [t], relief = None, text_style = 3,
+                                         text_font = ToontownGlobals.getToonFont(),
+                                         text0_fg = (0.152, 0.750, 0.258, 1),
+                                         text1_fg = (0.152, 0.750, 0.258, 1),
+                                         text2_fg = (0.977, 0.816, 0.133, 1), ))
         myScrolledList.addItems(*btns)
 
         # An exit button

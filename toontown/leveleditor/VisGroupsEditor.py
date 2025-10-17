@@ -1,7 +1,12 @@
+from tkinter import GROOVE, IntVar
+from tkinter.constants import X, BOTH, MULTIPLE, VERTICAL, LEFT, W
+
 import Pmw
 import sys
+
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets.Tree import *
+from tkinter import Frame, Radiobutton
 
 
 class VisGroupsEditor(Pmw.MegaToplevel):
@@ -30,16 +35,19 @@ class VisGroupsEditor(Pmw.MegaToplevel):
 
         # Handle to the toplevels hull
         hull = self.component('hull')
+        w = int(300 * settings.get('panel-scaling', 1.0))
+        h = int(825 * settings.get('panel-scaling', 1.0))
+        hull.geometry(f'{w}x{h}')
 
         balloon = self.balloon = Pmw.Balloon(hull)
         # Start with balloon help disabled
         self.balloon.configure(state = 'none')
 
-        menuFrame = Frame(hull, relief = GROOVE, bd = 2)
-        menuFrame.pack(fill = X, expand = 1)
+        menuFrame = Frame(hull, relief = GROOVE, bd = 2, height = 30)
+        menuFrame.pack(fill = X, expand = 0)
 
-        menuBar = Pmw.MenuBar(menuFrame, hotkeys = 1, balloon = balloon)
-        menuBar.pack(side = LEFT, expand = 1, fill = X)
+        menuBar = Pmw.MenuBar(menuFrame, hotkeys = 1, balloon = balloon, hull_height=30)
+        menuBar.pack(side = LEFT, expand = 0, fill = X)
         menuBar.addmenu('Vis Groups Editor',
                         'Visability Groups Editor Operations')
         menuBar.addmenuitem('Vis Groups Editor', 'command',
@@ -59,7 +67,7 @@ class VisGroupsEditor(Pmw.MegaToplevel):
         # Create a combo box to choose target vis group
         self.targetSelector = Pmw.ComboBox(
                 hull, labelpos = W, label_text = 'Target Vis Group:',
-                entry_width = 12, selectioncommand = self.selectVisGroup,
+                entry_width = 12, selectioncommand = self.selectVisGroup, hull_height = 30,
                 scrolledlist_items = self.visGroupNames)
         self.targetSelector.selectitem(self.visGroupNames[0])
         self.targetSelector.pack(expand = 1, fill = X)
@@ -67,7 +75,7 @@ class VisGroupsEditor(Pmw.MegaToplevel):
         # Scrolled frame to hold radio selector
         sf = Pmw.ScrolledFrame(hull, horizflex = 'elastic',
                                usehullsize = 1, hull_width = 200,
-                               hull_height = 400)
+                               hull_height = 800)
         frame = sf.interior()
         sf.pack(padx = 5, pady = 3, fill = BOTH, expand = 1)
 
@@ -175,7 +183,7 @@ class VisGroupsEditor(Pmw.MegaToplevel):
                 if key == self.target:
                     groupNP.setColorScale(0, 1, 0, 1)
                 else:
-                    groupNP.setColorScale(0, .8, .5, 1)
+                    groupNP.setColorScale(0, .2, .9, 1)
             else:
                 if self.showMode.get() == 0:
                     groupNP.show()
