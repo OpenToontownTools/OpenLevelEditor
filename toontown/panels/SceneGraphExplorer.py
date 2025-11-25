@@ -112,6 +112,7 @@ class SceneGraphExplorer(DirectObject):
 
                     if imgui.button("OK") or imgui.is_key_pressed(imgui.Key.enter):
                         nodePath.setName(self.rename)
+                        messenger.send('DIRECT_nodePathSetName', [nodePath, self.rename])
                         self.rename = ''
                         imgui.close_current_popup()
 
