@@ -5,6 +5,8 @@ from imgui_bundle import imgui_ctx
 from imgui_bundle._imgui_bundle import imgui
 from imgui_bundle.demos_python.demos_immvision.demo_immvision_no_opencv import ImVec2
 
+from toontown.panels.FlatBuildingPanel import FlatBuildingPanel
+from toontown.panels.LandmarkPanel import LandmarkPanel
 from toontown.panels.PropSelectionPanel import PropSelectionPanel
 from toontown.panels.StreetSelectionPanel import StreetSelectionPanel
 
@@ -17,12 +19,14 @@ class ElementsPanel(DirectObject):
         self.isOpen = True
         self.streetPanel = StreetSelectionPanel(editor)
         self.propPanel = PropSelectionPanel(editor)
+        self.flatBuildingPanel = FlatBuildingPanel(editor)
+        self.landmarkPanel = LandmarkPanel(editor)
 
 
     def draw(self):
         if not self.isOpen:
             return
-        with imgui_ctx.begin("Elements"):  # the panel containing your tabs
+        with imgui_ctx.begin("Elements", True):  # the panel containing your tabs
 
             if imgui.begin_tab_bar("##tabs"):
 
@@ -30,6 +34,14 @@ class ElementsPanel(DirectObject):
                 if imgui.begin_tab_item("Streets")[0]:
                     self.streetPanel.draw()
 
+                    imgui.end_tab_item()
+
+                if imgui.begin_tab_item("Flat Bldgs")[0]:
+                    self.flatBuildingPanel.draw()
+                    imgui.end_tab_item()
+
+                if imgui.begin_tab_item("Landmark Bldgs")[0]:
+                    self.landmarkPanel.draw()
                     imgui.end_tab_item()
 
                 # Props Tab
