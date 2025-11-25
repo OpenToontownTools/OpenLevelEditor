@@ -1,1 +1,2 @@
 aiohttp
+panda3d-imgui

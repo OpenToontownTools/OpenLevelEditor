@@ -6,9 +6,12 @@ import builtins
 import os
 import pathlib
 import sys
+
+import p3dimgui
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.ShowBase import ShowBase
+from imgui_bundle import imgui, imgui_ctx
 from panda3d.core import loadPrcFile, loadPrcFileData
 from tkinter import Tk, messagebox
 
@@ -151,6 +154,22 @@ class ToontownLevelEditor(ShowBase):
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
+
+        p3dimgui.init()
+        style = imgui.get_style()
+        scale_factor = 2.0
+        style.scale_all_sizes(scale_factor)
+        io = imgui.get_io()
+        io.config_dpi_scale_fonts = True
+        font = io.fonts.add_font_from_file_ttf('resources/fonts/ImpressBT.ttf', 35)
+        io.font_default = font
+
+        self.accept('imgui-new-frame', self.draw)
+
+    def draw(self):
+        self.le.drawImgui()
+
+
 
     def setFrameRateMeter(self, flag):
         return

@@ -12,6 +12,8 @@ from direct.controls import ControlManager
 from direct.controls import NonPhysicsWalker
 from direct.directtools.DirectGlobals import *
 from direct.gui import DirectGui
+from imgui_bundle import imgui_ctx
+from imgui_bundle._imgui_bundle import imgui
 from panda3d.core import BoundingHexahedron
 from typing import Tuple, Any
 
@@ -349,6 +351,29 @@ class LevelEditor(NodePath, DirectObject):
         self.boxEndMouse: Tuple[float, float] = (0, 0)
 
         AutoSaver.initializeAutoSaver()
+
+    def drawImgui(self):
+        # Dear ImGui commands can be placed here.
+        with imgui_ctx.begin_main_menu_bar() as mainMenu:
+            if mainMenu:
+
+                with imgui_ctx.begin_menu("Level Editor") as leMenu:
+                    if leMenu:
+
+                        clickedExplorer, _ = imgui.menu_item("Show Scene Graph Explorer", "", base.render in base.explorerManager.nodesToExplorers, True)
+                        if clickedExplorer:
+                            if base.render not in base.explorerManager.nodesToExplorers:
+                                base.render.explore()
+                            else:
+                                base.explorerManager.nodesToExplorers[self.render].active = False
+
+                        clickedQuit, _ = imgui.menu_item("Quit", "Cmd+Q" if sys.platform == 'darwin' else "Alt+F4", False, True)
+                        if clickedQuit:
+                            self.userExit()
+
+                # Display FPS after the menu on the menu bar, cause why not.
+                imgui.set_cursor_pos_x(imgui.get_window_size().x - 140)
+                imgui.text("%.2f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
 
     # ENABLE/DISABLE
     def enable(self):
