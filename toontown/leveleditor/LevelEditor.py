@@ -376,24 +376,41 @@ class LevelEditor(NodePath, DirectObject):
         with imgui_ctx.begin_main_menu_bar() as mainMenu:
             if mainMenu:
 
-                with imgui_ctx.begin_menu("Level Editor") as leMenu:
+                with imgui_ctx.begin_menu("File") as leMenu:
                     if leMenu:
                         imgui.separator_text("Files")
                         clickedLoad, _ = imgui.menu_item("Load DNA...", "Ctrl+O", False, True)
                         if clickedLoad:
                             DNASerializer.loadSpecifiedDNAFile()
 
-                        clickSave, _ = imgui.menu_item("Save DNA", "Ctrl+S", False, True)
                         clickSaveAs, _ = imgui.menu_item("Save DNA As...", "Ctrl+Shift+S", False, True)
+                        if clickSaveAs:
+                            DNASerializer.saveToSpecifiedDNAFile()
+
+                        clickSave, _ = imgui.menu_item("Save DNA", "Ctrl+S", False, True)
+                        if clickSave:
+                            DNASerializer.outputDNADefaultFile()
 
                         imgui.separator()
                         clickedQuit, _ = imgui.menu_item("Quit", "Cmd+Q" if sys.platform == 'darwin' else "Alt+F4", False, True)
                         if clickedQuit:
                             self.destroy()
-                            base.exitFunc()
+                            base.userExit()
+
+                with imgui_ctx.begin_menu("Quick Actions") as quickActions:
+                    if quickActions:
+                        clickedAddVisgroup, _ = imgui.menu_item("Add Visgroup", "", False, True)
+
                 with imgui_ctx.begin_menu("Panels") as panelMenu:
                     if panelMenu:
-                        clickedExplorer, _ = imgui.menu_item("Scene Graph Explorer", "", base.render in base.explorerManager.nodesToExplorers, True)
+
+                        clickedElements, _ = imgui.menu_item("Elements", "", self.elementsPanel.isOpen, True)
+                        if clickedElements:
+                            self.elementsPanel.isOpen = not self.elementsPanel.isOpen
+
+                        clickedSign, _ = imgui.menu_item("Sign Editor", "", False, True)
+
+                        clickedExplorer, _ = imgui.menu_item("Scene Graph Explorer", "", self.NPToplevel in base.explorerManager.nodesToExplorers, True)
                         if clickedExplorer:
                             if self.NPToplevel not in base.explorerManager.nodesToExplorers:
                                 self.NPToplevel.explore()
@@ -401,12 +418,19 @@ class LevelEditor(NodePath, DirectObject):
                                 base.explorerManager.nodesToExplorers[self.NPToplevel].active = False
                         clickedVisibility, _ = imgui.menu_item("Visibility", "", False, True)
 
-                clickedElements, _ = imgui.menu_item("Elements", "", self.elementsPanel.isOpen, True)
-                if clickedElements:
-                    self.elementsPanel.isOpen = not self.elementsPanel.isOpen
 
-                clickedSign, _ = imgui.menu_item("Sign", "", False, True)
 
+                with imgui_ctx.begin_menu("Options") as optsMenu:
+                    if optsMenu:
+                        imgui.separator_text("Visual")
+                        clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", False, True)
+                        clickedShowBldgLabels, _ = imgui.menu_item("Show Building Labels", "", False, True)
+                        clickedLabelsOnTop, _ = imgui.menu_item("Labels Always On Top", "", False, True)
+                        clickedShowGrid, _ = imgui.menu_item("Show Grid", "", False, True)
+                        imgui.separator_text("Snapping")
+                        clickedSnapPos, _ = imgui.menu_item("Position Snapping", "", False, True)
+                        clickedSnapRot, _ = imgui.menu_item("Rotation Snapping", "", False, True)
+                        #clickedSnapPlane, _ = imgui.menu_item("Plane Snapping", "", False, True)
 
 
 
@@ -414,7 +438,6 @@ class LevelEditor(NodePath, DirectObject):
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
 
         self.elementsPanel.draw()
-
 
     # ENABLE/DISABLE
     def enable(self):
