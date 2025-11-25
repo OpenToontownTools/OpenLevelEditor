@@ -17,6 +17,7 @@ from tkinter import Tk, messagebox
 
 from ott.Settings import Settings
 from ott.ShaderRegistry import ShaderRegistry
+from toontown.panels.ExplorerManager import ExplorerManager
 
 from toontown.toonbase import ToontownGlobals
 
@@ -151,20 +152,21 @@ class ToontownLevelEditor(ShowBase):
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
 
-        p3dimgui.init()
+        p3dimgui.init(wantExplorerManager = False)
+
+        base.explorerManager = ExplorerManager()
         style = imgui.get_style()
         scale_factor = 2.0
         #style.scale_all_sizes(scale_factor)
         io = imgui.get_io()
         io.config_dpi_scale_fonts = True
-        font = io.fonts.add_font_from_file_ttf('resources/fonts/ImpressBT.ttf', 35)
+        font = io.fonts.add_font_from_file_ttf('resources/fonts/ImpressBT.ttf', 30)
         io.font_default = font
 
         self.accept('imgui-new-frame', self.draw)
 
     def draw(self):
         self.le.drawImgui()
-
 
 
     def setFrameRateMeter(self, flag):

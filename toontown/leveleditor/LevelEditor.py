@@ -33,7 +33,6 @@ from .LevelStyleManager import *
 from .PieMenu import *
 from .RadialMenu import RadialMenu, RadialItem
 from ..panels.ElementsPanel import ElementsPanel
-from ..panels.StreetSelectionPanel import StreetSelectionPanel
 
 # Force direct and tk to be on
 base.startDirect(fWantDirect = 1, fWantTk = 1)
@@ -246,13 +245,17 @@ class LevelEditor(NodePath, DirectObject):
             ('alt-o', self.toggleVisibleOccluders),
             # This already exists, but we will override it to show an input
             ('p', self.setReparentTarget),
-            ('f8', self.createNewVisGroup)
+            ('f8', self.createNewVisGroup),
+            ('mouse1', self.__mouse1),
+            ('mouse3', self.__mouse3),
             ]
 
         self.overrideEvents = [
             ('page_up', base.direct),
             ('page_down', base.direct),
-            ('p', base.direct)
+            ('p', base.direct),
+            ('mouse1', base.direct),
+            ('mouse3', base.direct)
             ]
 
         self.labelsOnTop = False
@@ -357,6 +360,16 @@ class LevelEditor(NodePath, DirectObject):
 
         self.elementsPanel = ElementsPanel(self)
 
+    def __mouse1(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
+        base.messenger.send("DIRECT-mouse1", [0])
+
+
+    def __mouse3(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
+        base.messenger.send("DIRECT-mouse3", [0])
 
     def drawImgui(self):
         # Dear ImGui commands can be placed here.
@@ -2336,6 +2349,8 @@ class LevelEditor(NodePath, DirectObject):
 
     # MANIPULATION FUNCTIONS
     def keyboardRotateSelected(self, arrowDirection):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         """ Rotate selected objects using arrow keys """
         # Get current snap angle
         if (arrowDirection == 'up') or (arrowDirection == 'down'):
@@ -2360,6 +2375,8 @@ class LevelEditor(NodePath, DirectObject):
             base.direct.grid.setSnapAngle(oldSnapAngle)
 
     def keyboardZTranslateSelected(self, arrowDirection):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         gridToCamera = base.direct.grid.getMat(base.direct.camera)
         camXAxis = gridToCamera.xformVec(X_AXIS)
         xxDot = camXAxis.dot(X_AXIS)
@@ -2400,6 +2417,8 @@ class LevelEditor(NodePath, DirectObject):
             base.direct.grid.gridSpacing = oldGridSpacing
 
     def keyboardTranslateSelected(self, arrowDirection):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         gridToCamera = base.direct.grid.getMat(base.direct.camera)
         camXAxis = gridToCamera.xformVec(X_AXIS)
         xxDot = camXAxis.dot(X_AXIS)
@@ -2449,6 +2468,8 @@ class LevelEditor(NodePath, DirectObject):
             base.direct.grid.gridSpacing = oldGridSpacing
 
     def keyboardXformSelected(self, arrowDirection, mode):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         if mode == 'rotate':
             self.keyboardRotateSelected(arrowDirection)
         elif mode == 'zlate':

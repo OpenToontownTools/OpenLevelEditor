@@ -15,7 +15,8 @@ class StreetSelectionPanel(DirectObject):
 
     def draw(self):
         avail_w, avail_h = imgui.get_content_region_avail()
-        imgui.button("Place", ImVec2(avail_w, 0))
+        if imgui.button("Place", ImVec2(avail_w, 0)):
+            self.levelEditor.addStreet(self.selectedStreet)
 
         imgui.separator_text("Select Prop")
         avail_w, avail_h = imgui.get_content_region_avail()
