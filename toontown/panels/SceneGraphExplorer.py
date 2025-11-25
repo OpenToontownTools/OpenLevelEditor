@@ -47,6 +47,13 @@ class SceneGraphExplorer(DirectObject):
             typeName = nodePath.node().getType().getName()
             name = nodePath.getName()
 
+            dnaNode = None
+            if hasattr(base, 'le'):
+                dnaNode = base.le.findDNANode(nodePath)
+            if dnaNode is not None:
+                typeName = dnaNode.getType().getName()
+                name = dnaNode.getName()
+
             tree = imgui.tree_node_ex(f"{self.nodePath.getName()}-{id}", flags, f"{typeName} {name}")
 
             if self.flashOnClick and imgui.is_item_clicked():
