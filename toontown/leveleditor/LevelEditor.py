@@ -4,6 +4,7 @@ import json
 import os
 import re
 import random
+import sys
 from datetime import datetime
 from tkinter.filedialog import *
 from tkinter.messagebox import showinfo
@@ -31,6 +32,8 @@ from .EditorUtil import *
 from .LevelStyleManager import *
 from .PieMenu import *
 from .RadialMenu import RadialMenu, RadialItem
+from ..panels.ElementsPanel import ElementsPanel
+from ..panels.StreetSelectionPanel import StreetSelectionPanel
 
 # Force direct and tk to be on
 base.startDirect(fWantDirect = 1, fWantTk = 1)
@@ -352,6 +355,9 @@ class LevelEditor(NodePath, DirectObject):
 
         AutoSaver.initializeAutoSaver()
 
+        self.elementsPanel = ElementsPanel(self)
+
+
     def drawImgui(self):
         # Dear ImGui commands can be placed here.
         with imgui_ctx.begin_main_menu_bar() as mainMenu:
@@ -359,21 +365,43 @@ class LevelEditor(NodePath, DirectObject):
 
                 with imgui_ctx.begin_menu("Level Editor") as leMenu:
                     if leMenu:
+                        imgui.separator_text("Files")
+                        clickedLoad, _ = imgui.menu_item("Load DNA...", "Ctrl+O", False, True)
+                        if clickedLoad:
+                            DNASerializer.loadSpecifiedDNAFile()
 
-                        clickedExplorer, _ = imgui.menu_item("Show Scene Graph Explorer", "", base.render in base.explorerManager.nodesToExplorers, True)
-                        if clickedExplorer:
-                            if base.render not in base.explorerManager.nodesToExplorers:
-                                base.render.explore()
-                            else:
-                                base.explorerManager.nodesToExplorers[self.render].active = False
+                        clickSave, _ = imgui.menu_item("Save DNA", "Ctrl+S", False, True)
+                        clickSaveAs, _ = imgui.menu_item("Save DNA As...", "Ctrl+Shift+S", False, True)
 
+                        imgui.separator()
                         clickedQuit, _ = imgui.menu_item("Quit", "Cmd+Q" if sys.platform == 'darwin' else "Alt+F4", False, True)
                         if clickedQuit:
-                            self.userExit()
+                            self.destroy()
+                            base.exitFunc()
+                with imgui_ctx.begin_menu("Panels") as panelMenu:
+                    if panelMenu:
+                        clickedExplorer, _ = imgui.menu_item("Scene Graph Explorer", "", base.render in base.explorerManager.nodesToExplorers, True)
+                        if clickedExplorer:
+                            if self.NPToplevel not in base.explorerManager.nodesToExplorers:
+                                self.NPToplevel.explore()
+                            else:
+                                base.explorerManager.nodesToExplorers[self.NPToplevel].active = False
+                        clickedVisibility, _ = imgui.menu_item("Visibility", "", False, True)
 
-                # Display FPS after the menu on the menu bar, cause why not.
-                imgui.set_cursor_pos_x(imgui.get_window_size().x - 140)
-                imgui.text("%.2f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
+                clickedElements, _ = imgui.menu_item("Elements", "", self.elementsPanel.isOpen, True)
+                if clickedElements:
+                    self.elementsPanel.isOpen = not self.elementsPanel.isOpen
+
+                clickedSign, _ = imgui.menu_item("Sign", "", False, True)
+
+
+
+
+                imgui.set_cursor_pos_x(imgui.get_window_size().x - 240)
+                imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
+
+        self.elementsPanel.draw()
+
 
     # ENABLE/DISABLE
     def enable(self):
@@ -2134,6 +2162,8 @@ class LevelEditor(NodePath, DirectObject):
         DNA Object, with no control key pressed, hook selects only
         DNA Root objects
         """
+        if base.imgui.isMouseCaptured():
+            return
         self.selectedDNARoot = None
         self.selectedNPRoot = None
         self.selectedSuitPoint = None

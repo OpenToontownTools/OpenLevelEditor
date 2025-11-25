@@ -146,10 +146,6 @@ class ToontownLevelEditor(ShowBase):
         ShowBase.__init__(self)
         aspect2d.setAntialias(AntialiasAttrib.MAuto)
 
-        # Create the framerate meter
-        flag = self.config.GetBool('show-frame-rate-meter', False)
-        if flag:
-            self.toggleFrameRateMeter(flag)
 
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
@@ -158,7 +154,7 @@ class ToontownLevelEditor(ShowBase):
         p3dimgui.init()
         style = imgui.get_style()
         scale_factor = 2.0
-        style.scale_all_sizes(scale_factor)
+        #style.scale_all_sizes(scale_factor)
         io = imgui.get_io()
         io.config_dpi_scale_fonts = True
         font = io.fonts.add_font_from_file_ttf('resources/fonts/ImpressBT.ttf', 35)
