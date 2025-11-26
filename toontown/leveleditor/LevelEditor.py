@@ -5,6 +5,9 @@ import os
 import re
 import random
 import sys
+
+from imgui_bundle import portable_file_dialogs
+import limeade
 from datetime import datetime
 from tkinter.filedialog import *
 from tkinter.messagebox import showinfo
@@ -423,18 +426,24 @@ class LevelEditor(NodePath, DirectObject):
                 with imgui_ctx.begin_menu("Options") as optsMenu:
                     if optsMenu:
                         imgui.separator_text("Visual")
+                        clickedShowGrid, _ = imgui.menu_item("Show Grid", "", False, True)
                         clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", False, True)
                         clickedShowBldgLabels, _ = imgui.menu_item("Show Building Labels", "", False, True)
                         clickedLabelsOnTop, _ = imgui.menu_item("Labels Always On Top", "", False, True)
-                        clickedShowGrid, _ = imgui.menu_item("Show Grid", "", False, True)
+                        clickedSuitPaths, _ = imgui.menu_item("Show Suit Paths", "", False, True)
+                        clickedSuitPathLabels, _ = imgui.menu_item("Show Suit Path Labels", "", False, True)
+                        clickedBattleCells, _ = imgui.menu_item("Show Battle Cells", "", False, True)
+                        clickedColorZones, _ = imgui.menu_item("Color Zones", "", False, True)
                         imgui.separator_text("Snapping")
                         clickedSnapPos, _ = imgui.menu_item("Position Snapping", "", False, True)
                         clickedSnapRot, _ = imgui.menu_item("Rotation Snapping", "", False, True)
                         #clickedSnapPlane, _ = imgui.menu_item("Plane Snapping", "", False, True)
+                        imgui.separator_text("Debug")
+                        clickedRefreshLimade, _ = imgui.menu_item("Reload Code", "", False, True)
+                        if clickedRefreshLimade:
+                            limeade.refresh()
 
-
-                clickedPlaceSelected, _ = imgui.menu_item("Edit Selected", "", False, True)
-
+                clickedPlaceSelected, _ = imgui.menu_item("Place Selected Node", "", False, True)
                 imgui.set_cursor_pos_x(imgui.get_window_size().x - 240)
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
         self.elementsPanel.draw()
