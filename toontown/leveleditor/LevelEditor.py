@@ -433,10 +433,10 @@ class LevelEditor(NodePath, DirectObject):
                         #clickedSnapPlane, _ = imgui.menu_item("Plane Snapping", "", False, True)
 
 
+                clickedPlaceSelected, _ = imgui.menu_item("Edit Selected", "", False, True)
 
                 imgui.set_cursor_pos_x(imgui.get_window_size().x - 240)
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
-
         self.elementsPanel.draw()
 
     # ENABLE/DISABLE

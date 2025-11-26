@@ -1,6 +1,8 @@
 ![thumbnail](https://raw.githubusercontent.com/OpenToontownTools/web/master/assets/openttle_thumb.png)
 
 ## An open sourced modernized version of Disney's in-house Toontown Online level editor used to create .dna files.
+## Version 2.0
+Version 2.0 brings a whole new UI using ImGui, replacing the outdated Tk UI.
 
 # [***READ THE FAQ BEFORE ASKING QUESTIONS***](#faq)
 
@@ -25,27 +27,28 @@
 * **You need a Panda3D build that INCLUDES commit [b507c88](https://github.com/panda3d/panda3d/commit/b507c88cd9fd5d3a432aae42fdc9165422a527b4) and [7eba53c](https://github.com/panda3d/panda3d/commit/7eba53cffac5e57e1e2e192d17d4ea92a4c8d14c) as these are CRITICAL fixes for the editor. You will NOT be able to use it without these fixes!**
 * Toontown phase files that include all the dna files. [These](https://github.com/open-toontown/resources) work fine. ***Toontown Rewritten's phase files do NOT contain .dna files since they use a completely different format, so you need to use them from elsewhere. Open-Toontown's resources are the closest to Toontown Online's that you can get, while also being completely updated and compatible with Panda3D 1.10.x.***
     * These phase files go in the ROOT directory of the editor
+    * _If you know what you're doing with Panda3D's config, you can also just mount your game's resources that way_
 * Basic knowledge on how streets are setup
-* Here you have two options:
-    * The advanced option
-        * Build yourself a copy of [libtoontown](https://github.com/OpenToontownTools/libtoontown), and drop the .pyd files in the root directory.
-        * Recent Panda3D build (1.10.7 or later) running on *__Python 3__*. This editor is NOT compatible with Python 2.x and will NOT ever be made compatible as Python 2.x is no longer supported.
-    * **OR** the easy option:
-        * you can download the [Toontown Realms Panda3D SDK](https://toontownrealms.com/dev/Panda3D-TTRMDev-1.11.0-py3.6-x64.exe)
+* Toontown's C++ features built. There are two ways to do this::
+    * The easy option (Windows Only):
+        * you can download this [pre-built Panda3D SDK](https://hostiletakeover.co/dl/realms/Panda3D-TTRMDev-1.11.0-py3.12-x64.exe)
+    * The advanced option (All Platforms):
+        * Build yourself a copy of [libtoontown](https://github.com/OpenToontownTools/libtoontown), and drop the .pyd (or .so) files in the root directory.
+        * Recent Panda3D build with Python 3.12
+
+* panda3d-imgui pip package. *This is included in requirements.txt and will auto install if you use the provided run.bat.*
 
 ## Credits
 * [drewcification](https://github.com/drewc5131) - Project Lead | Developer
 * [Disyer](https://github.com/darktohka/) - Updating [LIBTOONTOWN](https://github.com/darktohka/libtoontown) to be compatible with modern panda and python 3 | Other Assistance
+* [LittleCat](https://github.com/LittleToonCat) - Creating [panda3d-imgui](https://github.com/LittleToonCat/panda3d-imgui) and assisting with implementation
 * [Any other contributors are listed on the side](https://github.com/OpenToontownTools/TTOpenLevelEditor/graphs/contributors)
 
 ## Help
 * If you encounter a bug, create an issue and attach the .dna file (and any models required). *If this is private information that you do not want to share on this public repo, feel free to send me a DM on discord @drewcification#5131*
 
-* [*Please only contact me if you need assistance with the editor. No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
+* [*No, I will not help you hack Toontown.*](https://cdn.discordapp.com/attachments/735304945062117468/760296465498898491/hwW1Mlq.png)
 
-## Known Incompatibilities
-~~* Corporate Clash's Acorn Acres street buildings (and likely YOTT as well)~~
-   ~~* This is an issue we are investigating. Substitute them with another playground's buildings in the storage dna file. This issue occurs in all released versions of the level editor as well.~~ This issue is fixed in [recent commits to libtoontown](https://github.com/OpenToontownTools/libtoontown)
 
 # FAQ
 ### Why can't I load a street from X playground?
@@ -63,10 +66,10 @@
 
 ### I did the setup properly, but the editor just closes on startup with no error message, how do I fix?
 * If you are downloading my redistributed copy of Panda from above, this may be an issue of having multiple installations of panda, and an incorrect one being targeted. Try one or both of the following:
-    * Edit the registry
+    * Option 1: Edit the registry
         * Open RegEdit
-        * Navigate to `Computer\HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\3.9\InstallPath`
-        * Change (Default)'s value to `C:\Panda3D-1.11.0-py39-x64\python`
-        * Change ExecutablePath's value to `C:\Panda3D-1.11.0-py39-x64\python\python.exe`
+        * Navigate to `Computer\HKEY_CURRENT_USER\SOFTWARE\Python\PythonCore\3.12\InstallPath`
+        * Change (Default)'s value to `C:\Panda3D-TTRMDev-1.11.0-x64\python`
+        * Change ExecutablePath's value to `C:\Panda3D-TTRMDev-1.11.0-x64\python\python.exe`
         * Save, and if that does not work try restarting your PC, or doing option #2
-    * Remove all other versions of Panda3D.
+    * Option 2: Remove all other versions of Panda3D.

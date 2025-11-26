@@ -1,7 +1,6 @@
 """ OpenLevelEditor Base Class - Drewcification 091420 """
 
 import argparse
-import asyncio
 import builtins
 import os
 import pathlib
@@ -11,7 +10,7 @@ import p3dimgui
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.ShowBase import ShowBase
-from imgui_bundle import imgui, imgui_ctx
+from imgui_bundle import imgui
 from panda3d.core import loadPrcFile, loadPrcFileData
 from tkinter import Tk, messagebox
 
@@ -70,7 +69,6 @@ class ToontownLevelEditor(ShowBase):
         parser = argparse.ArgumentParser(description = "Modes")
         parser.add_argument("--experimental", action = 'store_true', help = "Enables experimental features")
         parser.add_argument("--debug", action = 'store_true', help = "Enables debugging features")
-        parser.add_argument("--noupdate", action = 'store_true', help = "Disables Auto Updating")
         parser.add_argument("--png", action = 'store_true', help = "Forces PNG resources mode, if this is not "
                                                                    "specified, it will automatically determine the "
                                                                    "format")
@@ -134,10 +132,6 @@ class ToontownLevelEditor(ShowBase):
 
         # Setup the root for Tkinter!
         self.__createTk()
-
-        if not args.noupdate:
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(self.__checkUpdates())
 
         self.__addCullBins()
 
@@ -255,27 +249,6 @@ class ToontownLevelEditor(ShowBase):
         ShaderRegistry.register('dna:anim_prop',
                                 frag = 'resources/shaders/tt_sha_dna_anim_prop.frag',
                                 vert = 'resources/shaders/tt_sha_dna_anim_prop.vert')
-
-    async def __checkUpdates(self):
-        import aiohttp, webbrowser
-        async with aiohttp.ClientSession() as session:
-            try:
-                async with session.get(
-                        "https://raw.githubusercontent.com/OpenToontownTools/OpenLevelEditor/master/ver") as resp:
-                    ver = await resp.text()
-                    ver = ver.splitlines()[0]
-                    if ver != self.APP_VERSION:
-                        self.notify.info(f"Client is out of date! Latest: {ver} | Client: {self.APP_VERSION}")
-                        if messagebox.askokcancel("Error",
-                                                  f"Client is out of date!\nLatest: {ver} | Client: {self.APP_VERSION}. "
-                                                  f"Press OK to be taken to the download page."):
-                            webbrowser.open("https://github.com/OpenToontownTools/OpenLevelEditor/releases/latest")
-                    else:
-                        self.notify.info("Client is up to date!")
-            except:
-                messagebox.showerror(
-                        message = "There was an error checking for updates! This is likely an issue with your connection. "
-                                  "Press OK to continue using the application.")
 
 
 # Run it
