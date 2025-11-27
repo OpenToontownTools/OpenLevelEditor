@@ -27,8 +27,7 @@ class DNASerializer:
         dnaFilename = askopenfilename(defaultextension = '.dna',
                                       filetypes = (('DNA Files', '*.dna'), ('All files', '*')),
                                       initialdir = path,
-                                      title = 'Load DNA File',
-                                      parent = base.le.panel.component('hull'))
+                                      title = 'Load DNA File')
         DNASerializer.autoSaveCount = 0
         # Wait until auto saver is done managing files before loading new file
         while DNASerializer.autoSaverMgrRunning is True:
@@ -50,8 +49,7 @@ class DNASerializer:
                 defaultextension = '.dna',
                 filetypes = (('DNA Files', '*.dna'), ('All files', '*')),
                 initialdir = path,
-                title = 'Save DNA File as',
-                parent = base.le.panel.component('hull'))
+                title = 'Save DNA File as')
         DNASerializer.autoSaveCount = 0
         # Wait until auto saver is done managing files before saving new file
         while DNASerializer.autoSaverMgrRunning is True:
@@ -106,8 +104,8 @@ class DNASerializer:
 
         # Set the title bar to have the filename to make it easier
         # to remember what file you are working on
-        base.le.panel["title"] = 'Open Level Editor: ' + os.path.basename(filename)
-        base.le.panel.sceneGraphExplorer.update()
+        #base.le.panel["title"] = 'Open Level Editor: ' + os.path.basename(filename)
+        # TODO: Show the file name somewhere useul
         base.le.popupNotification(f"Loaded {os.path.basename(filename)}")
 
     @staticmethod
@@ -232,8 +230,7 @@ class DNASerializer:
                              ('Maya files', '*.mb'),
                              ('All files', '*')),
                 initialdir = path,
-                title = 'Load Curve File',
-                parent = base.le.panel.component('hull'))
+                title = 'Load Curve File')
         if streetCurveFilename:
             modelFile = loader.loadModel(Filename.fromOsSpecific(streetCurveFilename))
             # curves = modelFile.findAllMatches('**/+ClassicNurbsCurve')

@@ -125,7 +125,7 @@ class LevelEditor(NodePath, DirectObject):
         # Marker for showing next insertion point
         self.createInsertionMarker()
 
-        self.panel = LevelEditorPanel.LevelEditorPanel(self)
+        #self.panel = LevelEditorPanel.LevelEditorPanel(self)
 
         self.elementsPanel = ElementsPanel(self)
         # Used to store whatever edges and points are loaded in the level
@@ -147,6 +147,8 @@ class LevelEditor(NodePath, DirectObject):
         self.orthCam: bool = False
         self.occludersVisible: bool = False
         self.zonesColored: bool = False
+        self.planeSnap: bool = False
+        self.pathLabels: bool = False
 
 
     def startUp(self, dnaPath = None):
@@ -183,7 +185,7 @@ class LevelEditor(NodePath, DirectObject):
             ('select_sign_color', self.setDNATargetColor),
             ('select_sign_orientation', self.setDNATargetOrientation),
             ('select_sign_texture', self.setDNATargetCode, ['sign']),
-            ('select_baseline_style', self.panel.setSignBaselineStyle),
+            #('select_baseline_style', self.panel.setSignBaselineStyle),
             ('select_door_color', self.setDNATargetColor),
             ('select_door_orientation', self.setDNATargetOrientation),
             ('select_door_single_texture', self.setDNATargetCode, ['door']),
@@ -312,20 +314,6 @@ class LevelEditor(NodePath, DirectObject):
         # Editing the first hood id on the list
         self.outputFile = None
         self.setEditMode(NEIGHBORHOODS[0])
-        # Start of with first item in lists
-        self.panel.streetSelector.selectitem(0)
-        self.panel.streetSelector.invoke()
-        self.panel.toonBuildingSelector.selectitem(0)
-        self.panel.toonBuildingSelector.invoke()
-        if hasattr(self.panel, 'landmarkBuildingSelector'):
-            self.panel.landmarkBuildingSelector.selectitem(0)
-            self.panel.landmarkBuildingSelector.invoke()
-        self.panel.propSelector.selectitem(0)
-        self.panel.propSelector.invoke()
-        # Start off with 20 foot buildings
-        self.panel.twentyFootButton.invoke()
-        # Update scene graph explorer
-        self.panel.sceneGraphExplorer.update()
 
         # Karting
         # the key is the barricade number,  the data is a two element list,
@@ -335,6 +323,8 @@ class LevelEditor(NodePath, DirectObject):
         self.innerBarricadeDict = {}
 
         self.mouseMayaCamera = True
+        base.direct.cameraControl.lockRoll = True
+        base.direct.cameraControl.useMayaCamControls = True
 
         self.fDrive = False
 
@@ -554,12 +544,7 @@ class LevelEditor(NodePath, DirectObject):
         self.visitedEdges = []
 
         self.animPropDict = {}
-
-        if fUpdateExplorer:
-            self.panel.sceneGraphExplorer.update()
-
         self.outputFile = None
-        self.panel["title"] = 'Open Level Editor: No file loaded'
 
     def deleteToplevel(self):
         self.DNAData.remove(self.DNAToplevel)
@@ -584,7 +569,6 @@ class LevelEditor(NodePath, DirectObject):
         """ Disable level editor and destroy node path """
         self.disable()
         self.removeNode()
-        self.panel.destroy()
         if self.vgpanel:
             self.vgpanel.destroy()
 
@@ -682,13 +666,6 @@ class LevelEditor(NodePath, DirectObject):
         base.camera.wrtReparentTo(self.avatar)
         base.camera.setHpr(0, 0, 0)
         base.camera.setPos(0, -11.8125, 3.9375)
-
-        if self.panel.fColl.get():
-            self.collisionsOn()
-        if self.panel.fVis.get():
-            self.visibilityOn()
-        if self.panel.fColl.get() or self.panel.fVis.get():
-            self.traversalOn()
 
         if self.controlManager is None:
             self.controlManager = ControlManager.ControlManager()
@@ -1279,7 +1256,7 @@ class LevelEditor(NodePath, DirectObject):
                 if DNAIsDerivedFrom(dnaObject, DNA_NODE):
                     pos = selectedNode.getPos(base.direct.grid)
                     snapPos = base.direct.grid.computeSnapPoint(pos)
-                    if self.panel.fPlaneSnap.get():
+                    if self.planeSnap:
                         zheight = 0
                     else:
                         zheight = snapPos[2]
@@ -1297,7 +1274,7 @@ class LevelEditor(NodePath, DirectObject):
                     # First snap selected node path to grid
                     pos = selectedNode.getPos(base.direct.grid)
                     snapPos = base.direct.grid.computeSnapPoint(pos)
-                    if self.panel.fPlaneSnap.get():
+                    if self.planeSnap:
                         zheight = 0
                     else:
                         zheight = snapPos[2]
@@ -1707,12 +1684,12 @@ class LevelEditor(NodePath, DirectObject):
         self.landmarkBlock = self.landmarkBlock + 1
         return str(self.landmarkBlock)
 
-    def addLandmark(self, landmarkType, specialType, title = ''):
+    def addLandmark(self, landmarkType, specialType, title = '', isSz = False):
         # Record new landmark type
         self.setCurrent('toon_landmark_texture', landmarkType)
         block = self.getNextLandmarkBlock()
         print(landmarkType)
-        if self.panel.bldgIsSafeZone.get() and specialType == '':
+        if isSz and specialType == '':
             prefix = 'sz'
         else:
             prefix = 'tb'
@@ -1736,7 +1713,7 @@ class LevelEditor(NodePath, DirectObject):
             dnaNode = self.findDNANode(selectedNode)
             if DNAGetClassType(dnaNode) == DNA_LANDMARK_BUILDING:
                 dnaNode.setTitle(title)
-        if self.panel.bldgLabels.get():
+        if self.bldgLabels:
             self.labelBldgs()
 
     def addAnimBuilding(self, animBuildingType):
@@ -1948,7 +1925,7 @@ class LevelEditor(NodePath, DirectObject):
             self.DNATarget = dnaObject
             if base.direct.gotControl(modifiers):
                 menuMode = 'prop_color'
-            elif base.direct.gotAlt(modifiers) and self.panel.currentBaselineDNA:
+            elif base.direct.gotAlt(modifiers): #and self.panel.currentBaselineDNA:
                 menuMode = 'baseline_style'
             elif base.direct.gotShift(modifiers):
                 menuMode = 'sign_texture'
@@ -2007,8 +1984,8 @@ class LevelEditor(NodePath, DirectObject):
                 state = self.DNATarget.getCode()
             elif menuMode.find('color') >= 0:
                 state = self.DNATarget.getColor()
-                self.panel.setCurrentColor(state)
-                self.panel.setResetColor(state)
+                #self.panel.setCurrentColor(state)
+                #self.panel.setResetColor(state)
             elif menuMode.find('orientation') >= 0:
                 state = self.DNATarget.getCode()[-2:]
             elif menuMode == 'building_width':
@@ -2017,8 +1994,8 @@ class LevelEditor(NodePath, DirectObject):
                 state = self.DNATarget.getWindowCount()
             elif menuMode == 'building_style_all':
                 state = DNAFlatBuildingStyle(building = self.DNATarget)
-            elif menuMode == 'baseline_style':
-                state = DNABaselineStyle(baseline = self.panel.currentBaselineDNA)
+            #elif menuMode == 'baseline_style':
+            #    state = DNABaselineStyle(baseline = self.panel.currentBaselineDNA)
             elif menuMode == 'wall_style':
                 state = DNAWallStyle(wall = self.DNATarget)
             elif menuMode.startswith('animlist_'):
@@ -2043,8 +2020,8 @@ class LevelEditor(NodePath, DirectObject):
             # Do sign operations
             if base.direct.gotControl(modifiers):
                 menuMode = 'sign_color'
-            elif base.direct.gotAlt(modifiers) and self.panel.currentBaselineDNA:
-                menuMode = 'baseline_style'
+            #elif base.direct.gotAlt(modifiers) and self.panel.currentBaselineDNA:
+            #    menuMode = 'baseline_style'
             elif base.direct.gotAlt(modifiers):
                 menuMode = 'sign_orientation'
             else:
@@ -2117,8 +2094,8 @@ class LevelEditor(NodePath, DirectObject):
         # Update panel color if appropriate
         if self.DNATarget:
             objClass = DNAGetClassType(self.DNATarget)
-            if objClass in [DNA_WALL, DNA_WINDOWS, DNA_DOOR, DNA_FLAT_DOOR, DNA_CORNICE, DNA_PROP]:
-                self.panel.setCurrentColor(self.DNATarget.getColor())
+            #if objClass in [DNA_WALL, DNA_WINDOWS, DNA_DOOR, DNA_FLAT_DOOR, DNA_CORNICE, DNA_PROP]:
+            #    self.panel.setCurrentColor(self.DNATarget.getColor())
 
     def setDNATargetColor(self, color):
         if self.DNATarget:
@@ -2264,7 +2241,7 @@ class LevelEditor(NodePath, DirectObject):
             # Reset last landmark
             if DNAClassEqual(dnaNode, DNA_LANDMARK_BUILDING):
                 self.lastLandmarkBuildingDNA = dnaNode
-                self.panel.landmarkBuildingNameString.set(dnaNode.getTitle())
+                #self.panel.landmarkBuildingNameString.set(dnaNode.getTitle())
                 if self.showLandmarkBlockToggleGroup:
                     # Toggle old highlighting off:
                     self.toggleShowLandmarkBlock()
@@ -2898,9 +2875,9 @@ class LevelEditor(NodePath, DirectObject):
             self.outputDir = 'DaisysGarden'
         elif neighborhood == 'donalds_dreamland':
             self.outputDir = 'DonaldsDreamland'
-        self.panel.editMenu.selectitem(neighborhood)
+        #self.panel.editMenu.selectitem(neighborhood)
         self.styleManager.setEditMode(neighborhood)
-        self.panel.updateHeightList(self.getCurrent('building_height'))
+        #self.panel.updateHeightList(self.getCurrent('building_height'))
         self.selectMap(neighborhood)
 
     def getEditMode(self):
@@ -3026,7 +3003,7 @@ class LevelEditor(NodePath, DirectObject):
         label.setDepthTest(not self.labelsOnTop)
         label.setScale(3)
         label.setName(f'suit_point_label_{suitPoint.getIndex()}')
-        if not self.panel.pathLabels.get():
+        if not self.pathLabels:
             label.hide()
         if type == DNASuitPoint.STREETPOINT:
             color = Vec4(0.0, 0.0, 1.0, 1.0)
@@ -3478,7 +3455,7 @@ class LevelEditor(NodePath, DirectObject):
         return None
 
     def toggleZoneColors(self):
-        if self.panel.zoneColor.get():
+        if self.zonesColored:
             self.colorZones()
         else:
             self.clearZoneColors()
@@ -3898,7 +3875,7 @@ class LevelEditor(NodePath, DirectObject):
 
         base.direct.grid.fXyzSnap = 0
         base.direct.grid.fHprSnap = 0
-        self.panel.fPlaneSnap.set(0)
+        self.planeSnap = 0
         bldgGroup = self.consolidateStreetBuildings()
         bldgs = bldgGroup.getChildren()
 
@@ -4041,7 +4018,7 @@ class LevelEditor(NodePath, DirectObject):
 
         base.direct.grid.fXyzSnap = 0
         base.direct.grid.fHprSnap = 0
-        self.panel.fPlaneSnap.set(0)
+        self.planeSnap = 0
         bldgGroup = self.consolidateStreetBuildings()
         bldgs = bldgGroup.getChildren()
 
