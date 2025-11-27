@@ -421,8 +421,6 @@ class LevelEditor(NodePath, DirectObject):
                                 base.explorerManager.nodesToExplorers[self.NPToplevel].active = False
                         clickedVisibility, _ = imgui.menu_item("Visibility", "", False, True)
 
-
-
                 with imgui_ctx.begin_menu("Options") as optsMenu:
                     if optsMenu:
                         imgui.separator_text("Visual")
@@ -433,11 +431,9 @@ class LevelEditor(NodePath, DirectObject):
                             else:
                                 self.clearZoneColors()
 
-
                         clickedSuitPaths, _ = imgui.menu_item("Show Suit Paths", "", False, True)
 
                         clickedBattleCells, _ = imgui.menu_item("Show Battle Cells", "", False, True)
-
 
                         clickedSuitPreviews, _ = imgui.menu_item("Preview Cog Buildings", "", self.suitPreviewsToggled, True)
                         if clickedSuitPreviews:
@@ -450,7 +446,6 @@ class LevelEditor(NodePath, DirectObject):
                         clickedOccluders, _ = imgui.menu_item("Show Occluders", "", self.occludersVisible, True)
                         if clickedOccluders:
                             self.toggleVisibleOccluders()
-
 
                         imgui.separator_text("Labels")
                         clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", self.zoneLabels != [], True)
@@ -469,7 +464,6 @@ class LevelEditor(NodePath, DirectObject):
                         clickedSuitPathLabels, _ = imgui.menu_item("Show Suit Path Labels", "", False, True)
                         if self.bldgLabels or self.zoneLabels:
                             clickedLabelsOnTop, _ = imgui.menu_item("Labels Always On Top", "", False, True)
-
 
                         imgui.separator_text("Snapping")
                         clickedSnapPos, _ = imgui.menu_item("Position Snapping", "", False, True)
