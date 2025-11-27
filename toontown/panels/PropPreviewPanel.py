@@ -12,6 +12,10 @@ class PropPreviewPanel(DirectObject):
         DirectObject.__init__(self)
         self.levelEditor: LevelEditor = editor
 
+        # This is required so that ImGui won't render the texture
+        # upside down. (Sure hope this doesn't break anything else...)
+        loadPrcFileData('','copy-texture-inverted 1')
+
         self.buffer = base.win.makeTextureBuffer("PreviewBuffer", 256, 256)
         self.texture = self.buffer.getTexture()
         self.texref = base.imgui.loadTexture(self.texture)
@@ -76,6 +80,4 @@ class PropPreviewPanel(DirectObject):
         self.node.setPosHpr((-13.20, 70.70, -14.95), (0.00, 0.00, 0.00))
 
     def draw(self):
-        # Panda3D renders textures upside down, so we tell ImGui to render
-        # it the same way. (uv0 : (0, 1), uv1: (1, 0))
-        imgui.image(self.texref, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0))
+        imgui.image(self.texref, ImVec2(256, 256))
