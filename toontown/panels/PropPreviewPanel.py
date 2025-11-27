@@ -102,6 +102,8 @@ class PropPreviewPanel(DirectObject):
         self.node.calcTightBounds(p1, p2)
         d = p2 - p1
         biggest = max(d[0], d[2])
+        if biggest == 0:
+            biggest = 1
         s = 12 / biggest
         mid = (p1 + d / 2.0) * s
         self.node.setPos(-mid[0], -mid[1] + 1, -mid[2] + 5)
