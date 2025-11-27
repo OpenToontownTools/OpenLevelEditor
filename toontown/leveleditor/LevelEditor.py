@@ -128,6 +128,11 @@ class LevelEditor(NodePath, DirectObject):
         #self.panel = LevelEditorPanel.LevelEditorPanel(self)
 
         self.elementsPanel = ElementsPanel(self)
+
+        self.showControlsWindow = False
+        self.showAboutWindow = False
+        self.aboutLogoTexture = None
+
         # Used to store whatever edges and points are loaded in the level
         self.edgeDict = {}
         self.np2EdgeDict = {}
@@ -465,9 +470,45 @@ class LevelEditor(NodePath, DirectObject):
                             limeade.refresh()
 
                 clickedPlaceSelected, _ = imgui.menu_item("Place Selected Node", "", False, True)
+
+                with imgui_ctx.begin_menu("Help") as helpMenu:
+                    if helpMenu:
+                        _, self.showControlsWindow = imgui.menu_item("Controls", "", self.showControlsWindow)
+                        _, self.showAboutWindow = imgui.menu_item("About", "", self.showAboutWindow)
+
                 imgui.set_cursor_pos_x(imgui.get_window_size().x - 240)
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
+
         self.elementsPanel.draw()
+
+        if self.showControlsWindow:
+            imgui.set_next_window_size((1041, 622))
+            with imgui_ctx.begin("Controls", True, imgui.WindowFlags_.no_resize) as (_, controlWindowOpen):
+                if not controlWindowOpen:
+                    self.showControlsWindow = False
+                    return
+                imgui.text(LevelEditorGlobals.CONTROLS)
+
+        if self.showAboutWindow:
+            with imgui_ctx.begin("About", True, imgui.WindowFlags_.always_auto_resize) as (_, aboutWindowOpen):
+                if not aboutWindowOpen:
+                    self.showAboutWindow = False
+                    return
+                if not self.aboutLogoTexture:
+                    self.aboutLogoTexture = base.imgui.loadTexture('resources/openttle_icon.png')
+
+                imgui.image(self.aboutLogoTexture, (128, 128), (0, 1), (1, 0))
+
+                imgui.same_line()
+                with imgui_ctx.begin_group():
+                    imgui.text(f"Open Level Editor {base.APP_VERSION}")
+                    imgui.text("Maintained by drewcification#5131")
+                    imgui.text_link_open_url("For more information, check out the GitHub repo.", "https://github.com/OpenToontownTools/ToontownLevelEditor")
+        else:
+            # Make sure that the logo texture gets cleaned up
+            if self.aboutLogoTexture:
+                base.imgui.removeTexture(self.aboutLogoTexture)
+                self.aboutLogoTexture = None
 
     # ENABLE/DISABLE
     def enable(self):
