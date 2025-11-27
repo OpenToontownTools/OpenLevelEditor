@@ -26,7 +26,7 @@ class ElementsPanel(DirectObject):
     def draw(self):
         if not self.isOpen:
             return
-        with imgui_ctx.begin("Elements", True):  # the panel containing your tabs
+        with imgui_ctx.begin("Elements"):  # the panel containing your tabs
 
             if imgui.begin_tab_bar("##tabs"):
 

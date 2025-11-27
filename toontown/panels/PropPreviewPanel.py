@@ -1,10 +1,18 @@
-from panda3d.core import NodePath, VBase3
+import enum
+
+from direct.showbase.ShowBaseGlobal import globalClock
+from panda3d.core import NodePath, VBase3, Point3
 from direct.showbase.DirectObject import DirectObject
 from imgui_bundle import imgui, ImVec2
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from toontown.leveleditor.LevelEditor import LevelEditor
+
+class PropType(enum.Enum):
+    STREET = 0
+    LANDMARK = 1
+    PROP = 2
 
 class PropPreviewPanel(DirectObject):
 
@@ -25,14 +33,19 @@ class PropPreviewPanel(DirectObject):
         self.camera = base.makeCamera(self.buffer)
         self.render = NodePath("PreviewRender")
         self.camera.reparentTo(self.render)
-
-        self.node = None
+        self.nodeHolder: NodePath = self.render.attachNewNode('nodeHolder')
+        self.nodeHolder.setPosHpr((0.00, 31.50, -6.15), (0.00, 0.00, 0.00))
+        self.propType: PropType = PropType.STREET
+        self.node: NodePath | None = None
 
     def cleanupRender(self):
         for node in self.render.children:
-            if node == self.camera:
+            if node in (self.camera, self.nodeHolder):
                 continue
             node.removeNode()
+        if self.node:
+            self.node.removeNode()
+            self.node = None
 
     def previewStreet(self, streetType: str):
         self.cleanupRender()
@@ -47,8 +60,10 @@ class PropPreviewPanel(DirectObject):
         newDNAStreet.setCurbTexture(
                 'street_curb_' + self.levelEditor.neighborhoodCode.replace("TTOFF_", '') + '_tex')
 
-        self.node = newDNAStreet.traverse(self.render, DNASTORE, 1)
-        self.node.setPosHpr(self.camera, (0.00, 203.10, -2.20), (1.00, 90.00, 0.00))
+        node = newDNAStreet.traverse(self.render, DNASTORE, 1)
+        node.setP(90.00)
+        self.propType = PropType.STREET
+        self.centerAndReparentNode(node)
 
     def previewProp(self, propType: str):
         self.cleanupRender()
@@ -56,8 +71,9 @@ class PropPreviewPanel(DirectObject):
         newDNAProp.setCode(propType)
         newDNAProp.setPos(VBase3(0))
         newDNAProp.setHpr(VBase3(0))
-        self.node = newDNAProp.traverse(self.render, DNASTORE, 1)
-        self.node.setPosHpr((0.00, 31.50, -6.15), (0.00, 0.00, 0.00))
+        node = newDNAProp.traverse(self.render, DNASTORE, 1)
+        self.propType = PropType.PROP
+        self.centerAndReparentNode(node)
 
     def previewLandmark(self, landmarkType: str, specialType: str):
         self.cleanupRender()
@@ -71,13 +87,30 @@ class PropPreviewPanel(DirectObject):
         newDNALandmarkBuilding.setBuildingType(specialType)
         newDNALandmarkBuilding.setPos(VBase3(0))
         newDNALandmarkBuilding.setHpr(VBase3(0))
-        # Headquarters do not have doors
-        if specialType not in ['hq', 'kartshop']:
-            newDNADoor = self.levelEditor.createDoor('landmark_door')
-            newDNALandmarkBuilding.add(newDNADoor)
+       # # Headquarters do not have doors
+       # if specialType not in ['hq', 'kartshop']:
+       #     newDNADoor = self.levelEditor.createDoor('landmark_door')
+       #     newDNALandmarkBuilding.add(newDNADoor)
 
-        self.node = newDNALandmarkBuilding.traverse(self.render, DNASTORE, 1)
-        self.node.setPosHpr((-13.20, 70.70, -14.95), (0.00, 0.00, 0.00))
+        node = newDNALandmarkBuilding.traverse(self.render, DNASTORE, 1)
+        self.propType = PropType.LANDMARK
+        self.centerAndReparentNode(node)
+
+    def centerAndReparentNode(self, node: NodePath):
+        self.node = node
+        p1, p2 = Point3(), Point3()
+        self.node.calcTightBounds(p1, p2)
+        d = p2 - p1
+        biggest = max(d[0], d[2])
+        s = 12 / biggest
+        mid = (p1 + d / 2.0) * s
+        self.node.setPos(-mid[0], -mid[1] + 1, -mid[2] + 5)
+        self.node.setScale(Vec3(s))
+        self.node.reparentTo(self.nodeHolder)
 
     def draw(self):
+        if self.propType == PropType.STREET:
+            self.nodeHolder.setH(0)
+        else:
+            self.nodeHolder.setH(self.nodeHolder, 30 * globalClock.getDt())
         imgui.image(self.texref, ImVec2(256, 256))

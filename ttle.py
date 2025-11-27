@@ -149,12 +149,9 @@ class ToontownLevelEditor(ShowBase):
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
 
-        style = imgui.get_style()
-        scale_factor = 2.0
-        #style.scale_all_sizes(scale_factor)
         io = imgui.get_io()
         io.config_dpi_scale_fonts = True
-        font = io.fonts.add_font_from_file_ttf('resources/fonts/ImpressBT.ttf', 30)
+        font = io.fonts.add_font_from_file_ttf('resources/fonts/ImpressBT.ttf', 20*settings.get('panel-scaling'))
         io.font_default = font
 
         self.accept('imgui-new-frame', self.draw)
