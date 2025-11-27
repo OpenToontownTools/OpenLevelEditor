@@ -3,7 +3,9 @@
 from direct.showbase.DirectObject import DirectObject
 from imgui_bundle import imgui, imgui_ctx
 
+from toontown.panels.AnimatedPropPanel import AnimatedPropPanel
 from toontown.panels.FlatBuildingPanel import FlatBuildingPanel
+from toontown.panels.InteractivePropPanel import InteractivePropPanel
 from toontown.panels.LandmarkPanel import LandmarkPanel
 from toontown.panels.PropSelectionPanel import PropSelectionPanel
 from toontown.panels.StreetSelectionPanel import StreetSelectionPanel
@@ -21,6 +23,8 @@ class ElementsPanel(DirectObject):
         self.propPanel = PropSelectionPanel(editor, self.previewPanel)
         self.flatBuildingPanel = FlatBuildingPanel(editor)
         self.landmarkPanel = LandmarkPanel(editor, self.previewPanel)
+        self.animPropPanel = AnimatedPropPanel(editor, self.previewPanel)
+        self.interactivePropPanel = InteractivePropPanel(editor, self.previewPanel)
 
 
     def draw(self):
@@ -30,7 +34,6 @@ class ElementsPanel(DirectObject):
 
             if imgui.begin_tab_bar("##tabs"):
 
-                # Streets Tab
                 if imgui.begin_tab_item("Streets")[0]:
                     self.streetPanel.draw()
 
@@ -44,10 +47,17 @@ class ElementsPanel(DirectObject):
                     self.landmarkPanel.draw()
                     imgui.end_tab_item()
 
-                # Props Tab
                 if imgui.begin_tab_item("Props")[0]:
                     self.propPanel.draw()
 
+                    imgui.end_tab_item()
+
+                if imgui.begin_tab_item("Anim Props")[0]:
+                    self.animPropPanel.draw()
+                    imgui.end_tab_item()
+
+                if imgui.begin_tab_item("Interactive Props")[0]:
+                    self.interactivePropPanel.draw()
                     imgui.end_tab_item()
 
                 imgui.end_tab_bar()

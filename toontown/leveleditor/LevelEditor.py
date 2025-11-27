@@ -35,6 +35,7 @@ from .LevelStyleManager import *
 from .PieMenu import *
 from .RadialMenu import RadialMenu, RadialItem
 from ..panels.ElementsPanel import ElementsPanel
+from ..panels.SignPanel import SignPanel
 
 # Force direct and tk to be on
 base.startDirect(fWantDirect = 1, fWantTk = 1)
@@ -125,9 +126,10 @@ class LevelEditor(NodePath, DirectObject):
         # Marker for showing next insertion point
         self.createInsertionMarker()
 
-        #self.panel = LevelEditorPanel.LevelEditorPanel(self)
+        self.panel = LevelEditorPanel.LevelEditorPanel(self)
 
         self.elementsPanel = ElementsPanel(self)
+        self.signPanel = SignPanel(self)
 
         self.showControlsWindow = False
         self.showAboutWindow = False
@@ -407,6 +409,8 @@ class LevelEditor(NodePath, DirectObject):
                             self.elementsPanel.isOpen = not self.elementsPanel.isOpen
 
                         clickedSign, _ = imgui.menu_item("Sign Editor", "", False, True)
+                        if clickedSign:
+                            self.signPanel.isOpen = not self.signPanel.isOpen
 
                         clickedExplorer, _ = imgui.menu_item("Scene Graph Explorer", "", self.NPToplevel in base.explorerManager.nodesToExplorers, True)
                         if clickedExplorer:
@@ -480,6 +484,7 @@ class LevelEditor(NodePath, DirectObject):
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
 
         self.elementsPanel.draw()
+        self.signPanel.draw()
 
         if self.showControlsWindow:
             imgui.set_next_window_size((1041, 622))
@@ -518,6 +523,11 @@ class LevelEditor(NodePath, DirectObject):
 
         for event in self.overrideEvents:
             event[1].ignore(event[0])
+
+        for key in base.direct.directOnlyKeyMap.keys():
+            base.direct.ignore(key)
+        for key in base.direct.hotKeyMap.keys():
+            base.direct.ignore(key)
 
         # Add all the action events
         for event in self.actionEvents:
@@ -992,6 +1002,8 @@ class LevelEditor(NodePath, DirectObject):
                 node.hide()
 
     def setReparentTarget(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         if base.direct.selected.last:
             base.direct.setActiveParent(base.direct.selected.last)
             self.popupNotification(f'Set reparent target to {base.direct.selected.last}')
@@ -2730,6 +2742,8 @@ class LevelEditor(NodePath, DirectObject):
             return 1
 
     def autoPositionGrid(self, fLerp = 0):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         taskMgr.remove('autoPositionGrid')
         # Move grid to prepare for placement of next object
         selectedNode = base.direct.selected.last
@@ -2849,6 +2863,8 @@ class LevelEditor(NodePath, DirectObject):
         return planeIntersect(mouseOrigin, mouseDir, ZERO_POINT, Z_AXIS)
 
     def jumpToInsertionPoint(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         """ Move selected object to insertion point """
         selectedNode = base.direct.selected.last
         if selectedNode:
@@ -3430,6 +3446,8 @@ class LevelEditor(NodePath, DirectObject):
         file.close()
 
     def toggleOrth(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         if not self.orthCam:
             base.cam.node().setLens(self.orthLens)
         else:
@@ -3583,6 +3601,8 @@ class LevelEditor(NodePath, DirectObject):
         return block
 
     def addToLandmarkBlock(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         dnaRoot = self.selectedDNARoot
         if dnaRoot and self.lastLandmarkBuildingDNA:
             if DNAClassEqual(dnaRoot, DNA_FLAT_BUILDING):
@@ -4248,6 +4268,8 @@ class LevelEditor(NodePath, DirectObject):
                 ).start()
 
     async def beginBoxSelection(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
         self.popupNotification('entered selection mode')
 
         self.isSelecting = True
