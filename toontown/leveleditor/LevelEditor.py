@@ -16,8 +16,7 @@ from direct.controls import ControlManager
 from direct.controls import NonPhysicsWalker
 from direct.directtools.DirectGlobals import *
 from direct.gui import DirectGui
-from imgui_bundle import imgui_ctx
-from imgui_bundle._imgui_bundle import imgui
+from imgui_bundle import imgui_ctx, imgui
 from panda3d.core import BoundingHexahedron
 from typing import Tuple, Any
 
@@ -73,7 +72,7 @@ for hood in base.hoods:
                     storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_WINTER_PATH]
         for storage in storages:
             loadDNAFile(DNASTORE, storage, CSDefault, 1)
-            
+
 if base.config.GetString("minigame") == "ttoff:prophunt":
     loadDNAFile(DNASTORE, 'phase_14.5/dna/ttoff_d_strg_ara_mg_phunt.dna', CSDefault, 1)
 

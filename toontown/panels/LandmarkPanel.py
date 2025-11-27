@@ -1,12 +1,9 @@
 # LandmarkPanel
 # Created by drewc Nov 25, 2025
 from direct.showbase.DirectObject import DirectObject
-from imgui_bundle import imgui_ctx
-from imgui_bundle._imgui_bundle import imgui
-from imgui_bundle.demos_python.demos_immvision.demo_immvision_no_opencv import ImVec2
+from imgui_bundle import imgui, ImVec2
 
 from toontown.leveleditor import LevelEditorGlobals
-
 
 class LandmarkPanel(DirectObject):
 
