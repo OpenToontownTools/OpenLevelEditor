@@ -1466,7 +1466,7 @@ class LevelEditor(NodePath, DirectObject):
 
     def setRandomBuildingStyle(self, dnaNode, name = 'building'):
         """ Initialize a new DNA Flat building to a random building style """
-        buildingType = self.getCurrent('building_type')
+        buildingType = 'random'
         if buildingType == 'random':
             buildingHeight = self.getCurrent('building_height')
             heightList = self.getRandomHeightList(buildingHeight)
