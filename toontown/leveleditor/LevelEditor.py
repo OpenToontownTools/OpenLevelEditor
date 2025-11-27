@@ -127,6 +127,7 @@ class LevelEditor(NodePath, DirectObject):
 
         self.panel = LevelEditorPanel.LevelEditorPanel(self)
 
+        self.elementsPanel = ElementsPanel(self)
         # Used to store whatever edges and points are loaded in the level
         self.edgeDict = {}
         self.np2EdgeDict = {}
@@ -141,10 +142,12 @@ class LevelEditor(NodePath, DirectObject):
         self.bldgLabels = []
         self.animPropDict = {}
 
-        self.collisionsToggled = False
-        self.suitPreviewsToggled = False
-        self.orthCam = False
-        self.occludersVisible = False
+        self.collisionsToggled: bool = False
+        self.suitPreviewsToggled: bool = False
+        self.orthCam: bool = False
+        self.occludersVisible: bool = False
+        self.zonesColored: bool = False
+
 
     def startUp(self, dnaPath = None):
         # Initialize LevelEditor variables DNAData, DNAToplevel, NPToplevel
@@ -241,7 +244,6 @@ class LevelEditor(NodePath, DirectObject):
             ('alt-f12', self.renderMap),  # doesnt do automatic stuff, likely wont get used, but just incase
             ('control-c', self.toggleVisibleCollisions),
             ('control-s', DNASerializer.outputDNADefaultFile),
-            ('tab', self.enterGlobalRadialMenu),
             ('s', self.beginBoxSelection),
             ('alt-s', self.toggleSuitBuildingPreviews),
             ('alt-o', self.toggleVisibleOccluders),
@@ -360,7 +362,6 @@ class LevelEditor(NodePath, DirectObject):
 
         AutoSaver.initializeAutoSaver()
 
-        self.elementsPanel = ElementsPanel(self)
 
     def __mouse1(self):
         if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
@@ -425,14 +426,51 @@ class LevelEditor(NodePath, DirectObject):
                 with imgui_ctx.begin_menu("Options") as optsMenu:
                     if optsMenu:
                         imgui.separator_text("Visual")
-                        clickedShowGrid, _ = imgui.menu_item("Show Grid", "", False, True)
-                        clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", False, True)
-                        clickedShowBldgLabels, _ = imgui.menu_item("Show Building Labels", "", False, True)
-                        clickedLabelsOnTop, _ = imgui.menu_item("Labels Always On Top", "", False, True)
+                        clickedColorZones, _ = imgui.menu_item("Color Zones", "", self.zonesColored, True)
+                        if clickedColorZones:
+                            if not self.zonesColored:
+                                self.colorZones()
+                            else:
+                                self.clearZoneColors()
+
+
                         clickedSuitPaths, _ = imgui.menu_item("Show Suit Paths", "", False, True)
-                        clickedSuitPathLabels, _ = imgui.menu_item("Show Suit Path Labels", "", False, True)
+
                         clickedBattleCells, _ = imgui.menu_item("Show Battle Cells", "", False, True)
-                        clickedColorZones, _ = imgui.menu_item("Color Zones", "", False, True)
+
+
+                        clickedSuitPreviews, _ = imgui.menu_item("Preview Cog Buildings", "", self.suitPreviewsToggled, True)
+                        if clickedSuitPreviews:
+                            self.toggleSuitBuildingPreviews()
+
+                        clickedShowGrid, _ = imgui.menu_item("Show Grid", "", False, True)
+                        clickedCollisionBoxes, _ = imgui.menu_item("Show Collisions", "", self.collisionsToggled, True)
+                        if clickedCollisionBoxes:
+                            self.toggleVisibleCollisions()
+                        clickedOccluders, _ = imgui.menu_item("Show Occluders", "", self.occludersVisible, True)
+                        if clickedOccluders:
+                            self.toggleVisibleOccluders()
+
+
+                        imgui.separator_text("Labels")
+                        clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", self.zoneLabels != [], True)
+                        if clickedShowLabels:
+                            if not self.zoneLabels:
+                                self.labelZones()
+                            else:
+                                self.clearZoneLabels()
+                        clickedShowBldgLabels, _ = imgui.menu_item("Show Building Labels", "", self.bldgLabels != [], True)
+                        if clickedShowBldgLabels:
+                            if not self.bldgLabels:
+                                self.labelBldgs()
+                            else:
+                                self.clearBldgLabels()
+
+                        clickedSuitPathLabels, _ = imgui.menu_item("Show Suit Path Labels", "", False, True)
+                        if self.bldgLabels or self.zoneLabels:
+                            clickedLabelsOnTop, _ = imgui.menu_item("Labels Always On Top", "", False, True)
+
+
                         imgui.separator_text("Snapping")
                         clickedSnapPos, _ = imgui.menu_item("Position Snapping", "", False, True)
                         clickedSnapRot, _ = imgui.menu_item("Rotation Snapping", "", False, True)
@@ -3452,6 +3490,7 @@ class LevelEditor(NodePath, DirectObject):
             self.clearZoneColors()
 
     def colorZones(self):
+        self.zonesColored = True
         # Give each zone a random color to see them better
         visGroups = self.getDNAVisGroups(self.NPToplevel)
         for visGroup in visGroups:
@@ -3461,6 +3500,7 @@ class LevelEditor(NodePath, DirectObject):
                              0.5 + random.random() / 2.0, 1.0)
 
     def clearZoneColors(self):
+        self.zonesColored = False
         # Clear random colors
         visGroups = self.getDNAVisGroups(self.NPToplevel)
         for visGroup in visGroups:
@@ -4163,45 +4203,6 @@ class LevelEditor(NodePath, DirectObject):
             else:
                 return self.findBldgEndPoint(bldgWidth, curve, currT, currPoint, startT = midT, endT = endT,
                                              rd = rd + 1)
-
-    async def enterGlobalRadialMenu(self):
-        """ Radial Menu with general commands """
-
-        # Load the gui model
-        gui = await loader.loadModel("resources/level_editor_gui.bam", blocking = False)
-
-        # Create the menu with the items
-        rm = RadialMenu(
-                RadialItem(gui.find("**/icon_cancel"), 'Cancel'),
-                RadialItem(gui.find("**/icon_save"), 'Save'),
-                RadialItem(gui.find("**/icon_landmark"), 'Toggle Landmark / Flat Wall Linking Mode'),
-                RadialItem(gui.find("**/icon_suit"), 'Toggle Suit Building Previews'),
-                RadialItem(gui.find("**/icon_collision"), 'Toggle Collision Boundry Display')
-                )
-        rm.activate()
-
-        del gui
-
-        # Wait for the user to release tab, simpler way of accept('tab-up', exitGlobalRadialMenu)
-        await messenger.future('tab-up')
-
-        # Now that the user has released tab,
-        # Get the choice
-        result = rm.getChoice()
-
-        # Destroy everything
-        rm.deactivate()
-        rm.destroy()
-
-        # Do the selected action
-        if result == 1:
-            self.outputDNADefaultFile()
-        if result == 2:
-            self.toggleShowLandmarkBlock()
-        if result == 3:
-            self.toggleSuitBuildingPreviews()
-        if result == 4:
-            self.toggleVisibleCollisions()
 
     @staticmethod
     def popupNotification(string: str):
