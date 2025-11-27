@@ -470,7 +470,7 @@ class LevelEditor(NodePath, DirectObject):
                         clickedSnapRot, _ = imgui.menu_item("Rotation Snapping", "", False, True)
                         #clickedSnapPlane, _ = imgui.menu_item("Plane Snapping", "", False, True)
                         imgui.separator_text("Debug")
-                        clickedRefreshLimade, _ = imgui.menu_item("Reload Code", "", False, True)
+                        clickedRefreshLimade, _ = imgui.menu_item("Reload Code", "Save First! Crashes Likely!", False, True)
                         if clickedRefreshLimade:
                             limeade.refresh()
 
