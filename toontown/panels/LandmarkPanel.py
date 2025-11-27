@@ -4,18 +4,22 @@ from direct.showbase.DirectObject import DirectObject
 from imgui_bundle import imgui, ImVec2
 
 from toontown.leveleditor import LevelEditorGlobals
+from toontown.panels.PropPreviewPanel import PropPreviewPanel
 
 class LandmarkPanel(DirectObject):
 
-    def __init__(self, editor):
+    def __init__(self, editor, preview: PropPreviewPanel):
         DirectObject.__init__(self)
         self.levelEditor = editor
+        self.preview: PropPreviewPanel = preview
         self.selectedProp = ""
         self.selectedSpecial = ""
         self.buildingName = ""
 
     def draw(self):
         avail_w, avail_h = imgui.get_content_region_avail()
+        imgui.dummy((avail_w / 5, 0)) ; imgui.same_line()
+        self.preview.draw()
         if imgui.button("Place", ImVec2(avail_w, 0)):
             self.levelEditor.addLandmark(self.selectedProp, self.selectedSpecial)
 
@@ -33,4 +37,5 @@ class LandmarkPanel(DirectObject):
                 clicked, _ = imgui.selectable(prop, isSelected)
                 if clicked:
                     self.selectedProp = prop
+                    self.preview.previewLandmark(self.selectedProp, self.selectedSpecial)
             imgui.end_list_box()

@@ -1680,6 +1680,9 @@ class LevelEditor(NodePath, DirectObject):
         # Now place new building in the world
         self.initDNANode(newDNAFlatBuilding)
 
+    def getCurrentLandmarkBlock(self):
+        return str(self.landmarkBlock)
+
     def getNextLandmarkBlock(self):
         self.landmarkBlock = self.landmarkBlock + 1
         return str(self.landmarkBlock)

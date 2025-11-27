@@ -141,14 +141,14 @@ class ToontownLevelEditor(ShowBase):
         ShowBase.__init__(self)
         aspect2d.setAntialias(AntialiasAttrib.MAuto)
 
+        p3dimgui.init(wantExplorerManager = False)
+        # Load up our own Scene Graph Explorer
+        base.explorerManager = ExplorerManager()
 
         from toontown.leveleditor import LevelEditor
         self.le = LevelEditor.LevelEditor()
         self.le.startUp(args.dnaPath)
 
-        p3dimgui.init(wantExplorerManager = False)
-
-        base.explorerManager = ExplorerManager()
         style = imgui.get_style()
         scale_factor = 2.0
         #style.scale_all_sizes(scale_factor)
@@ -240,7 +240,7 @@ class ToontownLevelEditor(ShowBase):
         cbm = CullBinManager.getGlobalPtr()
         cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
-        
+
     @staticmethod
     def __registerShaders():
         ShaderRegistry.register('render:black_and_white',

@@ -7,6 +7,7 @@ from toontown.panels.FlatBuildingPanel import FlatBuildingPanel
 from toontown.panels.LandmarkPanel import LandmarkPanel
 from toontown.panels.PropSelectionPanel import PropSelectionPanel
 from toontown.panels.StreetSelectionPanel import StreetSelectionPanel
+from toontown.panels.PropPreviewPanel import PropPreviewPanel
 
 
 class ElementsPanel(DirectObject):
@@ -15,10 +16,11 @@ class ElementsPanel(DirectObject):
         DirectObject.__init__(self)
         self.levelEditor = editor
         self.isOpen = True
-        self.streetPanel = StreetSelectionPanel(editor)
-        self.propPanel = PropSelectionPanel(editor)
+        self.previewPanel = PropPreviewPanel(editor)
+        self.streetPanel = StreetSelectionPanel(editor, self.previewPanel)
+        self.propPanel = PropSelectionPanel(editor, self.previewPanel)
         self.flatBuildingPanel = FlatBuildingPanel(editor)
-        self.landmarkPanel = LandmarkPanel(editor)
+        self.landmarkPanel = LandmarkPanel(editor, self.previewPanel)
 
 
     def draw(self):

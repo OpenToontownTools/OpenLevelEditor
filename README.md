@@ -41,7 +41,7 @@ Version 2.0 brings a whole new UI using ImGui, replacing the outdated Tk UI.
 ## Credits
 * [drewcification](https://github.com/drewc5131) - Project Lead | Developer
 * [Disyer](https://github.com/darktohka/) - Updating [LIBTOONTOWN](https://github.com/darktohka/libtoontown) to be compatible with modern panda and python 3 | Other Assistance
-* [LittleCat](https://github.com/LittleToonCat) - Creating [panda3d-imgui](https://github.com/LittleToonCat/panda3d-imgui) and assisting with implementation
+* [Little Cat](https://github.com/LittleToonCat) - Creating [panda3d-imgui](https://github.com/LittleToonCat/panda3d-imgui) and assisting with implementation
 * [Any other contributors are listed on the side](https://github.com/OpenToontownTools/TTOpenLevelEditor/graphs/contributors)
 
 ## Help
