@@ -10,6 +10,7 @@ import p3dimgui
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.ShowBase import ShowBase
+from direct.stdpy import file
 from imgui_bundle import imgui
 from panda3d.core import loadPrcFile, loadPrcFileData
 from tkinter import Tk, messagebox
@@ -54,6 +55,9 @@ class ToontownLevelEditor(ShowBase):
         # to have it affect window related stuff
         loadPrcFile('editor.prc')
 
+        if file.exists('userconfig.prc'):
+            loadPrcFile('userconfig.prc')
+
         builtins.userfiles = self.config.GetString('userfiles-directory')
 
         if not os.path.exists(userfiles):
@@ -97,10 +101,15 @@ class ToontownLevelEditor(ShowBase):
             loadPrcFileData("", f"compiler {args.compiler[0]}")
         if args.holiday:
             loadPrcFileData("", f"holiday {args.holiday[0]}")
-        if args.png:
-            loadPrcFileData("", "png-textures true")
         if args.minigame:
             loadPrcFileData("", f"minigame {args.minigame[0]}")
+
+
+        server = SERVER_TO_ID.get(args.server[0].lower(), DEFAULT_SERVER)
+        self.server = server
+
+        if args.png or server == TOONTOWN_HOSTTKVR:
+            loadPrcFileData("", "png-textures true")
         else:
             # If we don't specify png, we can search
             # we can use the eyes texture
@@ -112,10 +121,6 @@ class ToontownLevelEditor(ShowBase):
                 messagebox.showerror(
                         message = "There was an error located resources!\n"
                                   "Make sure you put the phase folders in the root folder!")
-
-        server = SERVER_TO_ID.get(args.server[0].lower(), DEFAULT_SERVER)
-        self.server = server
-
         self.hoods = args.hoods
         # HACK: Check for dnaPath in args.hoods
         for hood in self.hoods[:]:
@@ -158,7 +163,6 @@ class ToontownLevelEditor(ShowBase):
 
     def draw(self):
         self.le.drawImgui()
-
 
     def setFrameRateMeter(self, flag):
         return

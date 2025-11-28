@@ -2,6 +2,8 @@ import builtins
 import glob
 import json
 import os
+import pathlib
+import posixpath
 import re
 import random
 import sys
@@ -11,7 +13,8 @@ import limeade
 from datetime import datetime
 from tkinter.filedialog import *
 from tkinter.messagebox import showinfo
-
+from direct.stdpy import glob
+from direct.stdpy import file
 from direct.controls import ControlManager
 from direct.controls import NonPhysicsWalker
 from direct.directtools.DirectGlobals import *
@@ -34,6 +37,7 @@ from .EditorUtil import *
 from .LevelStyleManager import *
 from .PieMenu import *
 from .RadialMenu import RadialMenu, RadialItem
+from ..fixes.TTHTStorageConverter import convertHostileTakeoverStorage
 from ..panels.ElementsPanel import ElementsPanel
 from ..panels.SignPanel import SignPanel
 
@@ -46,9 +50,27 @@ useSnowTree = base.config.GetBool("use-snow-tree", 0)
 
 builtins.DNASTORE = DNASTORE = DNAStorage()
 
-if base.config.GetString("project") == "offline":
+if base.server == TOONTOWN_OFFLINE:
     loadDNAFile(DNASTORE, 'phase_4/dna/ttrm_d_strg.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_5/dna/ttrm_d_strg_town.dna', CSDefault, 1)
+elif base.server == TOONTOWN_HOSTTKVR:
+    convertHostileTakeoverStorage(ConfigVariableString("root-dir", "").getValue()+"/phase_3/dna/storage.dna",
+                                  ConfigVariableString("root-dir", "").getValue()+"/phase_3/dna/ole_ttht_strg_temp.dna")
+    loadDNAFile(DNASTORE, "phase_3/dna/ole_ttht_strg_temp.dna", CSDefault, 1)
+    # todo: delete the temp file after it loads
+    for code, path in {
+    'suit': 'phase_3/models/fonts/vtRemingtonPortable.ttf',
+    'mickey': 'phase_3/models/fonts/MickeyFont.bam',
+    'humanist': 'phase_3/models/fonts/ImpressBT.ttf',
+    'TT_Comedy': "phase_3/models/fonts/Comedy.ttf",
+    'DD_Portago': "phase_3/models/fonts/Portago.ttf",
+    'MM_Musicals':"phase_3/models/fonts/Musicals.ttf",
+    'DG_Ironwork': "phase_3/models/fonts/Ironwork.ttf",
+    'BR_Aftershock': "phase_3/models/fonts/Aftershock.ttf",
+    'DL_JiggeryPokery': "phase_3/models/fonts/JiggeryPokery.ttf"
+}.items():
+        DNASTORE.storeFont(code, loader.loadFont(path))
+
 else:
     loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)
@@ -261,6 +283,7 @@ class LevelEditor(NodePath, DirectObject):
             ('f8', self.createNewVisGroup),
             ('mouse1', self.__mouse1),
             ('mouse3', self.__mouse3),
+            ['delete', self.removeAllSelected],
             ]
 
         self.overrideEvents = [
@@ -359,6 +382,10 @@ class LevelEditor(NodePath, DirectObject):
 
         AutoSaver.initializeAutoSaver()
 
+    def removeAllSelected(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
+        base.direct.selected.removeAll()
 
     def __mouse1(self):
         if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
@@ -1826,11 +1853,11 @@ class LevelEditor(NodePath, DirectObject):
         newDNAStreet.setPos(VBase3(0))
         newDNAStreet.setHpr(VBase3(0))
         newDNAStreet.setStreetTexture(
-                'street_street_' + self.neighborhoodCode.replace("TTOFF_", '') + '_tex')
+                'street_street_' + self.neighborhoodCode.replace("TTOFF_", '').replace('TTHT_', '') + '_tex')
         newDNAStreet.setSidewalkTexture(
-                'street_sidewalk_' + self.neighborhoodCode.replace("TTOFF_", '') + '_tex')
+                'street_sidewalk_' + self.neighborhoodCode.replace("TTOFF_", '').replace('TTHT_', '') + '_tex')
         newDNAStreet.setCurbTexture(
-                'street_curb_' + self.neighborhoodCode.replace("TTOFF_", '') + '_tex')
+                'street_curb_' + self.neighborhoodCode.replace("TTOFF_", '').replace('TTHT_', '') + '_tex')
         # Now place new street in the world
         self.initDNANode(newDNAStreet)
 
@@ -1875,7 +1902,10 @@ class LevelEditor(NodePath, DirectObject):
         baseline.setScale(VBase3(0.7, 1.0, 0.7))
         newDNASign.add(baseline)
 
-        DNASetBaselineString(baseline, "Toon Shop")
+        if base.server == TOONTOWN_HOSTTKVR:
+            DNASetBaselineString(baseline, " ") # hack to make parsers happy when we dont need text since we use unique textures
+        else:
+            DNASetBaselineString(baseline, "Toon Shop")
         return newDNASign
 
     def createWindows(self):

@@ -54,11 +54,11 @@ class PropPreviewPanel(DirectObject):
         newDNAStreet.setPos(VBase3(0))
         newDNAStreet.setHpr(VBase3(0))
         newDNAStreet.setStreetTexture(
-                'street_street_' + self.levelEditor.neighborhoodCode.replace("TTOFF_", '') + '_tex')
+                'street_street_' + self.levelEditor.neighborhoodCode.replace("TTOFF_", '').replace('TTHT_', '') + '_tex')
         newDNAStreet.setSidewalkTexture(
-                'street_sidewalk_' + self.levelEditor.neighborhoodCode.replace("TTOFF_", '') + '_tex')
+                'street_sidewalk_' + self.levelEditor.neighborhoodCode.replace("TTOFF_", '').replace('TTHT_', '') + '_tex')
         newDNAStreet.setCurbTexture(
-                'street_curb_' + self.levelEditor.neighborhoodCode.replace("TTOFF_", '') + '_tex')
+                'street_curb_' + self.levelEditor.neighborhoodCode.replace("TTOFF_", '').replace('TTHT_', '') + '_tex')
 
         node = newDNAStreet.traverse(self.render, DNASTORE, 1)
         node.setP(90.00)
