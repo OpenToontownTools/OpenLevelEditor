@@ -8,7 +8,7 @@ import re
 import random
 import sys
 
-from imgui_bundle import portable_file_dialogs
+from imgui_bundle import portable_file_dialogs, ImVec2
 import limeade
 from datetime import datetime
 from tkinter.filedialog import *
@@ -442,6 +442,12 @@ class LevelEditor(NodePath, DirectObject):
 
                 with imgui_ctx.begin_menu("Options") as optsMenu:
                     if optsMenu:
+                        imgui.separator_text("Active Neighborhood")
+                        if imgui.begin_combo("##neighborhood", self.neighborhood):
+                            for _hood in NEIGHBORHOOD_CODES:
+                                if imgui.selectable(_hood, _hood == self.neighborhood)[0]:
+                                    self.setEditMode(_hood)
+                            imgui.end_combo()
                         imgui.separator_text("Visual")
                         clickedColorZones, _ = imgui.menu_item("Color Zones", "", self.zonesColored, True)
                         if clickedColorZones:
