@@ -1,0 +1,9 @@
+wallStyle
+wall_texture: wall_oz_1
+wall_color: Vec4(1.0, 1.0, 1.0, 1.0)
+endWallStyle
+
+wallStyle
+wall_texture: wall_oz_2
+wall_color: Vec4(1.0, 1.0, 1.0, 1.0)
+endWallStyle

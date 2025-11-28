@@ -76,15 +76,16 @@ for hood in base.hoods:
         storages = data.get(LevelEditorGlobals.HOOD_PATH)
         # Holidays
         holiday = ConfigVariableString("holiday", "none")
-        if LevelEditorGlobals.HOOD_HOLIDAY_PATH in data:
-            if holiday == 'halloween':
-                if LevelEditorGlobals.HOOD_HALLOWEEN_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
-                    storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_HALLOWEEN_PATH]
-            elif holiday == 'winter':
-                if LevelEditorGlobals.HOOD_WINTER_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
-                    storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_WINTER_PATH]
-        for storage in storages:
-            loadDNAFile(DNASTORE, storage, CSDefault, 1)
+        if base.server != TOONTOWN_HOSTTKVR:
+            if LevelEditorGlobals.HOOD_HOLIDAY_PATH in data:
+                if holiday == 'halloween':
+                    if LevelEditorGlobals.HOOD_HALLOWEEN_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
+                        storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_HALLOWEEN_PATH]
+                elif holiday == 'winter':
+                    if LevelEditorGlobals.HOOD_WINTER_PATH in data[LevelEditorGlobals.HOOD_HOLIDAY_PATH]:
+                        storages += data[LevelEditorGlobals.HOOD_HOLIDAY_PATH][LevelEditorGlobals.HOOD_WINTER_PATH]
+            for storage in storages:
+                loadDNAFile(DNASTORE, storage, CSDefault, 1)
 
 if base.config.GetString("minigame") == "ttoff:prophunt":
     loadDNAFile(DNASTORE, 'phase_14.5/dna/ttoff_d_strg_ara_mg_phunt.dna', CSDefault, 1)

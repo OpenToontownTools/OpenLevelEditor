@@ -22,8 +22,6 @@ wall_color: Vec4(0.913386, 0.540868, 0.540868, 1.0)
 window_texture: window_porthole_ur
 window_color: Vec4(0.0778138, 0.472441, 0.314961, 1.0)
 window_count: 2
-cornice_texture: cornice_horizontal_ur
-cornice_color: Vec4(1.0, 0.501961, 0.376471, 1.0)
 endWallStyle
 
 wallStyle
