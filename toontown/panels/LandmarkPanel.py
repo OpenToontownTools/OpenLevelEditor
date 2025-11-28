@@ -15,6 +15,7 @@ class LandmarkPanel(DirectObject):
         self.selectedProp = ""
         self.selectedSpecial = ""
         self.buildingName = ""
+        self.searchTerm: str = ""
 
     def draw(self):
         avail_w, avail_h = imgui.get_content_region_avail()
@@ -29,10 +30,13 @@ class LandmarkPanel(DirectObject):
                 imgui.selectable(_type if _type != "" else "generic", False)
             imgui.end_combo()
         imgui.separator_text("Select Prop")
+        _, self.searchTerm = imgui.input_text("Search", self.searchTerm)
         avail_w, avail_h = imgui.get_content_region_avail()
 
         if imgui.begin_list_box("##lmSelectionBox", ImVec2(avail_w, avail_h)):
             for prop in self.levelEditor.styleManager.getCatalogCodes('toon_landmark'):
+                if self.searchTerm and self.searchTerm.lower() not in prop.lower():
+                    continue
                 isSelected = self.selectedProp == prop
                 clicked, _ = imgui.selectable(prop, isSelected)
                 if clicked:

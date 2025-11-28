@@ -12,6 +12,7 @@ class PropSelectionPanel(DirectObject):
         self.levelEditor = editor
         self.selectedProp = ""
         self.preview: PropPreviewPanel = preview
+        self.searchTerm: str = ""
 
     def draw(self):
         avail_w, avail_h = imgui.get_content_region_avail()
@@ -21,10 +22,13 @@ class PropSelectionPanel(DirectObject):
             self.levelEditor.addProp(self.selectedProp)
 
         imgui.separator_text("Select Prop")
+        _, self.searchTerm = imgui.input_text("Search", self.searchTerm)
         avail_w, avail_h = imgui.get_content_region_avail()
 
         if imgui.begin_list_box("##propSelectionBox", ImVec2(avail_w, avail_h)):
             for prop in self.levelEditor.styleManager.getCatalogCodes('prop'):
+                if self.searchTerm and self.searchTerm.lower() not in prop.lower():
+                    continue
                 isSelected = self.selectedProp == prop
                 clicked, _ = imgui.selectable(prop, isSelected)
                 if clicked:

@@ -58,19 +58,9 @@ elif base.server == TOONTOWN_HOSTTKVR:
                                   ConfigVariableString("root-dir", "").getValue()+"/phase_3/dna/ole_ttht_strg_temp.dna")
     loadDNAFile(DNASTORE, "phase_3/dna/ole_ttht_strg_temp.dna", CSDefault, 1)
     # todo: delete the temp file after it loads
-    for code, path in {
-    'suit': 'phase_3/models/fonts/vtRemingtonPortable.ttf',
-    'mickey': 'phase_3/models/fonts/MickeyFont.bam',
-    'humanist': 'phase_3/models/fonts/ImpressBT.ttf',
-    'TT_Comedy': "phase_3/models/fonts/Comedy.ttf",
-    'DD_Portago': "phase_3/models/fonts/Portago.ttf",
-    'MM_Musicals':"phase_3/models/fonts/Musicals.ttf",
-    'DG_Ironwork': "phase_3/models/fonts/Ironwork.ttf",
-    'BR_Aftershock': "phase_3/models/fonts/Aftershock.ttf",
-    'DL_JiggeryPokery': "phase_3/models/fonts/JiggeryPokery.ttf"
-}.items():
-        DNASTORE.storeFont(code, loader.loadFont(path))
 
+    # ht doesnt specify fonts in the storage, so we'll do it manually here
+    loadDNAFile(DNASTORE, "resources/fonts/fontstorage.ole", CSDefault, 1)
 else:
     loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)

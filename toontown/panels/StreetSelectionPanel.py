@@ -12,6 +12,7 @@ class StreetSelectionPanel(DirectObject):
         self.levelEditor = editor
         self.preview: PropPreviewPanel = preview
         self.selectedStreet = ""
+        self.searchTerm: str = ""
 
     def draw(self):
         avail_w, avail_h = imgui.get_content_region_avail()
@@ -21,10 +22,13 @@ class StreetSelectionPanel(DirectObject):
             self.levelEditor.addStreet(self.selectedStreet)
 
         imgui.separator_text("Select Prop")
+        _, self.searchTerm = imgui.input_text("Search", self.searchTerm)
         avail_w, avail_h = imgui.get_content_region_avail()
 
         if imgui.begin_list_box("##streetSelectionBox", ImVec2(avail_w, avail_h)):
             for street in self.levelEditor.styleManager.getCatalogCodes('street'):
+                if self.searchTerm and self.searchTerm.lower() not in street.lower():
+                    continue
                 isSelected = self.selectedStreet == street
                 clicked, _ = imgui.selectable(street, isSelected)
                 if clicked:
