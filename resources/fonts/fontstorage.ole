@@ -1,7 +1,7 @@
 store_font [ "font" "suit" "phase_3/models/fonts/vtRemingtonPortable.ttf" ]
 store_font [ "font" "mickey" "phase_3/models/fonts/MickeyFont.bam" ]
 store_font [ "font" "humanist" "phase_3/models/fonts/ImpressBT.ttf" ]
-store_font [ "font" "TT_COMEDY" "phase_3/models/fonts/Comedy.ttf" ]
+store_font [ "font" "TT_Comedy" "phase_3/models/fonts/Comedy.ttf" ]
 store_font [ "font" "DD_Portago" "phase_3/models/fonts/Portago.ttf" ]
 store_font [ "font" "MM_Musicals" "phase_3/models/fonts/Musicals.ttf" ]
 store_font [ "font" "DG_Ironwork" "phase_3/models/fonts/Ironwork.ttf" ]
