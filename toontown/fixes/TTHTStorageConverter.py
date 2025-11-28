@@ -20,8 +20,8 @@ def convertHostileTakeoverStorage(inputFilePath, outputFilePath):
 
         if model_path == 'textures':
             for entry in entries:
-                quoted = "".join(f'"{str(x)}"' for x in entry)
-                out_lines.append(f'\tstore_texture [ {quoted} ]')
+                quoted = " ".join(f'"{str(x)}"' for x in entry)
+                out_lines.append(f'store_texture [ {quoted} ]')
         else:
             # TEMP: switch out the TTC tunnel until loading this is fixed on the engine side
             if model_path == "phase_4/models/modules/safe_zone_tunnel_TT":
