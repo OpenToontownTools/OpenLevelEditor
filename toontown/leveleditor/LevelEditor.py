@@ -416,7 +416,9 @@ class LevelEditor(NodePath, DirectObject):
 
                 with imgui_ctx.begin_menu("Quick Actions") as quickActions:
                     if quickActions:
-                        clickedAddVisgroup, _ = imgui.menu_item("Add Visgroup", "", False, True)
+                        clickedAddVisgroup, _ = imgui.menu_item("Add Visgroup", "f8", False, True)
+                        if clickedAddVisgroup:
+                            self.createNewVisGroup()
 
                 with imgui_ctx.begin_menu("Panels") as panelMenu:
                     if panelMenu:
