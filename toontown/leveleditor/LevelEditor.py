@@ -269,6 +269,7 @@ class LevelEditor(NodePath, DirectObject):
             ('shift-o', self.toggleOrth),
             ('f12', self.screenshot),
             ('shift-f12', self.renderMapScaled),
+            ('OLE_RenderMapScaled', self.renderMapScaled),
             ('alt-f12', self.renderMap),  # doesnt do automatic stuff, likely wont get used, but just incase
             ('control-c', self.toggleVisibleCollisions),
             ('control-s', DNASerializer.outputDNADefaultFile),
@@ -280,7 +281,7 @@ class LevelEditor(NodePath, DirectObject):
             ('f8', self.createNewVisGroup),
             ('mouse1', self.__mouse1),
             ('mouse3', self.__mouse3),
-            ['delete', self.removeAllSelected],
+            ('delete', self.removeAllSelected),
             ]
 
         self.overrideEvents = [
@@ -420,6 +421,10 @@ class LevelEditor(NodePath, DirectObject):
                         clickSave, _ = imgui.menu_item("Save DNA", "Ctrl+S", False, True)
                         if clickSave:
                             DNASerializer.outputDNADefaultFile()
+                        imgui.separator()
+                        clickedMap, _ = imgui.menu_item("Export Map", "", False, True)
+                        if clickedMap:
+                            base.messenger.send('OLE_RenderMapScaled')
 
                         imgui.separator()
                         clickedQuit, _ = imgui.menu_item("Quit", "Cmd+Q" if sys.platform == 'darwin' else "Alt+F4", False, True)
@@ -476,7 +481,6 @@ class LevelEditor(NodePath, DirectObject):
                         if clickedSuitPreviews:
                             self.toggleSuitBuildingPreviews()
 
-                        _, self.showGizmo = imgui.menu_item("Show Gizmo", "", self.showGizmo)
 
                         clickedShowGrid, _ = imgui.menu_item("Show Grid", "", bool(base.direct.grid.fEnabled), True)
                         if clickedShowGrid:
@@ -522,6 +526,20 @@ class LevelEditor(NodePath, DirectObject):
                         _, self.showControlsWindow = imgui.menu_item("Controls", "", self.showControlsWindow)
                         _, self.showAboutWindow = imgui.menu_item("About", "", self.showAboutWindow)
 
+                if base.direct.selected.last is not None:
+                    _, self.showGizmo = imgui.menu_item("Show Gizmo", "", self.showGizmo)
+                    if self.showGizmo:
+                        _, pos = imgui.menu_item("POS", "g", self.gizmo.operation == gizmo.OPERATION.translate)
+                        if pos:
+                            self.setGizmoOperation(gizmo.OPERATION.translate)
+                        _, rot = imgui.menu_item("ROT", "r", self.gizmo.operation == gizmo.OPERATION.rotate)
+                        if rot:
+                            self.setGizmoOperation(gizmo.OPERATION.rotate)
+                        _, scale = imgui.menu_item("SCA", "", self.gizmo.operation == gizmo.OPERATION.scale)
+                        if scale:
+                            self.setGizmoOperation(gizmo.OPERATION.scale)
+
+
                 imgui.set_cursor_pos_x(imgui.get_window_size().x - 240)
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
 
@@ -549,7 +567,7 @@ class LevelEditor(NodePath, DirectObject):
                 imgui.same_line()
                 with imgui_ctx.begin_group():
                     imgui.text(f"Open Level Editor {base.APP_VERSION}")
-                    imgui.text("Maintained by drewcification#5131")
+                    imgui.text("Maintained by drewcification")
                     imgui.text_link_open_url("For more information, check out the GitHub repo.", "https://github.com/OpenToontownTools/ToontownLevelEditor")
         else:
             # Make sure that the logo texture gets cleaned up
@@ -2398,6 +2416,7 @@ class LevelEditor(NodePath, DirectObject):
         self.selectedDNARoot = None
         self.selectedNPRoot = None
         self.selectedSuitPoint = None
+        base.direct.selected.last = None
         for hook in self.deselectedNodePathHookHooks:
             hook()
 
@@ -3407,6 +3426,7 @@ class LevelEditor(NodePath, DirectObject):
 
         aspect2d.hide()
         render2d.hide()
+        base.imgui.hide()
 
         # Unfortunately, if we only render once, it doesnt end up working properly
         # So we render again to ensure the engine caught up with us resizing the window
@@ -3424,6 +3444,7 @@ class LevelEditor(NodePath, DirectObject):
 
             aspect2d.show()
             render2d.show()
+            base.imgui.show()
 
             base.setFrameRateMeter(hasMeter)
 
@@ -3454,6 +3475,7 @@ class LevelEditor(NodePath, DirectObject):
 
         aspect2d.show()
         render2d.show()
+        base.imgui.show()
 
         base.setFrameRateMeter(hasMeter)
 
@@ -3512,6 +3534,8 @@ class LevelEditor(NodePath, DirectObject):
         file = open(f"maps/map_{self.neighborhood}_{datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')}_data.txt", 'w')
         file.write(data)
         file.close()
+        self.orthCam = False
+        base.cam.node().setLens(base.camLens)
 
     def toggleOrth(self):
         if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
