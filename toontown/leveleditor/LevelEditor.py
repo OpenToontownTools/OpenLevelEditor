@@ -661,11 +661,6 @@ class LevelEditor(NodePath, DirectObject):
         if fCreateToplevel:
             self.createToplevel(DNAGroup('level'))
 
-    def setTitle(self, filename):
-        props = WindowProperties()
-        props.setTitle(f'Open Level Editor: {filename}')
-        base.win.requestProperties(props)
-
         # Reset grid
         base.direct.grid.setPosHprScale(0, 0, 0, 0, 0, 0, 1, 1, 1)
         # The selected DNA Object/NodePath
@@ -690,6 +685,11 @@ class LevelEditor(NodePath, DirectObject):
 
         self.animPropDict = {}
         self.outputFile = None
+
+    def setTitle(self, filename):
+        props = WindowProperties()
+        props.setTitle(f'Open Level Editor: {filename}')
+        base.win.requestProperties(props)
 
     def deleteToplevel(self):
         self.DNAData.remove(self.DNAToplevel)
