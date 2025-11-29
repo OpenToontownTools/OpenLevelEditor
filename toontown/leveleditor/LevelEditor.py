@@ -23,6 +23,9 @@ from imgui_bundle import imgui_ctx, imgui
 from panda3d.core import BoundingHexahedron
 from typing import Tuple, Any
 
+from imgui_bundle import imguizmo
+gizmo = imguizmo.im_guizmo
+
 from panda3d.toontown import DNAVisGroup
 
 from otp.otpbase import OTPGlobals
@@ -38,6 +41,7 @@ from .LevelStyleManager import *
 from .PieMenu import *
 from .RadialMenu import RadialMenu, RadialItem
 from ..fixes.TTHTStorageConverter import convertHostileTakeoverStorage
+from .Gizmo import Gizmo
 from ..panels.ElementsPanel import ElementsPanel
 from ..panels.SignPanel import SignPanel
 
@@ -141,6 +145,7 @@ class LevelEditor(NodePath, DirectObject):
 
         self.panel = LevelEditorPanel.LevelEditorPanel(self)
 
+        self.gizmo = Gizmo(self)
         self.elementsPanel = ElementsPanel(self)
         self.signPanel = SignPanel(self)
 
@@ -290,9 +295,12 @@ class LevelEditor(NodePath, DirectObject):
         # Make sure direct is running
         base.direct.enable()
         # And only the appropriate handles are showing
-        base.direct.widget.disableHandles(['x-ring', 'x-disc',
-                                           'y-ring', 'y-disc',
-                                           'z-disc', 'z-post'])
+        # base.direct.widget.disableHandles(['x-ring', 'x-disc',
+        #                                    'y-ring', 'y-disc',
+        #                                    'z-disc', 'z-post'])
+        # Hide the DIRECT based gizmos since we use our own
+        # (the one that actually works).
+        base.direct.widget.disableHandles('all')
 
         base.direct.grid.setXyzSnap(0)
         base.direct.grid.setHprSnap(0)
@@ -391,6 +399,9 @@ class LevelEditor(NodePath, DirectObject):
 
     def drawImgui(self):
         # Dear ImGui commands can be placed here.
+        if base.direct.selected.last is not None:
+            self.gizmo.draw()
+
         with imgui_ctx.begin_main_menu_bar() as mainMenu:
             if mainMenu:
 
@@ -555,6 +566,14 @@ class LevelEditor(NodePath, DirectObject):
         for key in base.direct.hotKeyMap.keys():
             base.direct.ignore(key)
 
+        # Restore undo/redo
+        # FIXME: Tkinter overrides meta-z and shift-meta-z on macOS?
+        self.accept('control-z', self.undo)
+        self.accept('shift-control-z', self.redo)
+
+        self.accept('g', self.setGizmoOperation, [gizmo.OPERATION.translate])
+        self.accept('r', self.setGizmoOperation, [gizmo.OPERATION.rotate])
+
         # Add all the action events
         for event in self.actionEvents:
             if len(event) == 3:
@@ -563,6 +582,21 @@ class LevelEditor(NodePath, DirectObject):
                 self.accept(event[0], event[1])
         self.enableMouse()
         self.spawnInsertionMarkerTask()
+
+    def undo(self):
+        if base.imgui.isKeyboardCaptured():
+            return
+        base.messenger.send("DIRECT-Undo")
+
+    def redo(self):
+        if base.imgui.isKeyboardCaptured():
+            return
+        base.messenger.send("DIRECT-Redo")
+
+    def setGizmoOperation(self, operation: gizmo.OPERATION):
+        if base.imgui.isKeyboardCaptured():
+            return
+        self.gizmo.operation = operation
 
     def disable(self):
         """ Disable level editing and hide level """
