@@ -149,7 +149,7 @@ class LevelEditor(NodePath, DirectObject):
         self.elementsPanel = ElementsPanel(self)
         self.signPanel = SignPanel(self)
 
-        self.showGizmo = True
+        self.showGizmo = False
         self.showControlsWindow = False
         self.showAboutWindow = False
         self.aboutLogoTexture = None
@@ -535,10 +535,16 @@ class LevelEditor(NodePath, DirectObject):
                         _, rot = imgui.menu_item("ROT", "r", self.gizmo.operation == gizmo.OPERATION.rotate)
                         if rot:
                             self.setGizmoOperation(gizmo.OPERATION.rotate)
-                        _, scale = imgui.menu_item("SCA", "", self.gizmo.operation == gizmo.OPERATION.scale)
-                        if scale:
-                            self.setGizmoOperation(gizmo.OPERATION.scale)
-
+                        #_, scale = imgui.menu_item("SCA", "", self.gizmo.operation == gizmo.OPERATION.scale)
+                        #if scale:
+                        #    self.setGizmoOperation(gizmo.OPERATION.scale)
+                        _, self.gizmo.snap = imgui.menu_item("SNAP", "", self.gizmo.snap)
+                        if pos and self.gizmo.snap:
+                            imgui.push_item_width(200)
+                            _, self.gizmo.snapTransAmount = imgui.slider_int("Snap Amount", self.gizmo.snapTransAmount, 1, 10)
+                        if rot and self.gizmo.snap:
+                            imgui.push_item_width(200)
+                            _, self.gizmo.snapRotAmount = imgui.slider_int("Snap Amount", self.gizmo.snapRotAmount, 1, 180)
 
                 imgui.set_cursor_pos_x(imgui.get_window_size().x - 240)
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))

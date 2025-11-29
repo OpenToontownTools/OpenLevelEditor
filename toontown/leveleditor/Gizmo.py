@@ -29,6 +29,10 @@ class Gizmo(DirectObject):
         self.editor = editor
         self.operation: gizmo.OPERATION = gizmo.OPERATION.translate
         self.using = False
+        self.snap: bool = True
+        self.snapTransAmount = 5
+        self.snapRotAmount = 5
+        self.snapScaleAmount = 0.1
 
     def draw(self):
         if not base.direct.selected.last:
@@ -41,8 +45,16 @@ class Gizmo(DirectObject):
 
         objMat = convertPandaMatrixToGizmo(base.direct.selected.last.getNetTransform().getMat())
         delta = gizmo.Matrix16()
-        # TODO: Snapping toggle.
-        snapping = gizmo.Matrix3([base.direct.grid.gridSpacing] * 3)
+        snapAmt = 0
+        match self.operation:
+            case gizmo.OPERATION.translate:
+                snapAmt = self.snapTransAmount
+            case gizmo.OPERATION.rotate:
+                snapAmt = self.snapRotAmount
+            case gizmo.OPERATION.scale:
+                snapAmt = self.snapScaleAmount
+
+        snapping = gizmo.Matrix3([snapAmt] * 3) if self.snap else None
         if gizmo.is_using_any():
             if not self.using:
                 self.using = True
