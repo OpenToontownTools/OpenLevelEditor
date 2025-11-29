@@ -105,6 +105,7 @@ class DNASerializer:
         # Set the title bar to have the filename to make it easier
         # to remember what file you are working on
         #base.le.panel["title"] = 'Open Level Editor: ' + os.path.basename(filename)
+        base.le.setTitle(os.path.basename(filename))
         # TODO: Show the file name somewhere useul
         base.le.popupNotification(f"Loaded {os.path.basename(filename)}")
 

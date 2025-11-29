@@ -8,7 +8,7 @@ win-origin -2 -2
 win-size 1280 720
 
 # Set engine window title
-window-title Open Level Editor - Engine View
+window-title Open Level Editor
 icon-filename resources/openttle_ico_temp.ico
 
 # The framebuffer-hardware flag forces it to use an accelerated driver.
