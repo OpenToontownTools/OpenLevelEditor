@@ -149,6 +149,7 @@ class LevelEditor(NodePath, DirectObject):
         self.elementsPanel = ElementsPanel(self)
         self.signPanel = SignPanel(self)
 
+        self.showGizmo = True
         self.showControlsWindow = False
         self.showAboutWindow = False
         self.aboutLogoTexture = None
@@ -399,7 +400,7 @@ class LevelEditor(NodePath, DirectObject):
 
     def drawImgui(self):
         # Dear ImGui commands can be placed here.
-        if base.direct.selected.last is not None:
+        if base.direct.selected.last is not None and self.showGizmo:
             self.gizmo.draw()
 
         with imgui_ctx.begin_main_menu_bar() as mainMenu:
@@ -475,7 +476,11 @@ class LevelEditor(NodePath, DirectObject):
                         if clickedSuitPreviews:
                             self.toggleSuitBuildingPreviews()
 
-                        clickedShowGrid, _ = imgui.menu_item("Show Grid", "", False, True)
+                        _, self.showGizmo = imgui.menu_item("Show Gizmo", "", self.showGizmo)
+
+                        clickedShowGrid, _ = imgui.menu_item("Show Grid", "", bool(base.direct.grid.fEnabled), True)
+                        if clickedShowGrid:
+                            base.direct.grid.toggleGrid()
                         clickedCollisionBoxes, _ = imgui.menu_item("Show Collisions", "", self.collisionsToggled, True)
                         if clickedCollisionBoxes:
                             self.toggleVisibleCollisions()
