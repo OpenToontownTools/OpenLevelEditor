@@ -282,6 +282,7 @@ class LevelEditor(NodePath, DirectObject):
             ('mouse1', self.__mouse1),
             ('mouse3', self.__mouse3),
             ('delete', self.removeAllSelected),
+            ('7', base.direct.cameraControl.spawnMoveToView, [7])
             ]
 
         self.overrideEvents = [
