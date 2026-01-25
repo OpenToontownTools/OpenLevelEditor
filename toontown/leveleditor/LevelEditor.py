@@ -278,6 +278,7 @@ class LevelEditor(NodePath, DirectObject):
             ('alt-o', self.toggleVisibleOccluders),
             # This already exists, but we will override it to show an input
             ('p', self.setReparentTarget),
+            ('r', self.doWrtReparent),
             ('f8', self.createNewVisGroup),
             ('mouse1', self.__mouse1),
             ('mouse3', self.__mouse3),
@@ -602,7 +603,7 @@ class LevelEditor(NodePath, DirectObject):
         self.accept('shift-control-z', self.redo)
 
         self.accept('g', self.setGizmoOperation, [gizmo.OPERATION.translate])
-        self.accept('r', self.setGizmoOperation, [gizmo.OPERATION.rotate])
+        #self.accept('r', self.setGizmoOperation, [gizmo.OPERATION.rotate])
 
         # Add all the action events
         for event in self.actionEvents:
@@ -1102,6 +1103,11 @@ class LevelEditor(NodePath, DirectObject):
         if base.direct.selected.last:
             base.direct.setActiveParent(base.direct.selected.last)
             self.popupNotification(f'Set reparent target to {base.direct.selected.last}')
+    def doWrtReparent(self):
+        if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
+            return
+        if base.direct.selected.last:
+            base.direct.reparent(base.direct.selected.last, fWrt = 1)
 
     def initVisibilityData(self):
         self.showAllVisibles()

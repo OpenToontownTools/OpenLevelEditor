@@ -53,6 +53,7 @@ if base.server == TOONTOWN_HOSTTKVR:
     LANDMARK_SPECIAL_TYPES.append('paintshop')
     LANDMARK_SPECIAL_TYPES.append('toptoons')
     LANDMARK_SPECIAL_TYPES.append('snoozebar')
+    LANDMARK_SPECIAL_TYPES.append('postoffice')
 
 OBJECT_SNAP_POINTS = {
     'street_5x20':                  [(Vec3(5.0, 0, 0), Vec3(0)),
