@@ -257,7 +257,7 @@ class LevelEditor(NodePath, DirectObject):
             ('shift-control-arrow_up', self.keyboardXformSelected, ['up', 'rotate']),
             ('shift-control-arrow_down', self.keyboardXformSelected, ['down', 'rotate']),
             # Misc Hotkey Functions
-            ('a', self.autoPositionGrid),
+            ('a', self.pressAutoPositionGrid),
             ('j', self.jumpToInsertionPoint),
             ('shift-s', self.placeSuitPoint),
             ('shift-c', self.placeBattleCell),
@@ -547,7 +547,18 @@ class LevelEditor(NodePath, DirectObject):
                         if rot and self.gizmo.snap:
                             imgui.push_item_width(200)
                             _, self.gizmo.snapRotAmount = imgui.slider_int("Snap Amount", self.gizmo.snapRotAmount, 1, 180)
-
+                clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", self.zoneLabels != [], True)
+                if clickedShowLabels:
+                    if not self.zoneLabels:
+                        self.labelZones()
+                    else:
+                        self.clearZoneLabels()
+                clickedColorZones, _ = imgui.menu_item("Color Zones", "", self.zonesColored, True)
+                if clickedColorZones:
+                    if not self.zonesColored:
+                        self.colorZones()
+                    else:
+                        self.clearZoneColors()
                 imgui.set_cursor_pos_x(imgui.get_window_size().x - 240)
                 imgui.text("%.0f FPS (%.2f ms)" % (imgui.get_io().framerate, 1000.0 / imgui.get_io().framerate))
 
@@ -2846,9 +2857,12 @@ class LevelEditor(NodePath, DirectObject):
         else:
             return 1
 
-    def autoPositionGrid(self, fLerp = 0):
+    def pressAutoPositionGrid(self):
         if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():
             return
+        self.autoPositionGrid()
+
+    def autoPositionGrid(self, fLerp = 0):
         taskMgr.remove('autoPositionGrid')
         # Move grid to prepare for placement of next object
         selectedNode = base.direct.selected.last

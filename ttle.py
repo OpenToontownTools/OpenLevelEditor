@@ -136,7 +136,7 @@ class ToontownLevelEditor(ShowBase):
         self.__importMainLibs()
 
         # Setup the root for Tkinter!
-        self.__createTk()
+        #self.__createTk()
 
         self.__addCullBins()
 

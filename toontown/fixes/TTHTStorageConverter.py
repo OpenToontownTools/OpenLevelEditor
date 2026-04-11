@@ -28,6 +28,10 @@ def convertHostileTakeoverStorage(inputFilePath, outputFilePath):
                 model_path = "phase_6/models/modules/safe_zone_tunnel_DD"
             if model_path == "phase_3.5/models/modules/safe_zone_entrance_tunnel_TT":
                 model_path = "phase_6/models/modules/safe_zone_entrance_tunnel_DD"
+
+            # replace the occluder model with a visible one
+            if model_path == "phase_3/models/misc/ttht_m_gen_util_occluder":
+                model_path = "resources/ttht_m_gen_util_occluder"
             out_lines.append(f'model "{model_path}" [')
 
             for entry in entries:
