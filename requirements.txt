@@ -1,2 +1,2 @@
-panda3d-imgui~=1.1.0
+panda3d-imgui~=1.2.0
 limeade~=0.1.1

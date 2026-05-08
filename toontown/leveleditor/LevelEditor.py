@@ -581,7 +581,7 @@ class LevelEditor(NodePath, DirectObject):
                 if not self.aboutLogoTexture:
                     self.aboutLogoTexture = base.imgui.loadTexture('resources/openttle_icon.png')
 
-                imgui.image(self.aboutLogoTexture, (128, 128), (0, 1), (1, 0))
+                imgui.image(self.aboutLogoTexture, (128, 128))
 
                 imgui.same_line()
                 with imgui_ctx.begin_group():
