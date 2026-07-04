@@ -41,12 +41,15 @@ from .LevelStyleManager import *
 from .PieMenu import *
 from .RadialMenu import RadialMenu, RadialItem
 from ..fixes.TTHTStorageConverter import convertHostileTakeoverStorage
-from .Gizmo import Gizmo
 from ..panels.ElementsPanel import ElementsPanel
 from ..panels.SignPanel import SignPanel
 
+from ott.directtools.DirectSession import DirectSession
+
 # Force direct and tk to be on
-base.startDirect(fWantDirect = 1, fWantTk = 1)
+base.startTk()
+base.direct = DirectSession()
+base.direct.enable()
 
 visualizeZones = base.config.GetBool("visualize-zones", 0)
 dnaBuiltDirectory = Filename.expandFrom(base.config.GetString("dna-built-directory", "$TTMODELS/built"))
@@ -145,11 +148,11 @@ class LevelEditor(NodePath, DirectObject):
 
         self.panel = LevelEditorPanel.LevelEditorPanel(self)
 
-        self.gizmo = Gizmo(self)
         self.elementsPanel = ElementsPanel(self)
         self.signPanel = SignPanel(self)
 
         self.showGizmo = False
+        self.gizmoOperation = None
         self.showControlsWindow = False
         self.showAboutWindow = False
         self.aboutLogoTexture = None
@@ -298,13 +301,15 @@ class LevelEditor(NodePath, DirectObject):
         # Initialize state
         # Make sure direct is running
         base.direct.enable()
-        # And only the appropriate handles are showing
-        # base.direct.widget.disableHandles(['x-ring', 'x-disc',
-        #                                    'y-ring', 'y-disc',
-        #                                    'z-disc', 'z-post'])
-        # Hide the DIRECT based gizmos since we use our own
-        # (the one that actually works).
+        # And hide all the handles by default
         base.direct.widget.disableHandles('all')
+
+        # Set handles to world space by default (Snapping breaks on local space)
+        base.direct.manipulationControl.switchToWorldSpaceMode()
+
+        # Set default spacing values
+        base.direct.manipulationControl.fPosSpacing = 5
+        base.direct.manipulationControl.fHprSpacing = 5
 
         base.direct.grid.setXyzSnap(0)
         base.direct.grid.setHprSnap(0)
@@ -403,9 +408,6 @@ class LevelEditor(NodePath, DirectObject):
 
     def drawImgui(self):
         # Dear ImGui commands can be placed here.
-        if base.direct.selected.last is not None and self.showGizmo:
-            self.gizmo.draw()
-
         with imgui_ctx.begin_main_menu_bar() as mainMenu:
             if mainMenu:
 
@@ -512,6 +514,12 @@ class LevelEditor(NodePath, DirectObject):
                         if self.bldgLabels or self.zoneLabels:
                             clickedLabelsOnTop, _ = imgui.menu_item("Labels Always On Top", "", False, True)
 
+                        imgui.separator_text("Gizmos")
+                        if imgui.menu_item("Local Space Manipulation", "", not base.direct.manipulationControl.worldSpaceManip)[0]:
+                            base.direct.manipulationControl.switchToLocalSpaceMode()
+                        if imgui.menu_item("World Space Manipulation", "", base.direct.manipulationControl.worldSpaceManip)[0]:
+                            base.direct.manipulationControl.switchToWorldSpaceMode()
+
                         imgui.separator_text("Snapping")
                         clickedSnapPos, _ = imgui.menu_item("Position Snapping", "", False, True)
                         clickedSnapRot, _ = imgui.menu_item("Rotation Snapping", "", False, True)
@@ -521,7 +529,8 @@ class LevelEditor(NodePath, DirectObject):
                         if clickedRefreshLimade:
                             limeade.refresh()
 
-                clickedPlaceSelected, _ = imgui.menu_item("Place Selected Node", "", False, True)
+                if base.direct.selected.last is not None and imgui.menu_item("Place Selected Node", "", False, True)[0]:
+                    base.direct.selected.last.place()
 
                 with imgui_ctx.begin_menu("Help") as helpMenu:
                     if helpMenu:
@@ -529,24 +538,29 @@ class LevelEditor(NodePath, DirectObject):
                         _, self.showAboutWindow = imgui.menu_item("About", "", self.showAboutWindow)
 
                 if base.direct.selected.last is not None:
-                    _, self.showGizmo = imgui.menu_item("Show Gizmo", "", self.showGizmo)
+                    clickedGizmo, self.showGizmo = imgui.menu_item("Show Gizmo", "", self.showGizmo)
+                    if clickedGizmo:
+                        if self.showGizmo:
+                            self.setGizmoOperation(self.gizmoOperation if self.gizmoOperation else gizmo.OPERATION.translate)
+                        else:
+                            self.setGizmoOperation(None)
                     if self.showGizmo:
-                        _, pos = imgui.menu_item("POS", "g", self.gizmo.operation == gizmo.OPERATION.translate)
-                        if pos:
+                        clickedPos, pos = imgui.menu_item("POS", "g", self.gizmoOperation == gizmo.OPERATION.translate)
+                        if clickedPos:
                             self.setGizmoOperation(gizmo.OPERATION.translate)
-                        _, rot = imgui.menu_item("ROT", "r", self.gizmo.operation == gizmo.OPERATION.rotate)
-                        if rot:
+                        clickedRot, rot = imgui.menu_item("ROT", "r", self.gizmoOperation == gizmo.OPERATION.rotate)
+                        if clickedRot:
                             self.setGizmoOperation(gizmo.OPERATION.rotate)
-                        #_, scale = imgui.menu_item("SCA", "", self.gizmo.operation == gizmo.OPERATION.scale)
-                        #if scale:
-                        #    self.setGizmoOperation(gizmo.OPERATION.scale)
-                        _, self.gizmo.snap = imgui.menu_item("SNAP", "", self.gizmo.snap)
-                        if pos and self.gizmo.snap:
+                        clickedScale, scale = imgui.menu_item("SCA", "", self.gizmoOperation == gizmo.OPERATION.scale)
+                        if clickedScale:
+                           self.setGizmoOperation(gizmo.OPERATION.scale)
+                        _, base.direct.manipulationControl.fGridSnap = imgui.menu_item("SNAP", "", bool(base.direct.manipulationControl.fGridSnap))
+                        if pos and base.direct.manipulationControl.fGridSnap:
                             imgui.push_item_width(200)
-                            _, self.gizmo.snapTransAmount = imgui.slider_int("Snap Amount", self.gizmo.snapTransAmount, 1, 10)
-                        if rot and self.gizmo.snap:
-                            imgui.push_item_width(200)
-                            _, self.gizmo.snapRotAmount = imgui.slider_int("Snap Amount", self.gizmo.snapRotAmount, 1, 180)
+                            _, base.direct.manipulationControl.fPosSpacing = imgui.slider_int("Snap Amount", base.direct.manipulationControl.fPosSpacing, 1, 10)
+                        # if rot and base.direct.manipulationControl.fGridSnap:
+                        #     imgui.push_item_width(200)
+                        #     _, base.direct.manipulationControl.fHprSpacing = imgui.slider_int("Snap Amount", base.direct.manipulationControl.fHprSpacing, 1, 180)
                 clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", self.zoneLabels != [], True)
                 if clickedShowLabels:
                     if not self.zoneLabels:
@@ -638,7 +652,19 @@ class LevelEditor(NodePath, DirectObject):
     def setGizmoOperation(self, operation: gizmo.OPERATION):
         if base.imgui.isKeyboardCaptured():
             return
-        self.gizmo.operation = operation
+        self.gizmoOperation = operation
+
+        base.direct.widget.disableHandles('all')
+
+        handles = []
+        if operation == gizmo.OPERATION.translate:
+            handles = ['x-post','y-post','z-post','x-disc','y-disc','z-disc']
+        elif operation == gizmo.OPERATION.rotate:
+            handles = 'ring'
+        elif operation == gizmo.OPERATION.scale:
+            handles = 'scale'
+
+        base.direct.widget.enableHandles(handles)
 
     def disable(self):
         """ Disable level editing and hide level """
@@ -2027,7 +2053,7 @@ class LevelEditor(NodePath, DirectObject):
         # Record time of start of mouse interaction
         self.startT = globalClock.getFrameTime()
         self.startF = globalClock.getFrameCount()
-        if base.direct.cameraControl.useMayaCamControls and modifiers == 4:  # alt is down, use maya controls
+        if base.direct.cameraControl.useMayaCamControls and base.direct.gotAlt(modifiers):  # alt is down, use maya controls
             self.mouseMayaCamera = True
         else:
             self.mouseMayaCamera = False
@@ -2051,7 +2077,7 @@ class LevelEditor(NodePath, DirectObject):
 
     # LEVEL-OBJECT MODIFICATION FUNCTIONS
     def levelHandleMouse3(self, modifiers):
-        if base.direct.cameraControl.useMayaCamControls and modifiers == 4:  # alt is down, use maya controls
+        if base.direct.cameraControl.useMayaCamControls and base.direct.gotAlt(modifiers):  # alt is down, use maya controls
             self.mouseMayaCamera = True
             return
         else:

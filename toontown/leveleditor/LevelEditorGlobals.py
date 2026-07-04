@@ -214,9 +214,9 @@ DNA_PROP_SETS = {'tree':      ["prop_tree_small_ul",
 CONTROLS = '''
 --Camera--
 Note: All camera transformations orbit the currently selected object
-Translate Camera: Alt + Middle Click and Drag
+Translate Camera: Alt + Middle Click and Drag (Alt + Left Click + Control and Drag)
 Rotate / Orbit Camera: Alt + Left Click and Drag
-Zoom Camera: Alt + Right Click and Drag
+Zoom Camera: Alt + Right Click and Drag (Alt + Left Click + Shift and Drag)
 
 --Object Insertion--
 Move insertion point to currently selected object's origin: A
