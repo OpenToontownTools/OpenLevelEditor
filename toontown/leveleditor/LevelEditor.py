@@ -2447,6 +2447,7 @@ class LevelEditor(NodePath, DirectObject):
             # Reset last Code (for autoPositionGrid)
             if DNAClassEqual(dnaNode, DNA_STREET):
                 self.snapList = self.getSnapPoint(dnaNode.getCode())
+            base.messenger.send('OLE_selectedNodePath', [nodePath])
         else:
             pointOrCell, type = self.findPointOrCell(nodePath)
             if pointOrCell and (type == 'suitPointMarker'):

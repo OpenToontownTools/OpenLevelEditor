@@ -18,6 +18,7 @@ class SceneGraphExplorer(DirectObject):
 
         self.reparentTarget: NodePath | None = None
 
+        self.selectOnClick = False
         self.flashOnClick = False
         self.highlightSeq: Sequence | None = None
 
@@ -25,11 +26,18 @@ class SceneGraphExplorer(DirectObject):
         self.showSetNamePopupForNode: NodePath = None
         self.focusSetNameInput = False
 
+        self.ancestorsToOpen = []
+
         self.__firstDraw = True
         self.accept('imgui-new-frame', self.__draw)
 
+        self.accept('OLE_selectedNodePath', self.__openAncestors)
+
     def __del__(self):
         self.ignoreAll()
+
+    def __openAncestors(self, nodePath):
+        self.ancestorsToOpen = nodePath.ancestors
 
     def __draw(self):
         if not self.active:
@@ -38,11 +46,14 @@ class SceneGraphExplorer(DirectObject):
         id = 0
         def drawTreeForNode(nodePath):
             nonlocal id
-            flags = 0
+            flags = imgui.TreeNodeFlags_.open_on_arrow
             if nodePath.getNumChildren() == 0:
-                flags = imgui.TreeNodeFlags_.leaf.value
+                flags = imgui.TreeNodeFlags_.leaf
             elif nodePath == self.nodePath:
-                flags = imgui.TreeNodeFlags_.default_open.value
+                flags |= imgui.TreeNodeFlags_.default_open
+
+            if nodePath in base.direct.selected.selectedList:
+                flags |= imgui.TreeNodeFlags_.selected
 
             typeName = nodePath.node().getType().getName()
             name = nodePath.getName()
@@ -54,20 +65,31 @@ class SceneGraphExplorer(DirectObject):
                 typeName = dnaNode.getType().getName()
                 name = dnaNode.getName()
 
+            if self.ancestorsToOpen and nodePath in self.ancestorsToOpen and \
+               nodePath != self.ancestorsToOpen[0]:
+                imgui.set_next_item_open(True)
+
             tree = imgui.tree_node_ex(f"{self.nodePath.getName()}-{id}", flags, f"{typeName} {name}")
+
+            if self.ancestorsToOpen and nodePath == self.ancestorsToOpen[0]:
+                imgui.set_scroll_here_y()
 
             if self.flashOnClick and imgui.is_item_clicked():
                 base.messenger.send('SGE_Flash', [nodePath])
 
+            if self.selectOnClick and imgui.is_item_clicked():
+                base.direct.select(nodePath)
+
             if imgui.begin_popup_context_item():
-                clickedFlash, _ = imgui.menu_item("Flash", "", False)
-                if clickedFlash:
+                if imgui.menu_item("Select", "", False)[0]:
+                    base.direct.select(nodePath)
+
+                if imgui.menu_item("Flash", "", False)[0]:
                     base.messenger.send('SGE_Flash', [nodePath])
 
                 imgui.separator()
 
-                clickedSetName, _ = imgui.menu_item("Set Name", "", False)
-                if clickedSetName:
+                if imgui.menu_item("Set Name", "", False)[0]:
                     self.rename = nodePath.getName()
                     # HACK: Calling imgui.begin_popup wouldn't work here for some reason.
                     # Do this to call it outside the context popup statement.
@@ -76,27 +98,21 @@ class SceneGraphExplorer(DirectObject):
 
                 imgui.separator()
 
-                clickedSetTarget, _ = imgui.menu_item("Set Reparent Target", "", False)
-                if clickedSetTarget:
-                    self.reparentTarget = nodePath
+                if imgui.menu_item("Set Reparent Target", "", False)[0]:
                     messenger.send('SGE_Set Reparent Target', [nodePath])
 
-                clickedReparent, _ = imgui.menu_item("Reparent to Target", "", False, self.reparentTarget is not None)
-                if clickedReparent:
+                if imgui.menu_item("Reparent to Target", "", False, base.direct.activeParent is not None)[0]:
                     messenger.send('SGE_Reparent', [nodePath])
 
-                clickedWrtReparent, _ = imgui.menu_item("WRT Reparent To Target", "", False, self.reparentTarget is not None)
-                if clickedWrtReparent:
+                if imgui.menu_item("WRT Reparent To Target", "", False, base.direct.activeParent is not None)[0]:
                     messenger.send('SGE_WRT Reparent', [nodePath])
 
                 imgui.separator()
 
-                clickedPlace, _ = imgui.menu_item("Place", "", False)
-                if clickedPlace:
+                if imgui.menu_item("Place", "", False)[0]:
                     nodePath.place()
                 if nodePath != self.nodePath:
-                    clickedExplore, _ = imgui.menu_item("Explore Seperately", "", False)
-                    if clickedExplore:
+                    if imgui.menu_item("Explore Seperately", "", False)[0]:
                         nodePath.explore()
                 imgui.end_popup()
 
@@ -113,7 +129,7 @@ class SceneGraphExplorer(DirectObject):
                         imgui.set_keyboard_focus_here()
                         self.focusSetNameInput = False
 
-                    nameChanged, newName = imgui.input_text("##input", self.rename, imgui.InputTextFlags_.chars_no_blank.value)
+                    nameChanged, newName = imgui.input_text("##input", self.rename, imgui.InputTextFlags_.chars_no_blank)
                     if nameChanged:
                         self.rename = newName
 
@@ -154,12 +170,16 @@ class SceneGraphExplorer(DirectObject):
                 if menuBar:
                     with imgui_ctx.begin_menu("Options") as optionsMenu:
                         if optionsMenu:
-                            clickedFlashToggle, _ = imgui.menu_item("Flash on Click", "", self.flashOnClick)
-                            if clickedFlashToggle:
-                                self.flashOnClick = not self.flashOnClick
+                            _, self.selectOnClick = imgui.menu_item("Select on Click", "", self.selectOnClick)
+                            _, self.flashOnClick = imgui.menu_item("Flash on Click", "", self.flashOnClick)
 
-            imgui.text(f"Active Reparent Target: {self.reparentTarget}")
+            reparentName = None
+            if base.direct.activeParent:
+                reparentName = base.direct.activeParent.getName()
+            imgui.text(f"Active Reparent Target: {reparentName}")
             drawTreeForNode(self.nodePath)
+
+            self.ancestorsToOpen = []
 
 
 
