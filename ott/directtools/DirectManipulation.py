@@ -141,7 +141,7 @@ class DirectManipulationControl(DirectObject):
         # Start out in select mode
         self.mode = 'select'
 
-        if ShowBaseGlobal.direct.cameraControl.useMayaCamControls and ShowBaseGlobal.direct.gotAlt(modifiers):
+        if ShowBaseGlobal.direct.cameraControl.manipulateCameraTask:
             self.mode = 'camera'
 
         if self.fAllowSelectionOnly:
@@ -169,7 +169,7 @@ class DirectManipulationControl(DirectObject):
         else:
             entry = None
 
-        if not ShowBaseGlobal.direct.gotAlt(modifiers):
+        if not ShowBaseGlobal.direct.cameraControl.manipulateCameraTask:
             if entry:
                 # Check to see if we are moving the object
                 # We are moving the object if we either wait long enough
@@ -183,7 +183,7 @@ class DirectManipulationControl(DirectObject):
                 watchMouseTask.initY = ShowBaseGlobal.direct.dr.mouseY
                 taskMgr.add(watchMouseTask, 'manip-watch-mouse')
             else:
-                if ShowBaseGlobal.direct.fControl:
+                if ShowBaseGlobal.direct.fControl and not ShowBaseGlobal.direct.cameraControl.manipulateCameraTask:
                     self.mode = 'move'
                     self.manipulateObject()
                 elif not ShowBaseGlobal.direct.fAlt and self.fAllowMarquee:
