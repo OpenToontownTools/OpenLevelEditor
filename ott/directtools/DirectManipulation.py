@@ -98,6 +98,9 @@ class DirectManipulationControl(DirectObject):
         self.fPosSpacing = 0
         self.fHprSpacing = 0
 
+        self.highlightingWidget = None
+        self.origColorForHighlightedWidget = None
+
     def scaleWidget(self, factor):
         if hasattr(ShowBaseGlobal.direct, 'widget'):
             ShowBaseGlobal.direct.widget.multiplyScalingFactorBy(factor)
@@ -430,6 +433,42 @@ class DirectManipulationControl(DirectObject):
         t.base = ShowBaseGlobal.direct.selected.last
         # Spawn the task
         taskMgr.add(t, 'followSelectedNodePath')
+        # Also spawn the highlight task
+        taskMgr.add(self.highlightWidget, 'highlightWidgetTask')
+
+    def clearHighlightWidget(self):
+        if self.highlightingWidget:
+            if self.origColorForHighlightedWidget:
+                self.highlightingWidget.setColor(self.origColorForHighlightedWidget)
+                self.origColorForHighlightedWidget = None
+            else:
+                self.highlightingWidget.clearColor()
+            self.highlightingWidget = None
+
+    def highlightWidget(self, task):
+        direct = ShowBaseGlobal.direct
+        # Check for a widget hit point
+        entry = ShowBaseGlobal.direct.iRay.pickWidget()
+        # Did we hit a widget?
+        if entry:
+            name = entry.getIntoNodePath().getName()
+            node = direct.widget.find(f'**/{name}-group')
+            if self.highlightingWidget != node:
+                if self.highlightingWidget is not None:
+                    self.clearHighlightWidget()
+
+                self.highlightingWidget = node
+                if node.hasColor():
+                    self.origColorForHighlightedWidget = node.getColor()
+
+                a = 1
+                if 'disc' in name:
+                    a = .5
+                node.setColor(255, 255, 0, a, 1)
+        else:
+            self.clearHighlightWidget()
+
+        return task.cont
 
     def followSelectedNodePathTask(self, state):
         if hasattr(ShowBaseGlobal.direct, "manipulationControl") and ShowBaseGlobal.direct.manipulationControl.fMultiView:
@@ -549,6 +588,7 @@ class DirectManipulationControl(DirectObject):
             taskMgr.remove('followSelectedNodePath')
             # and the task to highlight the widget
             taskMgr.remove('highlightWidgetTask')
+            self.clearHighlightWidget()
             # Set manipulation flag
             self.fManip = 1
             # Record undo point
