@@ -6,7 +6,8 @@ Version 2.0 brings a whole new UI using ImGui, replacing the outdated Tk UI.
 
 # [***READ THE FAQ BEFORE ASKING QUESTIONS***](#faq)
 
-![overviewimage](https://i.imgur.com/i3RyBiu.png)
+<img width="3832" height="2086" alt="image" src="https://github.com/user-attachments/assets/69cd4d56-7d2c-4f9d-93d8-88d1ab0260e7" />
+
 
 ## Development Progress
 * This project is considered **fully released** and is entirely usable with little crashes and bugs. If you discover a crash or bug please create an issue.
