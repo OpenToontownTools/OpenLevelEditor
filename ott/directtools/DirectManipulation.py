@@ -446,7 +446,7 @@ class DirectManipulationControl(DirectObject):
             self.highlightingWidget = None
 
     def highlightWidget(self, task):
-        if self.fSetCoa or not self.fMovable:
+        if ShowBaseGlobal.base.imgui.isMouseCaptured() or self.fSetCoa or not self.fMovable:
             self.clearHighlightWidget()
             return task.cont
         direct = ShowBaseGlobal.direct
