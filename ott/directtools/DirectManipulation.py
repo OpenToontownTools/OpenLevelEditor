@@ -1257,15 +1257,15 @@ class ObjectHandles(NodePath, DirectObject):
         self.xPostCollision.hide()
         self.xRingCollision.hide()
         self.xScaleCollision.hide()
-        self.xDisc.setColor(1, 0, 0, .2)
+        self.xDisc.setColor(1, 0, 0, .05)
         self.yPostCollision.hide()
         self.yRingCollision.hide()
         self.yScaleCollision.hide()
-        self.yDisc.setColor(0, 1, 0, .2)
+        self.yDisc.setColor(0, 1, 0, .05)
         self.zPostCollision.hide()
         self.zRingCollision.hide()
         self.zScaleCollision.hide()
-        self.zDisc.setColor(0, 0, 1, .2)
+        self.zDisc.setColor(0, 0, 1, .05)
         # Augment geometry with lines
         self.createObjectHandleLines()
         # Create long markers to help line up in world
