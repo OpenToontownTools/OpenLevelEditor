@@ -30,7 +30,7 @@ from .DirectSelection import SelectionRay
 from direct.task import Task
 from direct.task.TaskManagerGlobal import taskMgr
 from copy import deepcopy
-from typing import Optional
+from typing import Optional, Callable
 
 
 class DirectManipulationControl(DirectObject):
@@ -52,6 +52,8 @@ class DirectManipulationControl(DirectObject):
         self.constraint: Optional[str] = None
         self.rotateAxis = 'x'
         self.lastCrankAngle = 0
+        self.rawCrankedAngle: float = 0.0
+        self.snappedCrankedAngle: float = 0.0
         self.fSetCoa = 0
         self.fHitInit = 1
         self.fScaleInit = 1
@@ -94,6 +96,8 @@ class DirectManipulationControl(DirectObject):
 
         # [gjeon] to support grid snapping
         self.fGridSnap = 0
+
+        self.fRotateSnap = False
 
         self.fPosSpacing = 0
         self.fHprSpacing = 0
@@ -837,7 +841,9 @@ class DirectManipulationControl(DirectObject):
                     ShowBaseGlobal.direct.widget.setPos(self.gridSnapping(ShowBaseGlobal.direct.widget, offset))
                 else:
                     ShowBaseGlobal.direct.widget.setPos(ShowBaseGlobal.direct.widget, offset)
-
+    @staticmethod
+    def roundTo(value: float, divisor: float) -> float:
+        return round(value / divisor) * divisor
     def rotate1D(self, state):
         assert self.constraint is not None
 
@@ -855,29 +861,54 @@ class DirectManipulationControl(DirectObject):
             self.rotationCenter = getScreenXY(ShowBaseGlobal.direct.widget)
             self.lastCrankAngle = getCrankAngle(self.rotationCenter)
 
+            self.rawCrankedAngle: float = 0.0
+            self.snappedCrankedAngle: float = 0.0
+            # TODO: Add RELATIVE Mode - this will just be done by disabling this start angle bit
+            if self.rotateAxis == 'x':
+                startAngle = ShowBaseGlobal.direct.selected.last.getP()
+            elif self.rotateAxis == 'y':
+                startAngle = ShowBaseGlobal.direct.selected.last.getR()
+            else:
+                startAngle = ShowBaseGlobal.direct.selected.last.getH()
+            self.rawCrankedAngle = startAngle
+            self.snappedCrankedAngle = startAngle
+
         # Rotate widget based on how far cursor has swung around origin
         newAngle = getCrankAngle(self.rotationCenter)
         deltaAngle = self.lastCrankAngle - newAngle
         if self.fWidgetTop:
             deltaAngle = -1 * deltaAngle
+
+        self.rawCrankedAngle += deltaAngle
+        if self.fGridSnap:
+            targetAngle = self.roundTo(self.rawCrankedAngle, self.fHprSpacing)
+        else:
+            targetAngle = self.rawCrankedAngle
+
+        snappedDelta = targetAngle - self.snappedCrankedAngle
+        self.snappedCrankedAngle = targetAngle
+
         if self.rotateAxis == 'x':
             if hasattr(ShowBaseGlobal.direct, "manipulationControl") and ShowBaseGlobal.direct.manipulationControl.fMultiView:
                 for widget in ShowBaseGlobal.direct.manipulationControl.widgetList:
-                    widget.setP(widget, deltaAngle)
+                    widget.setP(widget, snappedDelta)
             else:
-                ShowBaseGlobal.direct.widget.setP(ShowBaseGlobal.direct.widget, deltaAngle)
+                w = ShowBaseGlobal.direct.widget
+                w.setP(w, snappedDelta)
         elif self.rotateAxis == 'y':
             if hasattr(ShowBaseGlobal.direct, "manipulationControl") and ShowBaseGlobal.direct.manipulationControl.fMultiView:
                 for widget in ShowBaseGlobal.direct.manipulationControl.widgetList:
-                    widget.setR(widget, deltaAngle)
+                    widget.setR(widget, snappedDelta)
             else:
-                ShowBaseGlobal.direct.widget.setR(ShowBaseGlobal.direct.widget, deltaAngle)
+                w = ShowBaseGlobal.direct.widget
+                w.setR(w,snappedDelta)
         elif self.rotateAxis == 'z':
             if hasattr(ShowBaseGlobal.direct, "manipulationControl") and ShowBaseGlobal.direct.manipulationControl.fMultiView:
                 for widget in ShowBaseGlobal.direct.manipulationControl.widgetList:
-                    widget.setH(widget, deltaAngle)
+                    widget.setH(widget, snappedDelta)
             else:
-                ShowBaseGlobal.direct.widget.setH(ShowBaseGlobal.direct.widget, deltaAngle)
+                w = ShowBaseGlobal.direct.widget
+                w.setH(w, snappedDelta)
         # Record crank angle for next time around
         self.lastCrankAngle = newAngle
 

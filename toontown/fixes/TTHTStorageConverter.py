@@ -28,6 +28,9 @@ def convertHostileTakeoverStorage(inputFilePath, outputFilePath):
                 model_path = "phase_6/models/modules/safe_zone_tunnel_DD"
             if model_path == "phase_3.5/models/modules/safe_zone_entrance_tunnel_TT":
                 model_path = "phase_6/models/modules/safe_zone_entrance_tunnel_DD"
+            # and this :( i gotta rebuild the engine with c++ changes but i hate that
+            if model_path == 'phase_5/models/props/ttht_m_ara_ext_diner_entrance':
+                model_path = 'phase_5/models/props/diner_entrance'
 
             # replace the occluder model with a visible one
             if model_path == "phase_3/models/misc/ttht_m_gen_util_occluder":

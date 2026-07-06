@@ -21,9 +21,11 @@ from direct.directtools.DirectGlobals import *
 from direct.gui import DirectGui
 from imgui_bundle import imgui_ctx, imgui
 from panda3d.core import BoundingHexahedron
-from typing import Tuple, Any
+from typing import Tuple, Any, TYPE_CHECKING
 
 from imgui_bundle import imguizmo
+
+
 gizmo = imguizmo.im_guizmo
 
 from panda3d.toontown import DNAVisGroup
@@ -45,6 +47,11 @@ from ..panels.ElementsPanel import ElementsPanel
 from ..panels.SignPanel import SignPanel
 
 from ott.directtools.DirectSession import DirectSession
+
+if TYPE_CHECKING:
+    from ttle import ToontownLevelEditor
+    base: ToontownLevelEditor
+    from panda3d.toontown import *
 
 # Force direct and tk to be on
 base.startTk()
@@ -554,13 +561,14 @@ class LevelEditor(NodePath, DirectObject):
                         clickedScale, scale = imgui.menu_item("SCA", "", self.gizmoOperation == gizmo.OPERATION.scale)
                         if clickedScale:
                            self.setGizmoOperation(gizmo.OPERATION.scale)
-                        _, base.direct.manipulationControl.fGridSnap = imgui.menu_item("SNAP", "", bool(base.direct.manipulationControl.fGridSnap))
+                        if pos or rot:
+                            _, base.direct.manipulationControl.fGridSnap = imgui.menu_item("SNAP", "", bool(base.direct.manipulationControl.fGridSnap))
                         if pos and base.direct.manipulationControl.fGridSnap:
                             imgui.push_item_width(200)
                             _, base.direct.manipulationControl.fPosSpacing = imgui.slider_int("Snap Amount", base.direct.manipulationControl.fPosSpacing, 1, 10)
-                        # if rot and base.direct.manipulationControl.fGridSnap:
-                        #     imgui.push_item_width(200)
-                        #     _, base.direct.manipulationControl.fHprSpacing = imgui.slider_int("Snap Amount", base.direct.manipulationControl.fHprSpacing, 1, 180)
+                        if rot and base.direct.manipulationControl.fGridSnap:
+                            imgui.push_item_width(200)
+                            _, base.direct.manipulationControl.fHprSpacing = imgui.slider_int("Snap Amount", base.direct.manipulationControl.fHprSpacing, 1, 180)
                 clickedShowLabels, _ = imgui.menu_item("Show Zone Labels", "", self.zoneLabels != [], True)
                 if clickedShowLabels:
                     if not self.zoneLabels:
