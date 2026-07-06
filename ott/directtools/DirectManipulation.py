@@ -446,6 +446,9 @@ class DirectManipulationControl(DirectObject):
             self.highlightingWidget = None
 
     def highlightWidget(self, task):
+        if self.fSetCoa or not self.fMovable:
+            self.clearHighlightWidget()
+            return task.cont
         direct = ShowBaseGlobal.direct
         # Check for a widget hit point
         entry = ShowBaseGlobal.direct.iRay.pickWidget()
