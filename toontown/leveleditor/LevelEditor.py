@@ -528,8 +528,13 @@ class LevelEditor(NodePath, DirectObject):
                             base.direct.manipulationControl.switchToWorldSpaceMode()
 
                         imgui.separator_text("Snapping")
-                        clickedSnapPos, _ = imgui.menu_item("Position Snapping", "", False, True)
-                        clickedSnapRot, _ = imgui.menu_item("Rotation Snapping", "", False, True)
+                        _, base.direct.manipulationControl.fGridSnap = imgui.menu_item("Position Snapping", "", bool(base.direct.manipulationControl.fGridSnap))
+
+                        if base.direct.manipulationControl.fGridSnap:
+                            imgui.separator_text("Snap Mode")
+                            base.direct.manipulationControl.fSnapMode = not (imgui.menu_item('Global', "", bool(not base.direct.manipulationControl.fSnapMode)))[1]
+                            _, base.direct.manipulationControl.fSnapMode = imgui.menu_item('Relative', "", bool(base.direct.manipulationControl.fSnapMode))
+
                         #clickedSnapPlane, _ = imgui.menu_item("Plane Snapping", "", False, True)
                         imgui.separator_text("Debug")
                         clickedRefreshLimade, _ = imgui.menu_item("Reload Code", "Save First! Crashes Likely!", False, True)

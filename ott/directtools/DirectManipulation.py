@@ -30,7 +30,7 @@ from .DirectSelection import SelectionRay
 from direct.task import Task
 from direct.task.TaskManagerGlobal import taskMgr
 from copy import deepcopy
-from typing import Optional, Callable
+from typing import Optional, Callable, Literal
 
 
 class DirectManipulationControl(DirectObject):
@@ -97,7 +97,7 @@ class DirectManipulationControl(DirectObject):
         # [gjeon] to support grid snapping
         self.fGridSnap = 0
 
-        self.fRotateSnap = False
+        self.fSnapMode: Literal[0, 1] = 0 # 0 is global, 1 is local
 
         self.fPosSpacing = 0
         self.fHprSpacing = 0
@@ -863,15 +863,15 @@ class DirectManipulationControl(DirectObject):
 
             self.rawCrankedAngle: float = 0.0
             self.snappedCrankedAngle: float = 0.0
-            # TODO: Add RELATIVE Mode - this will just be done by disabling this start angle bit
-            if self.rotateAxis == 'x':
-                startAngle = ShowBaseGlobal.direct.selected.last.getP()
-            elif self.rotateAxis == 'y':
-                startAngle = ShowBaseGlobal.direct.selected.last.getR()
-            else:
-                startAngle = ShowBaseGlobal.direct.selected.last.getH()
-            self.rawCrankedAngle = startAngle
-            self.snappedCrankedAngle = startAngle
+            if self.fSnapMode == 0:
+                if self.rotateAxis == 'x':
+                    startAngle = ShowBaseGlobal.direct.selected.last.getP()
+                elif self.rotateAxis == 'y':
+                    startAngle = ShowBaseGlobal.direct.selected.last.getR()
+                else:
+                    startAngle = ShowBaseGlobal.direct.selected.last.getH()
+                self.rawCrankedAngle = startAngle
+                self.snappedCrankedAngle = startAngle
 
         # Rotate widget based on how far cursor has swung around origin
         newAngle = getCrankAngle(self.rotationCenter)
