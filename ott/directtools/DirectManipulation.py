@@ -70,7 +70,7 @@ class DirectManipulationControl(DirectObject):
         self.actionEvents = [
             ['DIRECT-mouse1', self.manipulationStart],
             ['DIRECT-mouse1Up', self.manipulationStop],
-            ['tab', self.toggleObjectHandlesMode],
+            ['DIRECT-toggleObjectHandlesMode', self.toggleObjectHandlesMode],
 ##             ['.', self.objectHandles.multiplyScalingFactorBy, 2.0],
 ##             ['>', self.objectHandles.multiplyScalingFactorBy, 2.0],
 ##             [',', self.objectHandles.multiplyScalingFactorBy, 0.5],
@@ -139,7 +139,7 @@ class DirectManipulationControl(DirectObject):
         self.fMultiView = 1
 
     def manipulationStart(self, modifiers):
-        if ShowBaseGlobal.base.imgui.isMouseCaptured():
+        if ShowBaseGlobal.direct.isImguiCapturedMouse():
             return
 
         # Start out in select mode
@@ -257,14 +257,14 @@ class DirectManipulationControl(DirectObject):
 
     def manipulationStop(self):
         base = ShowBaseGlobal.base
-        if base.imgui.isMouseCaptured():
+        direct = ShowBaseGlobal.direct
+        if direct.isImguiCapturedMouse():
             return
 
         taskMgr.remove('manipulateObject')
         taskMgr.remove('manip-move-wait')
         taskMgr.remove('manip-watch-mouse')
         taskMgr.remove('manip-marquee-mouse')
-        direct = ShowBaseGlobal.direct
         # depending on flag.....
         if self.mode == 'select':
             # Check for object under mouse
@@ -450,7 +450,7 @@ class DirectManipulationControl(DirectObject):
             self.highlightingWidget = None
 
     def highlightWidget(self, task):
-        if ShowBaseGlobal.base.imgui.isMouseCaptured() or self.fSetCoa or not self.fMovable:
+        if ShowBaseGlobal.direct.isImguiCapturedMouse() or not self.fMovable:
             self.clearHighlightWidget()
             return task.cont
         direct = ShowBaseGlobal.direct
@@ -1320,9 +1320,11 @@ class ObjectHandles(NodePath, DirectObject):
         useDirectRenderStyle(self)
 
     def coaModeColor(self):
+        # TODO: Fix disc alpha
         self.setColor(.5, .5, .5, 0.5, 1)
 
     def disabledModeColor(self):
+        # TODO: Fix disc alpha
         self.setColor(0.1,0.1,0.1,0.1,1)
 
     def manipModeColor(self):

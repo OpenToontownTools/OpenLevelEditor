@@ -1,4 +1,4 @@
-from direct.directtools.DirectGeometry import *
+from ott.directtools.DirectGeometry import *
 from direct.showbase.DirectObject import DirectObject
 from direct.task import Task
 

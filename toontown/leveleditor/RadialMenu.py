@@ -1,5 +1,5 @@
 """ Camera Radial Menu - drewcification 091720 """
-from direct.directtools.DirectGeometry import *
+from ott.directtools.DirectGeometry import *
 from direct.gui.DirectFrame import DirectFrame, OnscreenImage, OnscreenText
 from direct.showbase.DirectObject import DirectObject
 from direct.task import Task
@@ -94,7 +94,7 @@ class RadialMenu(DirectObject):
         self.selected = int(math.floor((menuAngle % 360) / self.itemAngle))
 
         # Set the rotation of the selector
-        # The selector image is from 12 o'clock to 3 o'clock, so we need to 
+        # The selector image is from 12 o'clock to 3 o'clock, so we need to
         # rotate it counter clockwise 45 degrees
         self.selector.setR(-self.itemAngle * self.selected + 45)
 

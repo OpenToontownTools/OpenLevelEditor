@@ -227,7 +227,7 @@ class DirectSession(DirectObject):
         keyList.extend([chr(i) for i in range(48, 58)])
         keyList.extend(["`", "-", "=", "[", "]", ";", "'", ",", ".", "/", "\\"])
 
-        self.specialKeys = ['escape', 'delete', 'page_up', 'page_down', 'enter']
+        self.specialKeys = ['tab', 'escape', 'delete', 'page_up', 'page_down', 'enter']
 
         def addCtrl(a):
             return "control-%s"%a
@@ -289,6 +289,7 @@ class DirectSession(DirectObject):
             'delete': ('Delete', 'DIRECT-delete'),
             '.': ('Scale Up Widget', 'DIRECT-widgetScaleUp'),
             ',': ('Scale Down Widget', 'DIRECT-widgetScaleDown'),
+            'tab': ('Toggle Widget Handles Mode', 'DIRECT-toggleObjectHandlesMode'),
             'page_up': ('Up Ancestry', 'DIRECT-upAncestry'),
             'page_down': ('Down Ancestry', 'DIRECT-downAncestry'),
             'escape': ('Deselect All', 'deselectAll'),
@@ -1162,6 +1163,16 @@ class DirectSession(DirectObject):
     def removeUnpickable(self, item):
         for iRay in self.iRayList:
             iRay.removeUnpickable(item)
+
+    def isImguiCapturedMouse(self):
+        if hasattr(ShowBaseGlobal.base, 'imgui'):
+            return ShowBaseGlobal.base.imgui.isMouseCaptured()
+        return False
+
+    def isImguiCapturedKeyboard(self):
+        if hasattr(ShowBaseGlobal.base, 'imgui'):
+            return ShowBaseGlobal.base.imgui.isKeyboardCaptured()
+        return False
 
 
 class DisplayRegionContext(DirectObject):

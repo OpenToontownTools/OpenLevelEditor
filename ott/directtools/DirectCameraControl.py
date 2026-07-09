@@ -119,9 +119,8 @@ class DirectCameraControl(DirectObject):
             self.coaMarker.hide()
 
     def mouseRotateStart(self, modifiers):
-        base = ShowBaseGlobal.base
         direct = ShowBaseGlobal.direct
-        if not base.imgui.isMouseCaptured() and self.useMayaCamControls: # use maya controls
+        if not direct.isImguiCapturedMouse() and self.useMayaCamControls: # use maya controls
             if direct.gotAlt(modifiers) and not direct.gotControl(modifiers) \
                and not direct.gotShift(modifiers): # only alt is pressed
             # base.direct.pushUndo([base.direct.camera])        # Wasteful use of undo
@@ -138,7 +137,7 @@ class DirectCameraControl(DirectObject):
         base = ShowBaseGlobal.base
         direct = ShowBaseGlobal.direct
 
-        if not base.imgui.isMouseCaptured() and self.useMayaCamControls and \
+        if not direct.isImguiCapturedMouse() and self.useMayaCamControls and \
            direct.gotAlt(modifiers): # alt is pressed - use maya controls
             # Hide the marker for this kind of motion
             self.coaMarker.hide()
@@ -180,7 +179,7 @@ class DirectCameraControl(DirectObject):
     def mouseFlyStart(self, modifiers):
         base = ShowBaseGlobal.base
         direct = ShowBaseGlobal.direct
-        if base.imgui.isMouseCaptured():
+        if direct.isImguiCapturedMouse():
             return
         # Record undo point
         #direct.pushUndo([direct.camera])            # Wasteful use of undo

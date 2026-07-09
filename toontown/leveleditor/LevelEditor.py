@@ -17,7 +17,8 @@ from direct.stdpy import glob
 from direct.stdpy import file
 from direct.controls import ControlManager
 from direct.controls import NonPhysicsWalker
-from direct.directtools.DirectGlobals import *
+from ott.directtools.DirectGlobals import *
+from ott.directtools.DirectSelection import COA_ORIGIN, COA_CENTER
 from direct.gui import DirectGui
 from imgui_bundle import imgui_ctx, imgui
 from panda3d.core import BoundingHexahedron
@@ -286,6 +287,7 @@ class LevelEditor(NodePath, DirectObject):
             ('s', self.beginBoxSelection),
             ('alt-s', self.toggleSuitBuildingPreviews),
             ('alt-o', self.toggleVisibleOccluders),
+            ('tab', self.toggleObjectHandlesMode),
             # This already exists, but we will override it to show an input
             ('p', self.setReparentTarget),
             ('r', self.doWrtReparent),
@@ -526,6 +528,19 @@ class LevelEditor(NodePath, DirectObject):
                             base.direct.manipulationControl.switchToLocalSpaceMode()
                         if imgui.menu_item("World Space Manipulation", "", base.direct.manipulationControl.worldSpaceManip)[0]:
                             base.direct.manipulationControl.switchToWorldSpaceMode()
+
+                        imgui.separator_text("Center of Action Placement")
+                        if imgui.menu_item("Place At Origin", "Will Deselect Active Nodes", base.direct.coaMode == COA_ORIGIN)[0]:
+                            base.direct.setCOAMode(COA_ORIGIN)
+                            base.direct.deselectAll()
+                            base.direct.selected.reset()
+                        if imgui.menu_item("Place At Center", "Will Deselect Active Nodes", base.direct.coaMode == COA_CENTER)[0]:
+                            base.direct.setCOAMode(COA_CENTER)
+                            base.direct.deselectAll()
+                            base.direct.selected.reset()
+                        if imgui.menu_item("Reset All Placements", "Will Deselect Active Nodes", base.direct.coaMode == COA_CENTER)[0]:
+                            base.direct.deselectAll()
+                            base.direct.selected.reset()
 
                         imgui.separator_text("Snapping")
                         _, base.direct.manipulationControl.fGridSnap = imgui.menu_item("Position Snapping", "", bool(base.direct.manipulationControl.fGridSnap))
@@ -1146,6 +1161,14 @@ class LevelEditor(NodePath, DirectObject):
         else:
             for node in render.findAllMatches('**/+OccluderNode'):
                 node.hide()
+
+    def toggleObjectHandlesMode(self):
+        base.direct.manipulationControl.toggleObjectHandlesMode()
+        if base.direct.manipulationControl.fMovable:
+            if base.direct.manipulationControl.fSetCoa:
+                self.popupNotification("Enabled COA Placement Mode")
+            else:
+                self.popupNotification("Disabled COA Placement Mode")
 
     def setReparentTarget(self):
         if base.imgui.isMouseCaptured() or base.imgui.isKeyboardCaptured():

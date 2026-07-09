@@ -2,7 +2,7 @@ import sys
 from functools import reduce
 from locale import atof
 
-from direct.directtools.DirectUtil import ROUND_INT
+from ott.directtools.DirectUtil import ROUND_INT
 
 from .LevelEditorGlobals import *
 from .PieMenu import *
