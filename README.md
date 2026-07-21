@@ -2,26 +2,16 @@
 
 ## An open sourced modernized version of Disney's in-house Toontown Online level editor used to create .dna files.
 ## Version 2.0
-Version 2.0 brings a whole new UI using ImGui, replacing the outdated Tk UI.
+Version 2.0 brings a whole new UI using ImGui, replacing the outdated Tk UI and bringing reliable 3d widgets
+### This is still very heavily under development. Many features are still unimplemented or use the old TK GUI. For a more stable but less updated experience, use the `legacy` branch
 
 # [***READ THE FAQ BEFORE ASKING QUESTIONS***](#faq)
 
 <img width="3832" height="2086" alt="image" src="https://github.com/user-attachments/assets/69cd4d56-7d2c-4f9d-93d8-88d1ab0260e7" />
 
-
-## Development Progress
-* This project is considered **fully released** and is entirely usable with little crashes and bugs. If you discover a crash or bug please create an issue.
-* This project is still being actively developed with new features and fixes. Feel free to contribute new features or fixes.
-
 ## Major New Features
 * [View a list here](https://github.com/OpenToontownTools/OpenLevelEditor/wiki/New-Features)
 
-## Now that the editor is fully released? What's next?
-* New features are still actively being developed with no plans of stopping anytime soon!
-* Some features planned for the future are:
-   * Drive mode will be making a return in the future
-   * Better mouse positioning widgets
-   * and much more!
 
 ## Requirements
 ### ***IMPORTANT***
